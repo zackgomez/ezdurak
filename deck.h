@@ -2,14 +2,14 @@
 #include <vector>
 #include "card.h"
 
-class deck
+class Deck
 {
 public:
-    deck();
-    ~deck();
+    Deck();
+    ~Deck();
 
-    card deal();
-    std::vector<card> deal(int numCards);
+    Card deal();
+    std::vector<Card> deal(int numCards);
 
     void shuffle();
 
@@ -19,5 +19,5 @@ public:
     void print() const;
 
 private:
-    std::vector<card> cards;
+    std::vector<Card> cards;
 };

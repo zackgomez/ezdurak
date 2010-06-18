@@ -13,26 +13,26 @@ int main(int argc, char **argv)
     srand(time(NULL));
 
     // Card tests
-    card c(card::ACE, card::hearts);
-    card c2(10, card::hearts);
-    card c3(6, card::clubs);
-    card c4(8, card::diamonds);
+    Card c(Card::ACE, Card::hearts);
+    Card c2(10, Card::hearts);
+    Card c3(6, Card::clubs);
+    Card c4(8, Card::diamonds);
 
     std::cout << "Ace of hearts:\n";
     std::cout << c << '\n';;
 
     std::cout << "Does " << c << " beat " << c2 << "?\n";
-    std::cout << (c.beats(c2, card::none) ? yes : no) << '\n';
+    std::cout << (c.beats(c2, Card::none) ? yes : no) << '\n';
 
     std::cout << "Does " << c << " beat " << c3 << "?\n";
-    std::cout << (c.beats(c3, card::none) ? yes : no) << '\n';
+    std::cout << (c.beats(c3, Card::none) ? yes : no) << '\n';
 
     std::cout << "Does " << c4 << " beat " << c << " (diamonds is trump)?\n";
-    std::cout << (c4.beats(c, card::diamonds) ? yes : no) << '\n';
+    std::cout << (c4.beats(c, Card::diamonds) ? yes : no) << '\n';
 
 
     // Deck Tests
-    deck d;
+    Deck d;
     d.print();
 
     std::cout << "\nShuffling...\n";

@@ -4,36 +4,36 @@
 #include <iostream>
 #include "card.h"
 
-deck::deck()
+Deck::Deck()
 {
     cards.reserve(36);
-    for (int i = 6; i <= card::ACE; i++)
+    for (int i = 6; i <= Card::ACE; i++)
     {
-        cards.push_back(card(i, card::hearts));
-        cards.push_back(card(i, card::diamonds));
-        cards.push_back(card(i, card::spades));
-        cards.push_back(card(i, card::clubs));
+        cards.push_back(Card(i, Card::hearts));
+        cards.push_back(Card(i, Card::diamonds));
+        cards.push_back(Card(i, Card::spades));
+        cards.push_back(Card(i, Card::clubs));
     }
 }
 
-deck::~deck()
+Deck::~Deck()
 {}
 
-card deck::deal()
+Card Deck::deal()
 {
     assert(!cards.empty());
 
-    card ret = cards.back();
+    Card ret = cards.back();
     cards.pop_back();
     return ret;
 }
 
-std::vector<card> deck::deal(int numCards)
+std::vector<Card> Deck::deal(int numCards)
 {
     assert(numCards > 0);
     assert((int) cards.size() >= numCards);
 
-    std::vector<card> hand(numCards);
+    std::vector<Card> hand(numCards);
     for (size_t i = 0; i < numCards; i++)
     {
         hand.push_back(cards.back());
@@ -43,22 +43,22 @@ std::vector<card> deck::deal(int numCards)
     return hand;
 }
 
-void deck::shuffle() 
+void Deck::shuffle() 
 {
     random_shuffle(cards.begin(), cards.end());
 }
 
-int deck::getNumCards() const
+int Deck::getNumCards() const
 {
     return cards.size();
 }
 
-bool deck::empty() const
+bool Deck::empty() const
 {
     return cards.empty();
 }
 
-void deck::print() const
+void Deck::print() const
 {
     for (size_t i = 0; i < cards.size(); i++)
     {

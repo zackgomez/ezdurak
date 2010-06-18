@@ -1,24 +1,24 @@
 #include "card.h"
 
-card::card()
+Card::Card()
     : num(NONUM), suit(none)
 {}
 
-card::card(int n, card::cardsuit s)
+Card::Card(int n, Card::cardsuit s)
     : num(n), suit(s)
 {}
 
-int card::getNum() const
+int Card::getNum() const
 {
     return num;
 }
 
-card::cardsuit card::getSuit() const
+Card::cardsuit Card::getSuit() const
 {
     return suit;
 }
 
-bool card::beats(card &rhs, cardsuit trump)
+bool Card::beats(Card &rhs, cardsuit trump)
 {
     // We only care if we are trump and they are not, we beat them then, other
     // case falls through to the return false.
@@ -31,13 +31,21 @@ bool card::beats(card &rhs, cardsuit trump)
     return false;
 }
 
-std::ostream& operator<<(std::ostream &os, const card &c)
+std::ostream& operator<<(std::ostream &os, const Card &c)
 {
-    bool red = (c.getSuit() == card::diamonds || c.getSuit() == card::hearts);
-    // Set the output color to red
+    bool red = (c.getSuit() == Card::diamonds || c.getSuit() == Card::hearts);
+    // Set output background to white
+    os << "\033[47m";
+    // Set the foreground output color to red
     if (red)
         os << "\033[31m";
+    else
+        os << "\033[30m";
 
+    // If the number isn't '10' then print a space so that all cards take 3
+    // spaces
+    if (c.getNum() != 10)
+        os << ' ';
     // Print number
     char numchars[4] = {'J', 'Q', 'K', 'A'};
     if (c.getNum() <= 10)

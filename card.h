@@ -1,7 +1,7 @@
 #pragma once
 #include <ostream>
 
-class card
+class Card
 {
 public:
     // Types
@@ -13,12 +13,12 @@ public:
     static const int ACE   = 14;
 
     // Constructors
-    card();
-    card(int num, cardsuit suit);
+    Card();
+    Card(int num, cardsuit suit);
 
 
     // Member Functions
-    bool beats(card &rhs, cardsuit trump);
+    bool beats(Card &rhs, cardsuit trump);
 
     // Accessors
     int getNum() const;
@@ -31,4 +31,4 @@ private:
 };
 
 // Operator Overloads
-std::ostream& operator<<(std::ostream& os, const card &c);
+std::ostream& operator<<(std::ostream& os, const Card &c);
