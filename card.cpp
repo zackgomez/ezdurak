@@ -1,32 +1,32 @@
 #include "card.h"
 
 Card::Card()
-    : num(NONUM), suit(none)
+    : num_(NONUM), suit_(none)
 {}
 
 Card::Card(int n, Card::cardsuit s)
-    : num(n), suit(s)
+    : num_(n), suit_(s)
 {}
 
 int Card::getNum() const
 {
-    return num;
+    return num_;
 }
 
 Card::cardsuit Card::getSuit() const
 {
-    return suit;
+    return suit_;
 }
 
 bool Card::beats(Card &rhs, cardsuit trump)
 {
     // We only care if we are trump and they are not, we beat them then, other
     // case falls through to the return false.
-    if (suit == trump && rhs.suit != trump)
+    if (suit_ == trump && rhs.suit_ != trump)
         return true;
     // If they are the same suit, it's based on the number, even if its trump
-    if (suit == rhs.suit)
-        return num > rhs.num;
+    if (suit_ == rhs.suit_)
+        return num_ > rhs.num_;
     // If it's not the same suit or some trump thing, return false.
     return false;
 }

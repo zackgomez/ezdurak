@@ -26,8 +26,8 @@ public:
 
 
 private:
-    int num;
-    cardsuit suit;
+    int num_;
+    cardsuit suit_;
 };
 
 // Operator Overloads

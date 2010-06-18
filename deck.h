@@ -19,5 +19,5 @@ public:
     void print() const;
 
 private:
-    std::vector<Card> cards;
+    std::vector<Card> cards_;
 };
