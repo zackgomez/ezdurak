@@ -14,7 +14,8 @@ public:
     virtual Card attack(std::set<int> playableRanks = std::set<int>());
 
     virtual void addCards(std::vector<Card>& cards);
-    int numCards() const;
+    int getNumCards() const;
+    std::string getName() const;
 
     void print() const;
 

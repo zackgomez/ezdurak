@@ -121,9 +121,14 @@ void GamePlayer::addCards(vector<Card>& cards)
     hand_.insert(hand_.end(), cards.begin(), cards.end());
 }
 
-int GamePlayer::numCards() const
+int GamePlayer::getNumCards() const
 {
     return hand_.size();
+}
+
+std::string GamePlayer::getName() const
+{
+    return name_;
 }
 
 void GamePlayer::print() const

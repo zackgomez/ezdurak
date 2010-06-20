@@ -1,7 +1,12 @@
 CPPFLAGS = -Wall -O0 -g
-OBJS 	 = test.o Card.o Deck.o GamePlayer.o
+OBJS 	 = Card.o Deck.o GamePlayer.o Game.o
 
-test: $(OBJS)
+all: ezdurak test
+
+ezdurak: $(OBJS) main.o
+	$(CXX) $^ $(CPPFLAGS) $(LDFLAGS) -o $@
+
+test: $(OBJS) test.o
 	$(CXX) $^ $(CPPFLAGS) $(LDFLAGS) -o $@
 
 run: test
