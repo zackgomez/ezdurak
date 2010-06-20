@@ -2,8 +2,10 @@
 #include <ctime>
 #include <string>
 #include <cstdlib>
-#include "card.h"
-#include "deck.h"
+#include <vector>
+#include "Card.h"
+#include "Deck.h"
+#include "GamePlayer.h"
 
 int main(int argc, char **argv)
 {
@@ -38,6 +40,38 @@ int main(int argc, char **argv)
     std::cout << "\nShuffling...\n";
     d.shuffle();
     d.print();
+
+    std::cout << "Dealing a couple cards...\n";
+    std::cout << d.deal();
+    std::cout << d.deal();
+    std::cout << '\n';
+
+    // GamePlayer Tests
+    std::cout << "Give a player a hand...\n";
+    std::string name = "TestPlayer";
+    std::vector<Card> hand = d.deal(15);
+    GamePlayer player(name, hand);
+    player.print();
+    std::cout << '\n';
+
+    // -- Defending Tests
+    std::cout << "Asking the player to defend a 6 of clubs...\n";
+    Card attackingCard(6, Card::clubs);
+    Card defendingCard = player.defend(attackingCard, Card::none);
+
+    if (defendingCard != Card())
+        std::cout << "They defended with " << defendingCard << '\n';
+    else 
+        std::cout << "They gave up\n";
+    player.print();
+
+    // -- Attack Tests
+    std::cout << "Asking them to attack with a first card...\n'";
+    attackingCard = player.attack();
+    std::cout << "They played a " << attackingCard << '\n';
+
+    player.print();
+
 
     return 0;
 }

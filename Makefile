@@ -1,5 +1,5 @@
 CPPFLAGS = -Wall -O0 -g
-OBJS 	 = test.o card.o deck.o
+OBJS 	 = test.o Card.o Deck.o GamePlayer.o
 
 test: $(OBJS)
 	$(CXX) $^ $(CPPFLAGS) $(LDFLAGS) -o $@
