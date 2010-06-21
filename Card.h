@@ -28,6 +28,8 @@ public:
     bool operator==(const Card& rhs) const;
     bool operator!=(const Card& rhs) const;
 
+    operator bool() const;
+
 
 private:
     int num_;

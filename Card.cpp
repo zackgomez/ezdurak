@@ -47,6 +47,11 @@ bool Card::operator!=(const Card& rhs) const
     return !(*this == rhs);
 }
 
+Card::operator bool() const
+{
+    return (num_ != NONUM && suit_ != none);
+}
+
 std::ostream& operator<<(std::ostream &os, const Card &c)
 {
     // Set output background to white

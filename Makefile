@@ -1,4 +1,4 @@
-CPPFLAGS = -Wall -O0 -g
+CPPFLAGS = -Wall -O0 -g -Wno-sign-compare
 OBJS 	 = Card.o Deck.o GamePlayer.o Game.o
 
 all: ezdurak test
