@@ -1,5 +1,5 @@
 CPPFLAGS = -Wall -O0 -g -Wno-sign-compare
-OBJS 	 = Card.o Deck.o GamePlayer.o Game.o
+OBJS 	 = Card.o Deck.o Player.o Game.o
 
 all: ezdurak test
 

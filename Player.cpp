@@ -1,4 +1,4 @@
-#include "GamePlayer.h"
+#include "Player.h"
 #include <iostream>
 
 using std::cout;
@@ -7,14 +7,14 @@ using std::string;
 using std::vector;
 using std::set;
 
-GamePlayer::GamePlayer(const string& name, const vector<Card>& hand)
+Player::Player(const string& name, const vector<Card>& hand)
     : hand_(hand), name_(name)
 {}
 
-GamePlayer::~GamePlayer()
+Player::~Player()
 {}
 
-Card GamePlayer::defend(const Card& attackingCard, Card::cardsuit trump)
+Card Player::defend(const Card& attackingCard, Card::cardsuit trump)
 {
     for (;;)
     {
@@ -62,7 +62,7 @@ Card GamePlayer::defend(const Card& attackingCard, Card::cardsuit trump)
     }
 }
 
-Card GamePlayer::attack(set<int> playableRanks)
+Card Player::attack(set<int> playableRanks)
 {
     for (;;)
     {
@@ -116,28 +116,28 @@ Card GamePlayer::attack(set<int> playableRanks)
     }
 }
 
-Card GamePlayer::pileOn(std::set<int> playableRanks)
+Card Player::pileOn(std::set<int> playableRanks)
 {
     cout << "Piling cards on\n";
     return attack(playableRanks);
 }
 
-void GamePlayer::addCards(const vector<Card>& cards)
+void Player::addCards(const vector<Card>& cards)
 {
     hand_.insert(hand_.end(), cards.begin(), cards.end());
 }
 
-int GamePlayer::getNumCards() const
+int Player::getNumCards() const
 {
     return hand_.size();
 }
 
-std::string GamePlayer::getName() const
+std::string Player::getName() const
 {
     return name_;
 }
 
-void GamePlayer::print() const
+void Player::print() const
 {
     cout << name_ << ":\n";
     // Print numbers

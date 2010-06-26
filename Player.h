@@ -4,11 +4,11 @@
 #include <set>
 #include "Card.h"
 
-class GamePlayer
+class Player
 {
 public:
-    GamePlayer(const std::string& name, const std::vector<Card>& hand);
-    virtual ~GamePlayer();
+    Player(const std::string& name, const std::vector<Card>& hand);
+    virtual ~Player();
 
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump);
     virtual Card attack(std::set<int> playableRanks = std::set<int>());
@@ -26,7 +26,7 @@ protected:
 
 private:
     // Private copy and assignment
-    GamePlayer(const GamePlayer&);
-    void operator=(const GamePlayer&);
+    Player(const Player&);
+    void operator=(const Player&);
 };
 

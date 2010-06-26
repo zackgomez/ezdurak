@@ -4,7 +4,7 @@
 #include <set>
 #include "Deck.h"
 
-class GamePlayer;
+class Player;
 
 class Game : public GameAgent
 {
@@ -18,9 +18,9 @@ public:
     virtual void addListener(GameListener *listener);
     virtual void removeListener(GameListener *listener);
     virtual Card::cardsuit getTrump() const;
-    virtual const GamePlayer * getAttacker() const;
-    virtual const GamePlayer * getDefender() const;
-    virtual const std::vector<GamePlayer*>& getPlayers() const;
+    virtual const Player * getAttacker() const;
+    virtual const Player * getDefender() const;
+    virtual const std::vector<Player*>& getPlayers() const;
 
     virtual const std::vector<Card>& getPlayedCards() const;
 
@@ -53,7 +53,7 @@ private:
     std::set<GameListener*> listeners_;
 
     // Data Members
-    std::vector<GamePlayer*> players_;
+    std::vector<Player*> players_;
     int attackerIdx_;
     int defenderIdx_;
     Deck deck_;
@@ -61,8 +61,8 @@ private:
     Card trumpCard_;
 
     // Transient Members
-    GamePlayer *attacker_;
-    GamePlayer *defender_;
+    Player *attacker_;
+    Player *defender_;
 
     int nextAttackerIdx_;
 

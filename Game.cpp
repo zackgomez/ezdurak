@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iostream>
 #include <cassert>
-#include "GamePlayer.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -25,7 +25,7 @@ Game::Game(int numPlayers) :
         ss << "Player" << i;
         string name = ss.str();
         vector<Card> hand = deck_.deal(6);
-        players_[i] = new GamePlayer(name, hand);
+        players_[i] = new Player(name, hand);
     }
 
 }
@@ -53,17 +53,17 @@ Card::cardsuit Game::getTrump() const
     return trump_;
 }
 
-const GamePlayer * Game::getAttacker() const
+const Player * Game::getAttacker() const
 {
     return attacker_;
 }
 
-const GamePlayer * Game::getDefender() const
+const Player * Game::getDefender() const
 {
     return defender_;
 }
 
-const std::vector<GamePlayer*>& Game::getPlayers() const
+const std::vector<Player*>& Game::getPlayers() const
 {
     return players_;
 }
@@ -92,7 +92,7 @@ void Game::run()
         refillCards();
         
         // Check for players with no cards and remove them from the players list
-        for (std::vector<GamePlayer*>::iterator it = players_.begin(); it != players_.end(); it++)
+        for (std::vector<Player*>::iterator it = players_.begin(); it != players_.end(); it++)
             if ((*it)->getNumCards() == 0)
             {
                 cout << (*it)->getName() << " has gone out!!!\n";

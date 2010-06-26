@@ -5,7 +5,7 @@
 #include <vector>
 #include "Card.h"
 #include "Deck.h"
-#include "GamePlayer.h"
+#include "Player.h"
 
 int main(int argc, char **argv)
 {
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     std::cout << "Give a player a hand...\n";
     std::string name = "TestPlayer";
     std::vector<Card> hand = d.deal(15);
-    GamePlayer player(name, hand);
+    Player player(name, hand);
     player.print();
     std::cout << '\n';
 
