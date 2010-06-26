@@ -10,9 +10,9 @@ public:
     Player(const std::string& name, const std::vector<Card>& hand);
     virtual ~Player();
 
-    virtual Card defend(const Card& attackingCard, Card::cardsuit trump);
-    virtual Card attack(std::set<int> playableRanks = std::set<int>());
-    virtual Card pileOn(std::set<int> playableRanks);
+    virtual Card defend(const Card& attackingCard, Card::cardsuit trump) = 0;
+    virtual Card attack(std::set<int> playableRanks = std::set<int>()) = 0;
+    virtual Card pileOn(std::set<int> playableRanks) = 0;
 
     virtual void addCards(const std::vector<Card>& cards);
     int getNumCards() const;

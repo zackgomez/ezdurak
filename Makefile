@@ -1,16 +1,22 @@
 CPPFLAGS = -Wall -O0 -g -Wno-sign-compare
-OBJS 	 = Card.o Deck.o Player.o Game.o
+OBJS 	 = obj/Card.o obj/Deck.o obj/Player.o obj/Game.o obj/CLIPlayer.o
 
 all: ezdurak test
 
-ezdurak: $(OBJS) main.o
+ezdurak: $(OBJS) obj/main.o
 	$(CXX) $^ $(CPPFLAGS) $(LDFLAGS) -o $@
 
-test: $(OBJS) test.o
+test: $(OBJS) obj/test.o
 	$(CXX) $^ $(CPPFLAGS) $(LDFLAGS) -o $@
+
+obj/%.o: %.cpp obj
+	$(CXX) -c $(CPPFLAGS) -o $@ $<
+
+obj:
+	mkdir obj
 
 run: test
 	./test
 
 clean:
-	rm -f *.o ezdurak test
+	rm -rf obj ezdurak test

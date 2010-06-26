@@ -6,6 +6,7 @@
 #include "Card.h"
 #include "Deck.h"
 #include "Player.h"
+#include "CLIPlayer.h"
 
 int main(int argc, char **argv)
 {
@@ -50,27 +51,28 @@ int main(int argc, char **argv)
     std::cout << "Give a player a hand...\n";
     std::string name = "TestPlayer";
     std::vector<Card> hand = d.deal(15);
-    Player player(name, hand);
-    player.print();
+    Player* player = new CLIPlayer(name, hand);
+    player->print();
     std::cout << '\n';
 
     // -- Defending Tests
     std::cout << "Asking the player to defend a 6 of clubs...\n";
     Card attackingCard(6, Card::clubs);
-    Card defendingCard = player.defend(attackingCard, Card::none);
+    Card defendingCard = player->defend(attackingCard, Card::none);
 
     if (defendingCard != Card())
         std::cout << "They defended with " << defendingCard << '\n';
     else 
         std::cout << "They gave up\n";
-    player.print();
+    player->print();
 
     // -- Attack Tests
     std::cout << "Asking them to attack with a first card...\n'";
-    attackingCard = player.attack();
+    attackingCard = player->attack();
     std::cout << "They played a " << attackingCard << '\n';
 
-    player.print();
+    player->print();
+    delete player;
 
 
     return 0;

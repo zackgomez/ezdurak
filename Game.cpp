@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cassert>
 #include "Player.h"
+#include "CLIPlayer.h"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ Game::Game(int numPlayers) :
         ss << "Player" << i;
         string name = ss.str();
         vector<Card> hand = deck_.deal(6);
-        players_[i] = new Player(name, hand);
+        players_[i] = new CLIPlayer(name, hand);
     }
 
 }
