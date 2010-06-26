@@ -1,5 +1,5 @@
 #pragma once
-#include "GameAgent.h";
+#include "GameAgent.h"
 
 class GameListener
 {
@@ -14,6 +14,8 @@ public:
 
     virtual void attackingCard(const Card &c) = 0;
     virtual void defendingCard(const Card &c) = 0;
+
+    // TODO given cards, player, amount
 
 protected:
     GameAgent *agent_;

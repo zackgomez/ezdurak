@@ -5,6 +5,7 @@
 #include <cassert>
 #include "Player.h"
 #include "CLIPlayer.h"
+#include "GameListener.h"
 
 using namespace std;
 
@@ -15,18 +16,38 @@ Game::Game(int numPlayers) :
 {
     assert(numPlayers >= 2 && numPlayers <= 6);
 
-    deck_.shuffle();
-    trumpCard_ = deck_.peekLast();
-    trump_ = trumpCard_.getSuit();
+    // Predeal the hands so that we can ensure that the game will be fair 
+    // without unnecessarily making and remaking players
+    std::vector<std::vector<Card>> hands(numPlayers);
+    for (;;)
+    {
+        // Shuffle and get trump card
+        deck_ = Deck();
+        deck_.shuffle();
+        trumpCard_ = deck_.peekLast();
+        trump_ = trumpCard_.getSuit();
+
+        // Deal and validate hands
+        for (int i = 0; i < numPlayers; i++)
+        {
+            hands[i] = deck_.deal(6);
+            if (!validateHand(hands[i]))
+            {
+                cout << "Misdeal!\n";
+                continue;
+            }
+        }
+
+        break;
+    }
+
 
     for (int i = 0; i < players_.size(); i++)
     {
-        // TODO if the hand is all the same color or 5 of one suit, redeal
         stringstream ss;
         ss << "Player" << i;
         string name = ss.str();
-        vector<Card> hand = deck_.deal(6);
-        players_[i] = new CLIPlayer(name, hand);
+        players_[i] = new CLIPlayer(name, hands[i]);
     }
 
 }
@@ -134,7 +155,7 @@ bool Game::doRound()
             // If all the attackers have passed, successful defend
             giveUps++;
             if (giveUps == players_.size() - 1)
-                return true;
+                break;
             
             nextAttacker();
 
@@ -145,6 +166,7 @@ bool Game::doRound()
         // If one attacker plays a card reset the giveUp count
         giveUps = 0;
         playedCards_.push_back(attC);
+        // TODO Broadcast card
 
         Card defC = defender_->defend(attC, trump_);
         if (!defC)
@@ -155,9 +177,11 @@ bool Game::doRound()
             cout << "Giving the defender " << playedCards_.size() << " cards\n";
             defender_->addCards(playedCards_);
             // Unsuccessful defend
+            // TODO Broadcast to listeners
             return false;
         }
         playedCards_.push_back(defC);
+        // TODO broadcast card
         cout << "The defending card is " << defC << '\n';
 
         // Add the cards to the played ranks
@@ -166,6 +190,7 @@ bool Game::doRound()
     }
 
     // If the max number of cards has been played, successful defend
+    // TODO broadcast to listeners
     return true;
 }
 
@@ -190,6 +215,10 @@ void Game::nextAttacker()
         nextAttackerIdx_ = (nextAttackerIdx_+1) % players_.size();
     attacker_ = players_[nextAttackerIdx_];
     nextAttackerIdx_ = (nextAttackerIdx_+1) % players_.size();
+
+    // Broadcast to the listeners
+    for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+        (*it)->attackerChanged();
 }
 
 void Game::pileOn(int maxCards)
@@ -208,8 +237,46 @@ void Game::pileOn(int maxCards)
             continue;
         }
         playedCards_.push_back(c);
+        // TODO broadcast card
         maxCards--;
         passers = 0;
         // No need to update played ranks, no new values will be played.
     }
+}
+
+bool Game::validateHand(const vector<Card>& hand)
+{
+    assert(hand.size() == 6);
+
+    int hcount, scount, ccount, dcount;
+    hcount = scount = ccount = dcount = 0;
+    int black = 0;
+    int red = 0;
+
+    for (int i = 0; i < hand.size(); i++)
+    {
+        if (hand[i].getSuit() == Card::hearts)
+        {
+            red++;
+            hcount++;
+        }
+        else if (hand[i].getSuit() == Card::diamonds)
+        {
+            red++;
+            dcount++;
+        }
+        else if (hand[i].getSuit() == Card::clubs)
+        {
+            black++;
+            ccount++;
+        }
+        else if (hand[i].getSuit() == Card::spades)
+        {
+            black++;
+            scount++;
+        }
+    }
+
+    return red != 6 && black != 6 &&
+        hcount < 5 && scount < 5 && ccount < 5 && dcount < 5;
 }

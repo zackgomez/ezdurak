@@ -30,7 +30,7 @@ Card Deck::deal()
 std::vector<Card> Deck::deal(int numCards)
 {
     assert(numCards > 0);
-    assert((int) cards_.size() >= numCards);
+    assert(cards_.size() >= numCards);
 
     std::vector<Card> hand(numCards);
     for (int i = 0; i < numCards; i++)

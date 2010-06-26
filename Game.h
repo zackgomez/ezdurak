@@ -49,6 +49,13 @@ private:
      */
     void pileOn(int maxCards);
 
+    /**
+     * Returns false if the hand is not a valid starting hand for Durak.  I.e. 
+     * the hand contains more than 4 of one suit or is all one color.
+     * @return false if the hand is invalid
+     */
+    bool validateHand(const std::vector<Card>& hand);
+
     // GameAgent implementation members
     std::set<GameListener*> listeners_;
 
