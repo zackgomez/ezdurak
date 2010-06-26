@@ -36,6 +36,44 @@ Game::~Game()
         delete players_[i];
 }
 
+// -------------- Functions Inherited from GameAgent Interface ----------------
+
+void Game::addListener(GameListener *listener)
+{
+    listeners_.insert(listener);
+}
+
+void Game::removeListener(GameListener *listener)
+{
+    listeners_.erase(listener);
+}
+
+Card::cardsuit Game::getTrump() const
+{
+    return trump_;
+}
+
+const GamePlayer * Game::getAttacker() const
+{
+    return attacker_;
+}
+
+const GamePlayer * Game::getDefender() const
+{
+    return defender_;
+}
+
+const std::vector<GamePlayer*>& Game::getPlayers() const
+{
+    return players_;
+}
+
+const std::vector<Card>& Game::getPlayedCards() const
+{
+    return playedCards_;
+}
+
+// -------------- Interface Functions -----------------
 void Game::run()
 {
     cout << "Starting a new game with " << players_.size() << " players\n";
@@ -44,6 +82,7 @@ void Game::run()
     while (players_.size() > 1)
     {
         playedCards_.clear();
+        playedRanks_.clear();
         attacker_ = players_[attackerIdx_];
         defender_ = players_[defenderIdx_];
         nextAttackerIdx_ = (defenderIdx_+1) % players_.size();
@@ -80,7 +119,6 @@ void Game::run()
 
 bool Game::doRound()
 {
-    set<int> playedRanks;
     int giveUps = 0;
     // Maximum of 6, or the number of cards the player had cards to be played
     int maxCards = min(6, defender_->getNumCards());
@@ -89,7 +127,7 @@ bool Game::doRound()
         cout << attacker_->getName() << " is attacking " <<
             defender_->getName() << '\n';
 
-        Card attC = attacker_->attack(playedRanks);
+        Card attC = attacker_->attack(playedRanks_);
         if (!attC)
         {
             // If all the attackers have passed, successful defend
@@ -110,6 +148,7 @@ bool Game::doRound()
         Card defC = defender_->defend(attC, trump_);
         if (!defC)
         {
+            cout << "The defender gave up\n";
             // Give the defender all of the cards
             pileOn(maxCards - i);
             cout << "Giving the defender " << playedCards_.size() << " cards\n";
@@ -118,10 +157,11 @@ bool Game::doRound()
             return false;
         }
         playedCards_.push_back(defC);
+        cout << "The defending card is " << defC << '\n';
 
         // Add the cards to the played ranks
-        playedRanks.insert(attC.getNum());
-        playedRanks.insert(defC.getNum());
+        playedRanks_.insert(attC.getNum());
+        playedRanks_.insert(defC.getNum());
     }
 
     // If the max number of cards has been played, successful defend
@@ -153,5 +193,22 @@ void Game::nextAttacker()
 
 void Game::pileOn(int maxCards)
 {
-    // TODO give the losing defender MORE cards
+    int passers = 0;
+    while (maxCards > 0)
+    {
+        Card c = attacker_->pileOn(playedRanks_);
+        if (!c)
+        {
+            passers++;
+            if (passers == players_.size() - 1)
+                return;
+
+            nextAttacker();
+            continue;
+        }
+        playedCards_.push_back(c);
+        maxCards--;
+        passers = 0;
+        // No need to update played ranks, no new values will be played.
+    }
 }

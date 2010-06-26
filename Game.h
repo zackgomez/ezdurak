@@ -1,17 +1,28 @@
 #pragma once
+#include "GameAgent.h"
 #include <vector>
 #include <set>
 #include "Deck.h"
 
 class GamePlayer;
 
-class Game
+class Game : public GameAgent
 {
 public:
     Game(int numPlayers);
-    ~Game();
+    virtual ~Game();
 
     void run();
+
+    // Functions inherited from GameAgent interface
+    virtual void addListener(GameListener *listener);
+    virtual void removeListener(GameListener *listener);
+    virtual Card::cardsuit getTrump() const;
+    virtual const GamePlayer * getAttacker() const;
+    virtual const GamePlayer * getDefender() const;
+    virtual const std::vector<GamePlayer*>& getPlayers() const;
+
+    virtual const std::vector<Card>& getPlayedCards() const;
 
 private:
     // Helper Functions
@@ -38,6 +49,9 @@ private:
      */
     void pileOn(int maxCards);
 
+    // GameAgent implementation members
+    std::set<GameListener*> listeners_;
+
     // Data Members
     std::vector<GamePlayer*> players_;
     int attackerIdx_;
@@ -53,4 +67,5 @@ private:
     int nextAttackerIdx_;
 
     std::vector<Card> playedCards_;
+    std::set<int> playedRanks_;
 };

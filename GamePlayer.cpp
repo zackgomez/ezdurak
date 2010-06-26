@@ -7,14 +7,14 @@ using std::string;
 using std::vector;
 using std::set;
 
-GamePlayer::GamePlayer(string& name, vector<Card>& hand)
+GamePlayer::GamePlayer(const string& name, const vector<Card>& hand)
     : hand_(hand), name_(name)
 {}
 
 GamePlayer::~GamePlayer()
 {}
 
-Card GamePlayer::defend(Card& attackingCard, Card::cardsuit trump)
+Card GamePlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {
     for (;;)
     {
@@ -116,7 +116,13 @@ Card GamePlayer::attack(set<int> playableRanks)
     }
 }
 
-void GamePlayer::addCards(vector<Card>& cards)
+Card GamePlayer::pileOn(std::set<int> playableRanks)
+{
+    cout << "Piling cards on\n";
+    return attack(playableRanks);
+}
+
+void GamePlayer::addCards(const vector<Card>& cards)
 {
     hand_.insert(hand_.end(), cards.begin(), cards.end());
 }
