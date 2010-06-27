@@ -3,8 +3,8 @@
 #include <sstream>
 #include <iostream>
 #include <cassert>
-#include "Player.h"
 #include "CLIPlayer.h"
+#include "AIPlayer.h"
 #include "GameListener.h"
 
 using namespace std;
@@ -42,12 +42,13 @@ Game::Game(int numPlayers) :
     }
 
 
-    for (int i = 0; i < players_.size(); i++)
+    players_[0] = new CLIPlayer("HumanPlayer", hands[0]);
+    for (int i = 1; i < players_.size(); i++)
     {
         stringstream ss;
-        ss << "Player" << i;
+        ss << "AIPlayer" << i;
         string name = ss.str();
-        players_[i] = new CLIPlayer(name, hands[i]);
+        players_[i] = new AIPlayer(this, name, hands[i]);
     }
 
 }
@@ -117,17 +118,6 @@ void Game::run()
 
         refillCards();
 
-        // Check for players with no cards and remove them from the players list
-        for (std::vector<Player*>::iterator it = players_.begin(); it != players_.end(); it++)
-            if ((*it)->getNumCards() == 0)
-            {
-                // Broadcast
-                for (auto lit = listeners_.begin(); lit != listeners_.end(); lit++)
-                    (*lit)->playedOut(*it);
-                // Remove them from active players
-                it = players_.erase(it);
-            }
-
         // Update attacker and defender index, successful defend means that the
         // defender is the next attacker, otherwise skip the defender
         if (successfulDefend)
@@ -145,6 +135,21 @@ void Game::run()
 
         // Defender is always to the right of the attacker
         defenderIdx_ = (attackerIdx_+1) % players_.size();
+
+        // Check for players with no cards and remove them from the players list
+        for (auto it = players_.begin(); it != players_.end(); it++)
+        {
+            cout << "Game: Value of ptr: " << *it << '\n';
+            if ((*it)->getNumCards() == 0)
+            {
+                Player* p = *it;
+                // Remove them from active players
+                it = players_.erase(it);
+                // Broadcast
+                for (auto lit = listeners_.begin(); lit != listeners_.end(); lit++)
+                    (*lit)->playedOut(p);
+            }
+        }
     }
     
     // TODO send a message via GameListener
@@ -176,7 +181,8 @@ bool Game::doRound()
             i--;
             continue;
         }
-        // If one attacker plays a card reset the giveUp count giveUps = 0;
+        // If one attacker plays a card reset the giveUp count
+        giveUps = 0;
         playedCards_.push_back(attC);
         playedRanks_.insert(attC.getNum());
         for (auto it = listeners_.begin(); it != listeners_.end(); it++)
@@ -186,7 +192,7 @@ bool Game::doRound()
         if (!defC)
         {
             // Give the defender all of the cards + pileOn
-            pileOn(maxCards - i);
+            pileOn(maxCards - (i+1));
             defender_->addCards(playedCards_);
             // Unsuccessful defend
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
