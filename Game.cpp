@@ -33,7 +33,7 @@ Game::Game(int numPlayers) :
             hands[i] = deck_.deal(6);
             if (!validateHand(hands[i]))
             {
-                cout << "Misdeal!\n";
+                cout << "Game: Misdeal!\n";
                 continue;
             }
         }
@@ -70,9 +70,9 @@ void Game::removeListener(GameListener *listener)
     listeners_.erase(listener);
 }
 
-Card::cardsuit Game::getTrump() const
+Card Game::getTrumpCard() const
 {
-    return trump_;
+    return trumpCard_;
 }
 
 const Player * Game::getAttacker() const
@@ -98,8 +98,7 @@ const std::vector<Card>& Game::getPlayedCards() const
 // -------------- Interface Functions -----------------
 void Game::run()
 {
-    cout << "Starting a new game with " << players_.size() << " players\n";
-    cout << trumpCard_ << " is trump\n";
+    cout << "Game: Starting a new game with " << players_.size() << " players\n";
 
     while (players_.size() > 1)
     {
@@ -109,34 +108,51 @@ void Game::run()
         defender_ = players_[defenderIdx_];
         nextAttackerIdx_ = (defenderIdx_+1) % players_.size();
 
+        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+        {
+            (*it)->attackerChanged(attacker_);
+            (*it)->defenderChanged(defender_);
+        }
         bool successfulDefend = doRound();
 
         refillCards();
-        
+
         // Check for players with no cards and remove them from the players list
         for (std::vector<Player*>::iterator it = players_.begin(); it != players_.end(); it++)
             if ((*it)->getNumCards() == 0)
             {
-                cout << (*it)->getName() << " has gone out!!!\n";
+                // Broadcast
+                for (auto lit = listeners_.begin(); lit != listeners_.end(); lit++)
+                    (*lit)->playedOut(*it);
+                // Remove them from active players
                 it = players_.erase(it);
             }
 
         // Update attacker and defender index, successful defend means that the
         // defender is the next attacker, otherwise skip the defender
         if (successfulDefend)
+        {
             attackerIdx_ = defenderIdx_;
+            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+                (*it)->defenderWon();
+        }
         else
+        {
+            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+                (*it)->defenderLost();
             attackerIdx_ = (defenderIdx_+1) % players_.size();
+        }
 
         // Defender is always to the right of the attacker
         defenderIdx_ = (attackerIdx_+1) % players_.size();
     }
     
+    // TODO send a message via GameListener
     // Check for win/tie
     if (players_.size() == 1)
-        cout << players_[0]->getName() << " is the biscuit!!!\n";
+        cout << "Game: " << players_[0]->getName() << " is the biscuit!!!\n";
     else
-        cout << "The game was a tie.\n";
+        cout << "Game: The game was a tie.\n";
 }
 
 bool Game::doRound()
@@ -146,9 +162,6 @@ bool Game::doRound()
     int maxCards = min(6, defender_->getNumCards());
     for (int i = 0; i < maxCards; i++)
     {
-        cout << attacker_->getName() << " is attacking " <<
-            defender_->getName() << '\n';
-
         Card attC = attacker_->attack(playedRanks_);
         if (!attC)
         {
@@ -163,34 +176,32 @@ bool Game::doRound()
             i--;
             continue;
         }
-        // If one attacker plays a card reset the giveUp count
-        giveUps = 0;
+        // If one attacker plays a card reset the giveUp count giveUps = 0;
         playedCards_.push_back(attC);
-        // TODO Broadcast card
+        playedRanks_.insert(attC.getNum());
+        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+            (*it)->attackingCard(attC);
 
         Card defC = defender_->defend(attC, trump_);
         if (!defC)
         {
-            cout << "The defender gave up\n";
-            // Give the defender all of the cards
+            // Give the defender all of the cards + pileOn
             pileOn(maxCards - i);
-            cout << "Giving the defender " << playedCards_.size() << " cards\n";
             defender_->addCards(playedCards_);
             // Unsuccessful defend
-            // TODO Broadcast to listeners
+            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+                (*it)->givenCards(defender_, playedCards_.size());
             return false;
         }
         playedCards_.push_back(defC);
-        // TODO broadcast card
-        cout << "The defending card is " << defC << '\n';
-
-        // Add the cards to the played ranks
-        playedRanks_.insert(attC.getNum());
         playedRanks_.insert(defC.getNum());
+        // Broadcast
+        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+            (*it)->defendingCard(defC);
+
     }
 
     // If the max number of cards has been played, successful defend
-    // TODO broadcast to listeners
     return true;
 }
 
@@ -204,6 +215,8 @@ void Game::refillCards()
         {
             vector<Card> newcs = deck_.deal(numCards);
             players_[i]->addCards(newcs);
+            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+                (*it)->givenCards(players_[i], numCards);
         }
     }
 }
@@ -215,10 +228,10 @@ void Game::nextAttacker()
         nextAttackerIdx_ = (nextAttackerIdx_+1) % players_.size();
     attacker_ = players_[nextAttackerIdx_];
     nextAttackerIdx_ = (nextAttackerIdx_+1) % players_.size();
-
+    
     // Broadcast to the listeners
     for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-        (*it)->attackerChanged();
+        (*it)->attackerChanged(attacker_);
 }
 
 void Game::pileOn(int maxCards)
@@ -237,7 +250,8 @@ void Game::pileOn(int maxCards)
             continue;
         }
         playedCards_.push_back(c);
-        // TODO broadcast card
+        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+            (*it)->attackingCard(c);
         maxCards--;
         passers = 0;
         // No need to update played ranks, no new values will be played.

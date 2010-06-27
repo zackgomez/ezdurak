@@ -1,5 +1,6 @@
 CPPFLAGS = -Wall -O0 -g -Wno-sign-compare -std=c++0x
-OBJS 	 = obj/Card.o obj/Deck.o obj/Player.o obj/Game.o obj/CLIPlayer.o
+OBJS 	 = obj/Card.o obj/Deck.o obj/Player.o obj/Game.o obj/CLIPlayer.o \
+	   obj/CLIListener.o
 
 all: ezdurak test
 
@@ -18,3 +19,6 @@ run: test
 
 clean:
 	rm -rf obj ezdurak test
+
+obj:
+	mkdir -p obj

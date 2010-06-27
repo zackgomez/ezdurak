@@ -1,11 +1,13 @@
-#include "Game.h"
 #include <cstdlib>
 #include <ctime>
+#include "Game.h"
+#include "CLIListener.h"
 
 int main()
 {
     srand(time(NULL));
-    Game game(4);
+    Game game(3);
+    CLIListener listener(&game);
 
     game.run();
 

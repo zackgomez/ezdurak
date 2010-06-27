@@ -17,7 +17,7 @@ public:
     // Functions inherited from GameAgent interface
     virtual void addListener(GameListener *listener);
     virtual void removeListener(GameListener *listener);
-    virtual Card::cardsuit getTrump() const;
+    virtual Card getTrumpCard() const;
     virtual const Player * getAttacker() const;
     virtual const Player * getDefender() const;
     virtual const std::vector<Player*>& getPlayers() const;

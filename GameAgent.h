@@ -15,7 +15,7 @@ public:
     virtual void addListener(GameListener *listener) = 0;
     virtual void removeListener(GameListener *listener) = 0;
 
-    virtual Card::cardsuit getTrump() const = 0;
+    virtual Card getTrumpCard() const = 0;
 
     virtual const Player * getAttacker() const = 0;
     virtual const Player * getDefender() const = 0;
