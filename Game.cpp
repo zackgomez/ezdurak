@@ -136,6 +136,7 @@ void Game::run()
         // Defender is always to the right of the attacker
         defenderIdx_ = (attackerIdx_+1) % players_.size();
 
+        // XXX This code segfaults sometimes...
         // Check for players with no cards and remove them from the players list
         for (auto it = players_.begin(); it != players_.end(); it++)
         {
