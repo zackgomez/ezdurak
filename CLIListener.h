@@ -7,6 +7,8 @@ public:
     virtual ~CLIListener();
 
     // Methods inherited from GameListener
+    void gameStart();
+    void gameOver(const Player*);
     void attackerChanged(const Player*);
     void defenderChanged(const Player*);
     void defenderLost();

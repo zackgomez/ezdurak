@@ -18,7 +18,7 @@ run: test
 	./test
 
 clean:
-	rm -rf ezdurak test
+	rm -rf obj/* ezdurak test
 
 obj:
 	mkdir -p obj
