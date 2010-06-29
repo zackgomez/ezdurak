@@ -17,6 +17,8 @@ public:
     virtual void addCards(const std::vector<Card>& cards);
 
     // Methods Inherited from GameListener interface
+    virtual void gameStart();
+    virtual void gameOver(const Player*);
     virtual void attackerChanged(const Player*);
     virtual void defenderChanged(const Player*);
     virtual void defenderLost();

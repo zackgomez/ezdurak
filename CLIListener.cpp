@@ -9,6 +9,13 @@ using std::cout;
 CLIListener::CLIListener(GameAgent *agent) :
     GameListener(agent)
 {
+}
+
+CLIListener::~CLIListener()
+{ /* Empty */ }
+
+void CLIListener::gameStart()
+{
     cout << "The players are seated like:\n";
     const vector<Player*> players = agent_->getPlayers();
     for (auto it = players.begin(); it != players.end(); it++)
@@ -18,8 +25,14 @@ CLIListener::CLIListener(GameAgent *agent) :
     cout << agent_->getTrumpCard() << " is trump.\n";
 }
 
-CLIListener::~CLIListener()
-{ /* Empty */ }
+void CLIListener::gameOver(const Player* biscuitPlayer)
+{
+    cout << "Game over.  ";
+    if (biscuitPlayer)
+        cout << "The biscuit is " << biscuitPlayer->getName() << '\n';
+    else
+        cout << "The game was a tie.\n";
+}
 
 void CLIListener::attackerChanged(const Player *newAttacker)
 {

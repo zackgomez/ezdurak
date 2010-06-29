@@ -15,14 +15,16 @@ public:
     void run();
 
     // Functions inherited from GameAgent interface
-    virtual void addListener(GameListener *listener);
-    virtual void removeListener(GameListener *listener);
-    virtual Card getTrumpCard() const;
-    virtual const Player * getAttacker() const;
-    virtual const Player * getDefender() const;
-    virtual const std::vector<Player*>& getPlayers() const;
+    void addListener(GameListener *listener);
+    void removeListener(GameListener *listener);
+    Card getTrumpCard() const;
+    int  getDeckSize() const;
+    
+    const Player * getAttacker() const;
+    const Player * getDefender() const;
+    const std::vector<Player*>& getPlayers() const;
 
-    virtual const std::vector<Card>& getPlayedCards() const;
+    const std::vector<Card>& getPlayedCards() const;
 
 private:
     // Helper Functions

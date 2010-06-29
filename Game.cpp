@@ -51,6 +51,8 @@ Game::Game(int numPlayers) :
         players_[i] = new AIPlayer(this, name, hands[i]);
     }
 
+    attacker_ = players_[attackerIdx_];
+    defender_ = players_[defenderIdx_];
 }
 
 Game::~Game()
@@ -76,6 +78,11 @@ Card Game::getTrumpCard() const
     return trumpCard_;
 }
 
+int Game::getDeckSize() const
+{
+    return deck_.getNumCards();
+}
+
 const Player * Game::getAttacker() const
 {
     return attacker_;
@@ -99,7 +106,9 @@ const std::vector<Card>& Game::getPlayedCards() const
 // -------------- Interface Functions -----------------
 void Game::run()
 {
-    cout << "Game: Starting a new game with " << players_.size() << " players\n";
+    // The game begins!!
+    for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+        (*it)->gameStart();
 
     while (players_.size() > 1)
     {
@@ -121,17 +130,11 @@ void Game::run()
         // Update attacker and defender index, successful defend means that the
         // defender is the next attacker, otherwise skip the defender
         if (successfulDefend)
-        {
-            attackerIdx_ = defenderIdx_;
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
                 (*it)->defenderWon();
-        }
         else
-        {
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
                 (*it)->defenderLost();
-            attackerIdx_ = (defenderIdx_+1) % players_.size();
-        }
 
         // Defender is always to the right of the attacker
         defenderIdx_ = (attackerIdx_+1) % players_.size();
@@ -151,14 +154,24 @@ void Game::run()
                     (*lit)->playedOut(p);
             }
         }
+
+        // TODO Fix this as they could be incorrect after people go out
+        // Update indicies
+        if (successfulDefend)
+            attackerIdx_ = defenderIdx_;
+        else
+            attackerIdx_ = (defenderIdx_+1) % players_.size();
+        // Defender is always to the right of the attacker
+        defenderIdx_ = (attackerIdx_+1) % players_.size();
     }
     
-    // TODO send a message via GameListener
-    // Check for win/tie
+    // Check for win/tie and let the listeners know
+    Player *biscuit = NULL;
     if (players_.size() == 1)
-        cout << "Game: " << players_[0]->getName() << " is the biscuit!!!\n";
-    else
-        cout << "Game: The game was a tie.\n";
+        biscuit = players_[0];
+
+    for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+        (*it)->gameOver(biscuit);
 }
 
 bool Game::doRound()

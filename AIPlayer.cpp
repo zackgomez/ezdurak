@@ -59,6 +59,11 @@ void AIPlayer::addCards(const vector<Card>& cards)
     Player::addCards(cards);
 }
 
+void AIPlayer::gameStart()
+{ /* Empty */ }
+
+void AIPlayer::gameOver(const Player *biscuit)
+{ /* Empty */ }
 
 void AIPlayer::attackerChanged(const Player *newAttacker)
 { /* Empty */ }

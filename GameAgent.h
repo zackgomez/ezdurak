@@ -15,11 +15,31 @@ public:
     virtual void addListener(GameListener *listener) = 0;
     virtual void removeListener(GameListener *listener) = 0;
 
+    /**
+     * Returns the card the defines trump.
+     */
     virtual Card getTrumpCard() const = 0;
+
+    /**
+     * Returns the number of cards left in the deck.
+     */
+    virtual int  getDeckSize() const = 0;
 
     virtual const Player * getAttacker() const = 0;
     virtual const Player * getDefender() const = 0;
+
+    /**
+     * Returns the list of active players in seated order.  You can query
+     * the players for the number of cards they have remaining in their hand
+     * or their name.
+     */
     virtual const std::vector<Player*>& getPlayers() const = 0;
 
+    /**
+     * Returns the played cards for the attack against the current defender.
+     * This is reset each round sometime after the defenderWon/Lost message
+     * is sent.
+     */
     virtual const std::vector<Card>& getPlayedCards() const = 0;
 };
+
