@@ -30,4 +30,5 @@ private:
     // Helper functions
     std::vector<Card> playableCards(std::set<int> playableRanks);
     std::vector<Card> defendableCards(const Card& card, Card::cardsuit trump);
+    void removeCard(const Card& card);
 };

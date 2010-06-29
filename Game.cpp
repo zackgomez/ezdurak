@@ -298,6 +298,6 @@ bool Game::validateHand(const vector<Card>& hand)
         }
     }
 
-    return red != 6 && black != 6 &&
+    return red < 6 && black < 6 &&
         hcount < 5 && scount < 5 && ccount < 5 && dcount < 5;
 }

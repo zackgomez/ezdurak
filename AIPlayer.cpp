@@ -10,7 +10,8 @@ using std::vector;
 using std::set;
 using std::string;
 
-AIPlayer::AIPlayer(GameAgent* agent, const string& name, const vector<Card>& hand) :
+AIPlayer::AIPlayer(GameAgent* agent, const string& name,
+                   const vector<Card>& hand) :
     Player(name, hand),
     GameListener(agent)
 { /* Empty */ }
@@ -28,17 +29,9 @@ Card AIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
     int idx = (rand() % playable.size());
     Card defC = playable[idx];
 
-    for (int i = 0; i < hand_.size(); i++)
-    {
-        if (hand_[i] == defC)
-        {
-            hand_[i] = hand_[hand_.size() - 1];
-            hand_.pop_back();
-            return defC;
-        }
-    }
+    removeCard(defC);
 
-    assert(false && "chose a card that wasn't in my hand?!");
+    return defC;
 }
 
 Card AIPlayer::attack(set<int> playableRanks)
@@ -51,16 +44,9 @@ Card AIPlayer::attack(set<int> playableRanks)
     int idx = (rand() % playable.size());
     Card attC = playable[idx];
 
-    for (int i = 0; i < hand_.size(); i++) {
-        if (hand_[i] == attC)
-        {
-            hand_[i] = hand_[hand_.size() - 1];
-            hand_.pop_back();
-            return attC;
-        }
-    }
+    removeCard(attC);
 
-    assert(false && "chose a card that wasn't in my hand?!");
+    return attC;
 }
 
 Card AIPlayer::pileOn(set<int> playableRanks)
@@ -113,7 +99,8 @@ vector<Card> AIPlayer::playableCards(set<int> playableRanks)
     return playable;
 }
 
-vector<Card> AIPlayer::defendableCards(const Card& attackingCard, Card::cardsuit trump)
+vector<Card> AIPlayer::defendableCards(const Card& attackingCard,
+                                       Card::cardsuit trump)
 {
     vector<Card> playable;
 
@@ -124,4 +111,19 @@ vector<Card> AIPlayer::defendableCards(const Card& attackingCard, Card::cardsuit
     }
 
     return playable;
+}
+
+void AIPlayer::removeCard(const Card& card)
+{
+    for (int i = 0; i < hand_.size(); i++)
+    {
+        if (hand_[i] == card)
+        {
+            hand_[i] = hand_[hand_.size() - 1];
+            hand_.pop_back();
+            return;
+        }
+    }
+
+    assert(false && "Tried to remove a card that wasn't in the hand");
 }
