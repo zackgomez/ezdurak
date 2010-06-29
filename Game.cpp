@@ -5,6 +5,7 @@
 #include <cassert>
 #include "CLIPlayer.h"
 #include "AIPlayer.h"
+#include "EHPlayer.h"
 #include "GameListener.h"
 
 using namespace std;
@@ -46,9 +47,9 @@ Game::Game(int numPlayers) :
     for (int i = 1; i < players_.size(); i++)
     {
         stringstream ss;
-        ss << "AIPlayer" << i;
+        ss << "EHPlayer" << i;
         string name = ss.str();
-        players_[i] = new AIPlayer(this, name, hands[i]);
+        players_[i] = new EHPlayer(this, name, hands[i]);
     }
 
 }
