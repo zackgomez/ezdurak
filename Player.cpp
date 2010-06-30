@@ -7,8 +7,8 @@ using std::string;
 using std::vector;
 using std::set;
 
-Player::Player(const string& name, const vector<Card>& hand)
-    : hand_(hand), name_(name)
+Player::Player(const string& name)
+    : hand_(), name_(name)
 {}
 
 Player::~Player()

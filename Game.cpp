@@ -1,20 +1,18 @@
 #include "Game.h"
 #include <string>
-#include <sstream>
 #include <iostream>
 #include <cassert>
-#include "CLIPlayer.h"
-#include "AIPlayer.h"
-#include "EHPlayer.h"
 #include "GameListener.h"
+#include "Player.h"
 
 using namespace std;
 
-Game::Game(int numPlayers) :
-    players_(numPlayers),
+Game::Game(const std::vector<Player*> players) :
+    players_(players),
     attackerIdx_(0),
     defenderIdx_(1)
 {
+    int numPlayers = players_.size();
     assert(numPlayers >= 2 && numPlayers <= 6);
 
     // Predeal the hands so that we can ensure that the game will be fair 
@@ -42,16 +40,8 @@ Game::Game(int numPlayers) :
         break;
     }
 
-
-    players_[0] = new CLIPlayer("HumanPlayer", hands[0]);
-    for (int i = 1; i < players_.size(); i++)
-    {
-        stringstream ss;
-        ss << "EHPlayer" << i;
-        string name = ss.str();
-        players_[i] = new EHPlayer(this, name, hands[i]);
-    }
-
+    for (int i = 0; i < players_.size(); i++)
+        players_[i]->addCards(hands[i]);
     attacker_ = players_[attackerIdx_];
     defender_ = players_[defenderIdx_];
 }
@@ -114,7 +104,7 @@ void Game::run()
 {
     // The game begins!!
     for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-        (*it)->gameStart();
+        (*it)->gameStart(this);
 
     while (players_.size() > 1)
     {

@@ -10,10 +10,9 @@ using std::vector;
 using std::set;
 using std::string;
 
-AIPlayer::AIPlayer(GameAgent* agent, const string& name,
-                   const vector<Card>& hand) :
-    Player(name, hand),
-    GameListener(agent)
+AIPlayer::AIPlayer(const string& name) :
+    Player(name),
+    GameListener()
 { /* Empty */ }
 
 AIPlayer::~AIPlayer()
@@ -59,8 +58,10 @@ void AIPlayer::addCards(const vector<Card>& cards)
     Player::addCards(cards);
 }
 
-void AIPlayer::gameStart()
-{ /* Empty */ }
+void AIPlayer::gameStart(GameAgent *agent)
+{
+    GameListener::gameStart(agent);
+}
 
 void AIPlayer::gameOver(const Player *biscuit)
 { /* Empty */ }

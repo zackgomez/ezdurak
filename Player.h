@@ -7,7 +7,7 @@
 class Player
 {
 public:
-    Player(const std::string& name, const std::vector<Card>& hand);
+    Player(const std::string& name);
     virtual ~Player();
 
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump) = 0;

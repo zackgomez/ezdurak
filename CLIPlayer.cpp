@@ -7,8 +7,8 @@ using std::string;
 using std::vector;
 using std::set;
 
-CLIPlayer::CLIPlayer(const string& name, const vector<Card>& hand)
-    : Player(name, hand)
+CLIPlayer::CLIPlayer(const string& name)
+    : Player(name)
 {}
 
 CLIPlayer::~CLIPlayer()

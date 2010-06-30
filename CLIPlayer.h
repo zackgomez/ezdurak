@@ -4,7 +4,7 @@
 class CLIPlayer : public Player
 {
 public:
-    CLIPlayer(const std::string& name, const std::vector<Card>& hand);
+    CLIPlayer(const std::string& name);
     virtual ~CLIPlayer();
 
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump);

@@ -6,8 +6,7 @@ class AIPlayer :
     public Player, public GameListener
 {
 public:
-    AIPlayer(GameAgent* agent, const std::string& name,
-             const std::vector<Card>& hand);
+    AIPlayer(const std::string& name);
     virtual ~AIPlayer();
 
     // Methods Inherited from Player interface
@@ -17,7 +16,7 @@ public:
     virtual void addCards(const std::vector<Card>& cards);
 
     // Methods Inherited from GameListener interface
-    virtual void gameStart();
+    virtual void gameStart(GameAgent *);
     virtual void gameOver(const Player*);
     virtual void attackerChanged(const Player*);
     virtual void defenderChanged(const Player*);

@@ -6,7 +6,7 @@ class Player;
 class GameListener
 {
 public:
-    GameListener(GameAgent *agent) : agent_(agent) { agent_->addListener(this); }
+    GameListener() : agent_(NULL) { /* Empty */ }
     /** All intended base classes must have virtual destructors. */
     virtual ~GameListener() { agent_->removeListener(this); }
 
@@ -15,7 +15,7 @@ public:
      * the first attacker is just about to start.  It would be a good time to
      * get starting information from the game and do some initialization.
      */
-    virtual void gameStart() = 0;
+    virtual void gameStart(GameAgent* agent) { agent_ = agent; };
 
     /**
      * Called when the game is over.

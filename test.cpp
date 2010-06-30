@@ -51,7 +51,8 @@ int main(int argc, char **argv)
     std::cout << "Give a player a hand...\n";
     std::string name = "TestPlayer";
     std::vector<Card> hand = d.deal(15);
-    Player* player = new CLIPlayer(name, hand);
+    Player* player = new CLIPlayer(name);
+    player->addCards(hand);
     player->print();
     std::cout << '\n';
 

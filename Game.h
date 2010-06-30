@@ -9,7 +9,7 @@ class Player;
 class Game : public GameAgent
 {
 public:
-    Game(int numPlayers);
+    Game(const std::vector<Player*> players);
     virtual ~Game();
 
     void run();
