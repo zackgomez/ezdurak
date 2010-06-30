@@ -6,7 +6,7 @@
 int main()
 {
     srand(time(NULL));
-    Game game(4);
+    Game game(2);
     CLIListener listener(&game);
 
     game.run();

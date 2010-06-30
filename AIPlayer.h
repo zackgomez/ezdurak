@@ -28,7 +28,7 @@ public:
     virtual void playedOut(const Player *player);
     virtual void givenCards(const Player *player, int numCards);
 
-private:
+protected:
     // Helper functions
     std::vector<Card> playableCards(std::set<int> playableRanks);
     std::vector<Card> defendableCards(const Card& card, Card::cardsuit trump);
