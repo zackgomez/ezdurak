@@ -32,7 +32,7 @@ Game::Game(const std::vector<Player*> players) :
             hands[i] = deck_.deal(6);
             if (!validateHand(hands[i]))
             {
-                cout << "Game: Misdeal!\n";
+		// Misdeal
                 continue;
             }
         }
