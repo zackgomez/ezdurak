@@ -8,20 +8,24 @@ class GameListener
 public:
     GameListener() : agent_(NULL) { /* Empty */ }
     /** All intended base classes must have virtual destructors. */
-    virtual ~GameListener() { agent_->removeListener(this); }
+    virtual ~GameListener() { /* Empty */ }
 
     /**
      * This function is called after the Game is completely initialized and 
      * the first attacker is just about to start.  It would be a good time to
      * get starting information from the game and do some initialization.
      */
-    virtual void gameStart(GameAgent* agent) { agent_ = agent; };
+    virtual void gameStart(GameAgent* agent)
+    {
+        agent_ = agent;
+        agent->addListener(this);
+    }
 
     /**
      * Called when the game is over.
      * @param biscuit The losing "biscuit" player or NULL if it was a tie.
      */
-    virtual void gameOver(const Player* biscuit) = 0;
+    virtual void gameOver(const Player* biscuit) { agent_->removeListener(this); }
 
     virtual void attackerChanged(const Player* newAttacker) = 0;
     virtual void defenderChanged(const Player* newDefender) = 0;

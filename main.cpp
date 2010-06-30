@@ -14,8 +14,8 @@ int main()
     srand(time(NULL));
 
     std::vector<Player*> players(4);
-    players[0] = new CLIPlayer("HumanPlayer");
-    for (int i = 1; i < players.size(); i++)
+    //players[0] = new CLIPlayer("HumanPlayer");
+    for (int i = 0; i < players.size(); i++)
     {
         std::stringstream ss;
         ss << "AIPlayer" << i;

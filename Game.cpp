@@ -138,7 +138,6 @@ void Game::run()
         // Defender is always to the right of the attacker
         defenderIdx_ = (attackerIdx_+1) % players_.size();
 
-        // XXX This code segfaults sometimes...
         // Check for players with no cards and remove them from the players list
         for (auto it = players_.begin(); it != players_.end(); it++)
         {
@@ -147,13 +146,15 @@ void Game::run()
                 Player* p = *it;
                 // Remove them from active players
                 it = players_.erase(it);
+                // TODO:2010-06-29:zack:This fixes the segfault but is weird.
+                it = players_.begin();
                 // Broadcast
                 for (auto lit = listeners_.begin(); lit != listeners_.end(); lit++)
                     (*lit)->playedOut(p);
             }
         }
 
-        // TODO Fix this as they could be incorrect after people go out
+        // TODO:2010-06-28:zack:Fix this as they could be incorrect after people go out
         // Update indicies
         if (successfulDefend)
             attackerIdx_ = defenderIdx_;
