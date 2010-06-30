@@ -10,7 +10,7 @@ ezdurak: $(OBJS) obj/main.o
 test: $(OBJS) obj/test.o
 	$(CXX) $^ $(CPPFLAGS) $(LDFLAGS) -o $@
 
-obj/%.o: %.cpp 
+obj/%.o: %.cpp
 	$(CXX) -c $(CPPFLAGS) -o $@ $<
 
 

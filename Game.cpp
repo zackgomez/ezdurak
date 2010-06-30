@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include <algorithm>
 #include "GameListener.h"
 #include "Player.h"
 
@@ -103,8 +104,10 @@ const std::vector<Card>& Game::getPlayedCards() const
 void Game::run()
 {
     // The game begins!!
+    for (auto it = players_.begin(); it != players_.end(); it++)
+        (*it)->gameStarting(this);
     for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-        (*it)->gameStart(this);
+        (*it)->gameStart();
 
     while (players_.size() > 1)
     {
@@ -113,6 +116,7 @@ void Game::run()
         attacker_ = players_[attackerIdx_];
         defender_ = players_[defenderIdx_];
         nextAttackerIdx_ = (defenderIdx_+1) % players_.size();
+        refillOrder_.clear();
 
         // Maximum of 6, or the number of cards the player had cards to be played
         tricksLeft_ = min(6, defender_->getNumCards());
@@ -123,7 +127,8 @@ void Game::run()
             (*it)->defenderChanged(defender_);
         }
         bool successfulDefend = doRound();
-
+        // Now add the defender to the back of the refill order
+        refillOrder_.push_back(defender_);
         refillCards();
 
         // Update attacker and defender index, successful defend means that the
@@ -196,6 +201,10 @@ bool Game::doRound()
         playedCards_.push_back(attC);
         playedRanks_.insert(attC.getNum());
         tricksLeft_--;
+        // Keep track of the order the cards are played in
+        if (find(refillOrder_.begin(), refillOrder_.end(), attacker_)
+                == refillOrder_.end())
+            refillOrder_.push_back(attacker_);
         // Broadcast
         for (auto it = listeners_.begin(); it != listeners_.end(); it++)
             (*it)->attackingCard(attC);
@@ -205,8 +214,7 @@ bool Game::doRound()
         {
             // Give the defender all of the cards + pileOn
             pileOn();
-            defender_->addCards(playedCards_);
-            // Unsuccessful defend
+            defender_->addCards(playedCards_); // Unsuccessful defend
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
                 (*it)->givenCards(defender_, playedCards_.size());
             return false;
@@ -223,18 +231,18 @@ bool Game::doRound()
     return true;
 }
 
+// TODO:2010-06-29:zack: Make sure this function is working correctly
 void Game::refillCards()
 {
-    // TODO smart refill
-    for (int i = 0; i < players_.size(); i++) 
+    for (int i = 0; i < refillOrder_.size(); i++) 
     {
-        int numCards = min(deck_.getNumCards(), 6 - players_[i]->getNumCards());
+        int numCards = min(deck_.getNumCards(), 6 - refillOrder_[i]->getNumCards());
         if (numCards > 0)
         {
             vector<Card> newcs = deck_.deal(numCards);
-            players_[i]->addCards(newcs);
+            refillOrder_[i]->addCards(newcs);
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-                (*it)->givenCards(players_[i], numCards);
+                (*it)->givenCards(refillOrder_[i], numCards);
         }
     }
 }

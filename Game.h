@@ -68,14 +68,11 @@ private:
     Deck deck_;
     Card::cardsuit trump_;
     Card trumpCard_;
-
-    // Transient Members
     Player *attacker_;
     Player *defender_;
-
     int nextAttackerIdx_;
-
     std::vector<Card> playedCards_;
     std::set<int> playedRanks_;
     int tricksLeft_;
+    std::vector<Player*> refillOrder_;
 };

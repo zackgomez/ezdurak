@@ -6,18 +6,18 @@
 using std::vector;
 using std::cout;
 
-CLIListener::CLIListener() :
+CLIListener::CLIListener(GameAgent *agent) :
     GameListener()
 {
+    agent_ = agent;
+    agent_->addListener(this);
 }
 
 CLIListener::~CLIListener()
 { /* Empty */ }
 
-void CLIListener::gameStart(GameAgent* agent)
+void CLIListener::gameStart()
 {
-    GameListener::gameStart(agent);
-
     cout << "The players are seated like:\n";
     const vector<Player*> players = agent_->getPlayers();
     for (auto it = players.begin(); it != players.end(); it++)

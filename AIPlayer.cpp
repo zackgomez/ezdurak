@@ -4,7 +4,6 @@
 #include <cassert>
 #include <iostream>
 #include "GameAgent.h"
-
 using std::cout;
 using std::vector;
 using std::set;
@@ -17,6 +16,12 @@ AIPlayer::AIPlayer(const string& name) :
 
 AIPlayer::~AIPlayer()
 { /* Empty */ }
+
+void AIPlayer::gameStarting(GameAgent *agent)
+{
+    agent_ = agent;
+    agent_->addListener(this);
+}
 
 Card AIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {
@@ -58,10 +63,8 @@ void AIPlayer::addCards(const vector<Card>& cards)
     Player::addCards(cards);
 }
 
-void AIPlayer::gameStart(GameAgent *agent)
-{
-    GameListener::gameStart(agent);
-}
+void AIPlayer::gameStart()
+{ /* Empty */ }
 
 void AIPlayer::gameOver(const Player *biscuit)
 { /* Empty */ }

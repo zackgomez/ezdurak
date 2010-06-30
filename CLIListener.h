@@ -3,11 +3,11 @@
 class CLIListener : public GameListener
 {
 public:
-    CLIListener();
+    CLIListener(GameAgent *);
     virtual ~CLIListener();
 
     // Methods inherited from GameListener
-    void gameStart(GameAgent *);
+    void gameStart();
     void gameOver(const Player*);
     void attackerChanged(const Player*);
     void defenderChanged(const Player*);

@@ -2,6 +2,7 @@
 #include <ctime>
 #include <sstream>
 #include <string>
+#include <algorithm>
 #include "Game.h"
 #include "CLIListener.h"
 #include "CLIPlayer.h"
@@ -28,10 +29,11 @@ int main(int argc, char** argv)
             players[i] = new AIPlayer(name);
         }
 
+        random_shuffle(players.begin(), players.end());
+
         Game game(players);
 
-        CLIListener listener;
-        game.addListener(&listener);
+        CLIListener listener(&game);
 	game.addListener(&sk);
 
         game.run();

@@ -10,13 +10,14 @@ public:
     virtual ~AIPlayer();
 
     // Methods Inherited from Player interface
+    virtual void gameStarting(GameAgent *agent);
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump);
     virtual Card attack(std::set<int> playableRanks = std::set<int>());
     virtual Card pileOn(std::set<int> playableRanks);
     virtual void addCards(const std::vector<Card>& cards);
 
     // Methods Inherited from GameListener interface
-    virtual void gameStart(GameAgent *);
+    virtual void gameStart();
     virtual void gameOver(const Player*);
     virtual void attackerChanged(const Player*);
     virtual void defenderChanged(const Player*);

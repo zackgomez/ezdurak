@@ -14,6 +14,9 @@ CLIPlayer::CLIPlayer(const string& name)
 CLIPlayer::~CLIPlayer()
 {}
 
+void CLIPlayer::gameStarting(GameAgent *agent)
+{ /* Empty */ }
+
 Card CLIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {
     for (;;)

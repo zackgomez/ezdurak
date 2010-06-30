@@ -12,7 +12,7 @@ public:
     void print();
 
     // Caught messages from GameListener interface
-    void gameStart(GameAgent*);
+    void gameStart();
     void gameOver(const Player* biscuit);
 
     // Ignored messages

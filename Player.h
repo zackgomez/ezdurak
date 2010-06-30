@@ -4,11 +4,18 @@
 #include <set>
 #include "Card.h"
 
+class GameAgent;
+
 class Player
 {
 public:
     Player(const std::string& name);
     virtual ~Player();
+
+    /**
+     * Called at the start of the game.
+     */
+    virtual void gameStarting(GameAgent *agent) = 0;
 
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump) = 0;
     virtual Card attack(std::set<int> playableRanks = std::set<int>()) = 0;

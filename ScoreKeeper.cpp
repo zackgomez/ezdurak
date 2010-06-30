@@ -16,10 +16,8 @@ void ScoreKeeper::print()
     }
 }
 
-void ScoreKeeper::gameStart(GameAgent *agent)
-{
-    GameListener::gameStart(agent);
-}
+void ScoreKeeper::gameStart()
+{ /* Empty */ }
 
 void ScoreKeeper::gameOver(const Player* biscuit)
 {
