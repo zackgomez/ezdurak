@@ -23,7 +23,12 @@ public:
     /**
      * Returns the number of cards left in the deck.
      */
-    virtual int  getDeckSize() const = 0;
+    virtual int getDeckSize() const = 0;
+
+    /**
+     * Returns the number of tricks left to play on the current defender.
+     */
+    virtual int getTricksLeft() const = 0;
 
     virtual const Player * getAttacker() const = 0;
     virtual const Player * getDefender() const = 0;

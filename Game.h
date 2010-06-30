@@ -18,6 +18,7 @@ public:
     void addListener(GameListener *listener);
     void removeListener(GameListener *listener);
     Card getTrumpCard() const;
+    int  getTricksLeft() const;
     int  getDeckSize() const;
     
     const Player * getAttacker() const;
@@ -46,10 +47,9 @@ private:
     void nextAttacker();
 
     /**
-     * Gives the defender extra cards with a maximum of maxCards starting with
-     * the current attacker going first.
+     * Gives the defender extra cards with a maximum of tricksLeft_.
      */
-    void pileOn(int maxCards);
+    void pileOn();
 
     /**
      * Returns false if the hand is not a valid starting hand for Durak.  I.e. 
@@ -77,4 +77,5 @@ private:
 
     std::vector<Card> playedCards_;
     std::set<int> playedRanks_;
+    int tricksLeft_;
 };

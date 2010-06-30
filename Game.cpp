@@ -78,6 +78,11 @@ Card Game::getTrumpCard() const
     return trumpCard_;
 }
 
+int Game::getTricksLeft() const
+{
+    return tricksLeft_;
+}
+
 int Game::getDeckSize() const
 {
     return deck_.getNumCards();
@@ -118,6 +123,9 @@ void Game::run()
         defender_ = players_[defenderIdx_];
         nextAttackerIdx_ = (defenderIdx_+1) % players_.size();
 
+        // Maximum of 6, or the number of cards the player had cards to be played
+        tricksLeft_ = min(6, defender_->getNumCards());
+
         for (auto it = listeners_.begin(); it != listeners_.end(); it++)
         {
             (*it)->attackerChanged(attacker_);
@@ -143,7 +151,6 @@ void Game::run()
         // Check for players with no cards and remove them from the players list
         for (auto it = players_.begin(); it != players_.end(); it++)
         {
-            cout << "Game: Value of ptr: " << *it << '\n';
             if ((*it)->getNumCards() == 0)
             {
                 Player* p = *it;
@@ -177,9 +184,7 @@ void Game::run()
 bool Game::doRound()
 {
     int giveUps = 0;
-    // Maximum of 6, or the number of cards the player had cards to be played
-    int maxCards = min(6, defender_->getNumCards());
-    for (int i = 0; i < maxCards; i++)
+    while (tricksLeft_ > 0)
     {
         Card attC = attacker_->attack(playedRanks_);
         if (!attC)
@@ -192,13 +197,14 @@ bool Game::doRound()
             nextAttacker();
 
             // No card played
-            i--;
             continue;
         }
         // If one attacker plays a card reset the giveUp count
         giveUps = 0;
         playedCards_.push_back(attC);
         playedRanks_.insert(attC.getNum());
+        tricksLeft_--;
+        // Broadcast
         for (auto it = listeners_.begin(); it != listeners_.end(); it++)
             (*it)->attackingCard(attC);
 
@@ -206,7 +212,7 @@ bool Game::doRound()
         if (!defC)
         {
             // Give the defender all of the cards + pileOn
-            pileOn(maxCards - (i+1));
+            pileOn();
             defender_->addCards(playedCards_);
             // Unsuccessful defend
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
@@ -244,9 +250,7 @@ void Game::refillCards()
 void Game::nextAttacker()
 {
     // Make sure the defender doesn't attack themselves
-    if (nextAttackerIdx_ == defenderIdx_)
-        nextAttackerIdx_ = (nextAttackerIdx_+1) % players_.size();
-    attacker_ = players_[nextAttackerIdx_];
+    if (nextAttackerIdx_ == defenderIdx_) nextAttackerIdx_ = (nextAttackerIdx_+1) % players_.size(); attacker_ = players_[nextAttackerIdx_];
     nextAttackerIdx_ = (nextAttackerIdx_+1) % players_.size();
     
     // Broadcast to the listeners
@@ -254,10 +258,10 @@ void Game::nextAttacker()
         (*it)->attackerChanged(attacker_);
 }
 
-void Game::pileOn(int maxCards)
+void Game::pileOn()
 {
     int passers = 0;
-    while (maxCards > 0)
+    while (tricksLeft_ > 0)
     {
         Card c = attacker_->pileOn(playedRanks_);
         if (!c)
@@ -270,9 +274,10 @@ void Game::pileOn(int maxCards)
             continue;
         }
         playedCards_.push_back(c);
+        --tricksLeft_;
         for (auto it = listeners_.begin(); it != listeners_.end(); it++)
             (*it)->attackingCard(c);
-        maxCards--;
+        tricksLeft_--;
         passers = 0;
         // No need to update played ranks, no new values will be played.
     }
