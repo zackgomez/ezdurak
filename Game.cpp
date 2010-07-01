@@ -34,7 +34,7 @@ void Game::run()
         if (!successfulDefend)
             defender_->addCards(playedCards_);
         // Refill
-
+        refill();
         // Go out
 
         // new defender
@@ -136,6 +136,24 @@ void Game::nextAttacker()
         attackerIdx_ = (attackerIdx_ + 1) % players_.size();
         attacker_ = players_[attackerIdx_];
     } while (attacker_ == defender_);
+}
+
+// TODO:2010-06-30:zack: Smart refill.
+// The game should give players cards in the order that they attacked, with
+// the defender always last.
+void Game::refill()
+{
+    for (int i = 0; i < players_.size(); i++)
+    {
+        // You refill to HAND_SIZE, but only if there are enough cards.
+        int neededCards = min(HAND_SIZE - players_[i]->getNumCards(),
+                              deck_.getNumCards());
+        if (neededCards > 0)
+        {
+            vector<Card> refillCards = deck_.deal(neededCards);
+            players_[i]->addCards(refillCards);
+        }
+    }
 }
 
 // ------------------ GameAgent Interface -------------------------

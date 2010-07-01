@@ -58,5 +58,7 @@ private:
     void nextAttacker();
     /** Used by nextAttacker. */
     int attackerIdx_;
+    /** Refills the players hands up to HAND_SIZE. */
+    void refill();
 };
 
