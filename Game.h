@@ -58,6 +58,11 @@ private:
     void nextAttacker();
     /** Used by nextAttacker. */
     int attackerIdx_;
+    /**
+     * Continues to put cards on playableCards until the attackers all pass or
+     * the maximum number of tricks is reached.
+     */
+    void pileOn();
     /** Refills the players hands up to HAND_SIZE. */
     void refill();
     /**
@@ -65,5 +70,7 @@ private:
      * gone out and are no longer playing.
      */
     void removeFinishedPlayers();
+    /** Changes the defender_ variable to point to the next defender. */
+    void nextDefender(bool successfulDefend);
 };
 

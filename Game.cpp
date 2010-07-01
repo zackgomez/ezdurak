@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <cassert>
+#include <algorithm>
 #include "Player.h"
 
 #include <iostream>
@@ -28,17 +29,31 @@ void Game::run()
 
     while (players_.size() > 1)
     {
+        cout << "---------------------------------------------------\n"
+             << "Start of a new round\n"
+             << "Attacker: " << attacker_->getName() << '\n'
+             << "Defender: " << defender_->getName() << "\n\n";
         // Round
         bool successfulDefend = doRound();
         // If the defender loses, then they must take all of the played cards.
         if (!successfulDefend)
+        {
+            // And the attackers can pile on cards
+            pileOn();
             defender_->addCards(playedCards_);
+        }
         // Refill
         refill();
         // Go out
         removeFinishedPlayers();
         // new defender
+        nextDefender(successfulDefend);
     }
+
+    if (players_.size() == 0)
+        cout << "The game is a draw.\n";
+    else
+        cout << "The biscuit is " << players_[0]->getName() << '\n';
 }
 
 void Game::deal()
@@ -109,7 +124,6 @@ Card Game::getAttackingCard()
     // while all the attackers haven't passed
     do
     {
-        // XXX DEBUG INFO
         cout << "Current attacker:\n";
         attacker_->print();
         // Get the card from the attacker, could be a pass
@@ -137,6 +151,11 @@ void Game::nextAttacker()
     } while (attacker_ == defender_);
 }
 
+void Game::pileOn()
+{
+    // TODO
+}
+
 // TODO:2010-06-30:zack: Smart refill.
 // The game should give players cards in the order that they attacked, with
 // the defender always last.
@@ -161,12 +180,39 @@ void Game::removeFinishedPlayers()
     while (i < players_.size())
     {
         if (players_[i]->getNumCards() == 0)
+        {
+            cout << players_[i]->getName() << " has gone out!\n";
             // Remove that player using random access iterator
             // The next player is now accessed using the same index i
             players_.erase(players_.begin() + i);
+        }
         else
+        {
             i++;
+        }
     }
+}
+
+void Game::nextDefender(bool successfulDefend)
+{
+    // If is one or less player there is no next defender
+    if (players_.size() <= 1)
+        return;
+
+    // If there is a successful defend, the current defender is the new attacker
+    attacker_ = defender_;
+    // Set the attackerIdx_ variable
+    attackerIdx_ = find(players_.begin(), players_.end(), attacker_)
+        - players_.begin();
+    // If not, then the current attacker is the "nextAttacker" from the point 
+    // of view of the defender.
+    if (!successfulDefend)
+        nextAttacker();
+
+    // Now we have the correct attacker set, the defender is always the person
+    // after the initial attacker.
+    int defenderIdx = (attackerIdx_ + 1) % players_.size();
+    defender_ = players_[defenderIdx];
 }
 
 // ------------------ GameAgent Interface -------------------------
