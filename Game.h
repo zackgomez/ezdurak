@@ -15,7 +15,7 @@ public:
     void run();
 
     // Constants
-    const static int HAND_SIZE = 6;
+    const static int HAND_SIZE;
 
     // Functions inherited from GameAgent interface
     void addListener(GameListener *listener);
@@ -35,11 +35,28 @@ private:
 
     Player *attacker_;
     Player *defender_;
+    // TODO:2010-06-30:zack: Rename this variable to be clearer.
+    // It should signify that it is the number of attacking cards that can be
+    // played.
+    int tricksLeft_;
     std::vector<Card> playedCards_;
+    std::set<int> playableRanks_;
 
     std::set<GameListener*> listeners_;
 
+    /** Deals a the initial hands to the players */
     void deal();
-    void doRound();
+    /**
+     * Conducts one "round" vs a single defender.
+     * @return True if the rounded ended due to a successful defend, false if 
+     * the defender lost.
+     */
+    bool doRound();
+    /** Gets an attacking card or the null card if the attackers all pass. */
+    Card getAttackingCard();
+    /** Moves to the next attacker, making sure to skip the current defender. */
+    void nextAttacker();
+    /** Used by nextAttacker. */
+    int attackerIdx_;
 };
 
