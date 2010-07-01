@@ -36,7 +36,7 @@ void Game::run()
         // Refill
         refill();
         // Go out
-
+        removeFinishedPlayers();
         // new defender
     }
 }
@@ -106,7 +106,6 @@ Card Game::getAttackingCard()
     // Used to tell when all the attackers have passed
     const Player *initialAttacker = attacker_;
 
-    Card attC;
     // while all the attackers haven't passed
     do
     {
@@ -114,7 +113,7 @@ Card Game::getAttackingCard()
         cout << "Current attacker:\n";
         attacker_->print();
         // Get the card from the attacker, could be a pass
-        attC = attacker_->attack(playableRanks_);
+        Card attC = attacker_->attack(playableRanks_);
 
         // If they didn't pass
         if (attC)
@@ -153,6 +152,20 @@ void Game::refill()
             vector<Card> refillCards = deck_.deal(neededCards);
             players_[i]->addCards(refillCards);
         }
+    }
+}
+
+void Game::removeFinishedPlayers()
+{
+    int i = 0;
+    while (i < players_.size())
+    {
+        if (players_[i]->getNumCards() == 0)
+            // Remove that player using random access iterator
+            // The next player is now accessed using the same index i
+            players_.erase(players_.begin() + i);
+        else
+            i++;
     }
 }
 

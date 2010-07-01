@@ -60,5 +60,10 @@ private:
     int attackerIdx_;
     /** Refills the players hands up to HAND_SIZE. */
     void refill();
+    /**
+     * Removes the players that have no cards left in their hand as they have 
+     * gone out and are no longer playing.
+     */
+    void removeFinishedPlayers();
 };
 
