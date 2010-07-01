@@ -19,8 +19,10 @@ Game::Game(const std::vector<Player*> players) :
     // Predeal the hands so that we can ensure that the game will be fair 
     // without unnecessarily making and remaking players
     std::vector<std::vector<Card>> hands(numPlayers);
-    for (;;)
+    bool goodDeal;
+    do
     {
+        goodDeal = true;
         // Shuffle and get trump card
         deck_ = Deck();
         deck_.shuffle();
@@ -33,13 +35,11 @@ Game::Game(const std::vector<Player*> players) :
             hands[i] = deck_.deal(6);
             if (!validateHand(hands[i]))
             {
-		// Misdeal
-                continue;
+                goodDeal = false;
+                break;
             }
         }
-
-        break;
-    }
+    } while (!goodDeal);
 
     for (int i = 0; i < players_.size(); i++)
         players_[i]->addCards(hands[i]);
@@ -178,6 +178,8 @@ void Game::run()
         (*it)->gameOver(biscuit);
 }
 
+// TODO:2010-06-30:zack: Clean this function up, it's spaghettitastic.
+// Too many breaks/continues.
 bool Game::doRound()
 {
     int giveUps = 0;
