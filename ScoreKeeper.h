@@ -16,16 +16,17 @@ public:
     void gameOver(const Player* biscuit);
 
     // Ignored messages
-    void attackerChanged(const Player*);
-    void defenderChanged(const Player*);
-    void defenderLost();
-    void defenderWon();
+    void newRound(const Player*, const Player*);
+    void attackerPassed(const Player*);
+    void endRound(bool);
     void attackingCard(const Card &);
     void defendingCard(const Card &);
+    void piledOnCard(const Card &);
     void playedOut(const Player *);
     void givenCards(const Player *, int);
 
 private:
     std::map<std::string, int> scores_;
+    int numDraws_;
 };
 

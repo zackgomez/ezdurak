@@ -15,15 +15,14 @@ int main(int argc, char** argv)
 {
     srand(time(NULL));
 
-    // TODO:2010-06-30:zack: Reenable this line when ScoreKeeper is updated.
-    //ScoreKeeper sk;
+    ScoreKeeper sk;
 
-    for (int games = 0; games < 1; games++)
+    for (int games = 0; games < 10000; games++)
     {
         std::vector<Player*> players(4);
-        players[0] = new CLIPlayer("zack");
-        players[1] = new CLIPlayer("erin");
-        for (int i = 2; i < players.size(); i++)
+        //players[0] = new CLIPlayer("zack");
+        //players[1] = new CLIPlayer("erin");
+        for (int i = 0; i < players.size(); i++)
         {
             std::stringstream ss;
             ss << "AIPlayer" << i;
@@ -35,13 +34,13 @@ int main(int argc, char** argv)
 
         Game game(players);
 
-        CLIListener listener(&game);
-	//game.addListener(&sk);
+        //CLIListener listener(&game);
+	game.addListener(&sk);
 
         game.run();
     }
 
-    //sk.print();
+    sk.print();
 
     return 0;
 }
