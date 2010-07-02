@@ -153,7 +153,24 @@ void Game::nextAttacker()
 
 void Game::pileOn()
 {
-    // TODO
+    cout << "Piling on\n";
+    // loop invariant: there are cards left to play
+    while (tricksLeft_ > 0)
+    {
+        Card attC = getAttackingCard();
+        // Did the play a card?
+        if (attC)
+        {
+            // Record it
+            cout << "Card piled on: " << attC << '\n';
+            playedCards_.push_back(attC);
+            --tricksLeft_;
+        }
+        // Did they all pass?
+        else
+            // Then we're done
+            break;
+    }
 }
 
 // TODO:2010-06-30:zack: Smart refill.
