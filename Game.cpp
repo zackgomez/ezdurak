@@ -58,20 +58,54 @@ void Game::run()
 
 void Game::deal()
 {
-    // TODO:2010-06-30:zack: Check for misdeals
-    deck_ = Deck();
-    deck_.shuffle();
-    // Bottom card is trump
-    trumpCard_ = deck_.peekLast();
+    vector<vector<Card> > hands(players_.size());
+    // Loop invariant: the hands are not valid
+    do
+    {
+        cout << "Dealing...\n";
+        deck_ = Deck();
+        deck_.shuffle();
+        // Bottom card is trump
+        trumpCard_ = deck_.peekLast();
 
-    // Deal the hands
-    vector<vector<Card>> hands(players_.size());
-    for (int i = 0; i < players_.size(); i++)
-        hands[i] = deck_.deal(HAND_SIZE);
+        // Deal the hands
+        for (int i = 0; i < players_.size(); i++)
+            hands[i] = deck_.deal(HAND_SIZE);
+    } while (!validateHands(hands));
 
     // Give each player their hand
     for (int i = 0; i < players_.size(); i++)
         players_[i]->addCards(hands[i]);
+}
+
+bool Game::validateHands(const vector<vector<Card> >& hands) const
+{
+    // Some sanity checks
+    assert(hands.size() == players_.size());
+
+    for (int i = 0; i < hands.size(); i++)
+    {
+        assert(hands[i].size() == HAND_SIZE);
+        int red = 0, black = 0;
+        int ccnt = 0, scnt = 0, hcnt = 0, dcnt = 0;
+        for (int j = 0; j < hands[i].size(); j++)
+        {
+            Card::cardsuit s = hands[i][j].getSuit();
+            red   += (s == Card::hearts || s == Card::diamonds) ? 1 : 0;
+            black += (s == Card::clubs || s == Card::spades) ? 1 : 0;
+            ccnt  += (s == Card::clubs) ? 1 : 0;
+            scnt  += (s == Card::spades) ? 1 : 0;
+            hcnt  += (s == Card::hearts) ? 1 : 0;
+            dcnt  += (s == Card::diamonds) ? 1 : 0;
+        }
+
+        // If you have all one color, or more than 4 of one suit, it's a
+        // misdeal
+        if (red == HAND_SIZE || black == HAND_SIZE ||
+            ccnt > 4 || scnt > 4 || hcnt > 4 || dcnt > 4)
+            return false;
+    }
+    return true;
 }
 
 // TODO:2010-06-30:zack: Error checking on played cards.

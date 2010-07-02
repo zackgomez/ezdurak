@@ -23,9 +23,7 @@ public:
     Card getTrumpCard() const;
     int getTricksLeft() const;
     int getDeckSize() const;
-    const Player * getAttacker() const;
-    const Player * getDefender() const;
-    const std::vector<Player*>& getPlayers() const;
+    const Player * getAttacker() const; const Player * getDefender() const; const std::vector<Player*>& getPlayers() const;
     const std::vector<Card>& getPlayedCards() const;
 
 private:
@@ -46,6 +44,11 @@ private:
 
     /** Deals a the initial hands to the players */
     void deal();
+    /**
+     * Returns true if a hand is a valid starting hand.  I.e. it is not a 
+     * misdeal.
+     */
+    bool validateHands(const std::vector<std::vector<Card> >& hands) const;
     /**
      * Conducts one "round" vs a single defender.
      * @return True if the rounded ended due to a successful defend, false if 
