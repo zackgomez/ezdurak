@@ -63,7 +63,8 @@ private:
     int attackerIdx_;
     /**
      * Continues to put cards on playableCards until the attackers all pass or
-     * the maximum number of tricks is reached.
+     * the maximum number of tricks is reached.  It then gives all of the cards
+     * played during the round and pile on to the defender.
      */
     void pileOn();
     /** Refills the players hands up to HAND_SIZE. */

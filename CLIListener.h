@@ -11,7 +11,7 @@ public:
     void gameOver(const Player*);
     void newRound(const Player*, const Player*);
     void endRound(bool);
-    void attackerChanged(const Player*);
+    void attackerPassed(const Player*);
     void attackingCard(const Card &c);
     void defendingCard(const Card &c);
     void piledOnCard(const Card &c);

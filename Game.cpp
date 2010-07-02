@@ -50,7 +50,6 @@ void Game::run()
         {
             // And the attackers can pile on cards
             pileOn();
-            defender_->addCards(playedCards_);
         }
         // Refill
         refill();
@@ -188,6 +187,9 @@ Card Game::getAttackingCard()
             return attC;
         // If they did pass...
         nextAttacker();
+        // Broadcast it
+        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+            (*it)->attackerPassed(attacker_);
     } while (attacker_ != initialAttacker);
 
     return Card();
@@ -225,6 +227,15 @@ void Game::pileOn()
             // Then we're done
             break;
     }
+
+    // Finally, the defender has to take all of the played cards.
+    defender_->addCards(playedCards_);
+    // Broadcast the event
+    for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+        // TODO:2010-07-01:zack: Use a different message for this specifying the
+        // cards given, or modify the current message to take a list of cards if
+        // known.
+        (*it)->givenCards(defender_, playedCards_.size());
 }
 
 // TODO:2010-06-30:zack: Smart refill.
@@ -241,6 +252,9 @@ void Game::refill()
         {
             vector<Card> refillCards = deck_.deal(neededCards);
             players_[i]->addCards(refillCards);
+            // Broadcast the drawing
+            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+                (*it)->givenCards(players_[i], neededCards);
         }
     }
 }

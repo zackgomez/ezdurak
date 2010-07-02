@@ -21,8 +21,9 @@ int main(int argc, char** argv)
     for (int games = 0; games < 1; games++)
     {
         std::vector<Player*> players(4);
-        //players[0] = new CLIPlayer("HumanPlayer");
-        for (int i = 0; i < players.size(); i++)
+        players[0] = new CLIPlayer("zack");
+        players[1] = new CLIPlayer("erin");
+        for (int i = 2; i < players.size(); i++)
         {
             std::stringstream ss;
             ss << "AIPlayer" << i;
@@ -30,7 +31,7 @@ int main(int argc, char** argv)
             players[i] = new AIPlayer(name);
         }
 
-        //random_shuffle(players.begin(), players.end());
+        random_shuffle(players.begin(), players.end());
 
         Game game(players);
 
