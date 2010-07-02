@@ -1,9 +1,8 @@
 #pragma once
 #include "Player.h"
-#include "GameListener.h"
 
 class AIPlayer :
-    public Player, public GameListener
+    public Player
 {
 public:
     AIPlayer(const std::string& name);
@@ -15,18 +14,6 @@ public:
     virtual Card attack(std::set<int> playableRanks = std::set<int>());
     virtual Card pileOn(std::set<int> playableRanks);
     virtual void addCards(const std::vector<Card>& cards);
-
-    // Methods Inherited from GameListener interface
-    virtual void gameStart();
-    virtual void gameOver(const Player*);
-    virtual void attackerChanged(const Player*);
-    virtual void defenderChanged(const Player*);
-    virtual void defenderLost();
-    virtual void defenderWon();
-    virtual void attackingCard(const Card &c);
-    virtual void defendingCard(const Card &c);
-    virtual void playedOut(const Player *player);
-    virtual void givenCards(const Player *player, int numCards);
 
 protected:
     // Helper functions

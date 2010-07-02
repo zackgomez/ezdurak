@@ -23,13 +23,13 @@ public:
      */
     virtual void gameOver(const Player* biscuit) { agent_->removeListener(this); }
 
+    virtual void newRound(const Player* attacker, const Player* defender) = 0;
     virtual void attackerChanged(const Player* newAttacker) = 0;
-    virtual void defenderChanged(const Player* newDefender) = 0;
-    virtual void defenderLost() = 0;
-    virtual void defenderWon() = 0;
+    virtual void endRound(bool successfulDefend) = 0;
 
     virtual void attackingCard(const Card &c) = 0;
     virtual void defendingCard(const Card &c) = 0;
+    virtual void piledOnCard(const Card &c) = 0;
 
     virtual void playedOut(const Player *player) = 0;
     virtual void givenCards(const Player *player, int numCard) = 0;

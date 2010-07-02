@@ -3,15 +3,14 @@
 #include <set>
 #include <cassert>
 #include <iostream>
-#include "GameAgent.h"
+
 using std::cout;
 using std::vector;
 using std::set;
 using std::string;
 
 AIPlayer::AIPlayer(const string& name) :
-    Player(name),
-    GameListener()
+    Player(name)
 { /* Empty */ }
 
 AIPlayer::~AIPlayer()
@@ -19,8 +18,6 @@ AIPlayer::~AIPlayer()
 
 void AIPlayer::gameStarting(GameAgent *agent)
 {
-    agent_ = agent;
-    agent_->addListener(this);
 }
 
 Card AIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
@@ -62,36 +59,6 @@ void AIPlayer::addCards(const vector<Card>& cards)
 {
     Player::addCards(cards);
 }
-
-void AIPlayer::gameStart()
-{ /* Empty */ }
-
-void AIPlayer::gameOver(const Player *biscuit)
-{ /* Empty */ }
-
-void AIPlayer::attackerChanged(const Player *newAttacker)
-{ /* Empty */ }
-
-void AIPlayer::defenderChanged(const Player *newDefender)
-{ /* Empty */ }
-
-void AIPlayer::defenderLost()
-{ /* Empty */ }
-
-void AIPlayer::defenderWon()
-{ /* Empty */ }
-
-void AIPlayer::attackingCard(const Card &c)
-{ /* Empty */ }
-
-void AIPlayer::defendingCard(const Card &c)
-{ /* Empty */ }
-
-void AIPlayer::playedOut(const Player *player)
-{ /* Empty */ }
-
-void AIPlayer::givenCards(const Player *player, int numCards)
-{ /* Empty */ }
 
 vector<Card> AIPlayer::playableCards(set<int> playableRanks)
 {

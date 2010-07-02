@@ -2,6 +2,7 @@
 #include <cassert>
 #include <algorithm>
 #include "Player.h"
+#include "GameListener.h"
 
 #include <iostream>
 
@@ -24,17 +25,26 @@ Game::~Game()
 
 void Game::run()
 {
-    cout << "Beginning a game with: " << players_.size() << " players\n";
+    // First thing, deal out the hands
     deal();
 
+    // The game begins
+    for (auto it = players_.begin(); it != players_.end(); it++)
+        (*it)->gameStarting(this);
+    for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+        (*it)->gameStart();
+
+    // The game continues while there is more than 1 player
     while (players_.size() > 1)
     {
-        cout << "---------------------------------------------------\n"
-             << "Start of a new round\n"
-             << "Attacker: " << attacker_->getName() << '\n'
-             << "Defender: " << defender_->getName() << "\n\n";
+        // Broadcast start of a round
+        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+            (*it)->newRound(attacker_, defender_);
         // Round
         bool successfulDefend = doRound();
+        // Broadcast end of round
+        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+            (*it)->endRound(successfulDefend);
         // If the defender loses, then they must take all of the played cards.
         if (!successfulDefend)
         {
@@ -50,10 +60,13 @@ void Game::run()
         nextDefender(successfulDefend);
     }
 
-    if (players_.size() == 0)
-        cout << "The game is a draw.\n";
-    else
-        cout << "The biscuit is " << players_[0]->getName() << '\n';
+    const Player* biscuit = NULL;
+    // If there is a player left, they're the biscuit
+    if (players_.size() == 1)
+        biscuit = players_[0];
+    // Broadcast the game over with the loser or NULL
+    for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+        (*it)->gameOver(biscuit);
 }
 
 void Game::deal()
@@ -62,7 +75,6 @@ void Game::deal()
     // Loop invariant: the hands are not valid
     do
     {
-        cout << "Dealing...\n";
         deck_ = Deck();
         deck_.shuffle();
         // Bottom card is trump
@@ -83,11 +95,13 @@ bool Game::validateHands(const vector<vector<Card> >& hands) const
     // Some sanity checks
     assert(hands.size() == players_.size());
 
+    // Loop over each hand and see if its no good
     for (int i = 0; i < hands.size(); i++)
     {
         assert(hands[i].size() == HAND_SIZE);
         int red = 0, black = 0;
         int ccnt = 0, scnt = 0, hcnt = 0, dcnt = 0;
+        // Loop over each card in the hand and update the count variables
         for (int j = 0; j < hands[i].size(); j++)
         {
             Card::cardsuit s = hands[i][j].getSuit();
@@ -105,6 +119,8 @@ bool Game::validateHands(const vector<vector<Card> >& hands) const
             ccnt > 4 || scnt > 4 || hcnt > 4 || dcnt > 4)
             return false;
     }
+
+    // If there are no problem hands, then they are all valid
     return true;
 }
 
@@ -118,6 +134,7 @@ bool Game::doRound()
     playedCards_.clear();
     playableRanks_.clear();
 
+    // Loop invariant: There are still attacking cards to be played
     while (tricksLeft_ > 0)
     {
         // Get the next attacking card from any attacker
@@ -128,10 +145,12 @@ bool Game::doRound()
             return true;
         
         // Record the card
-        cout << "Attacking card: " << attC << '\n';
         playedCards_.push_back(attC);
         playableRanks_.insert(attC.getNum());
         --tricksLeft_;
+        // Broadcast the card
+        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+            (*it)->attackingCard(attC);
 
         // Get the card from the defender
         Card defC = defender_->defend(attC, trumpCard_.getSuit());
@@ -141,9 +160,11 @@ bool Game::doRound()
             return false;
 
         // Record the card
-        cout << "Defending card: " << defC << '\n';
         playedCards_.push_back(defC);
         playableRanks_.insert(defC.getNum());
+        // Broadcast the card
+        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+            (*it)->defendingCard(defC);
     }
 
     // If there are no tricks left to play, then the defender has won!
@@ -158,8 +179,6 @@ Card Game::getAttackingCard()
     // while all the attackers haven't passed
     do
     {
-        cout << "Current attacker:\n";
-        attacker_->print();
         // Get the card from the attacker, could be a pass
         Card attC = attacker_->attack(playableRanks_);
 
@@ -187,7 +206,6 @@ void Game::nextAttacker()
 
 void Game::pileOn()
 {
-    cout << "Piling on\n";
     // loop invariant: there are cards left to play
     while (tricksLeft_ > 0)
     {
@@ -196,9 +214,11 @@ void Game::pileOn()
         if (attC)
         {
             // Record it
-            cout << "Card piled on: " << attC << '\n';
             playedCards_.push_back(attC);
             --tricksLeft_;
+            // Broadcast it
+            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+                (*it)->piledOnCard(attC);
         }
         // Did they all pass?
         else
@@ -232,10 +252,13 @@ void Game::removeFinishedPlayers()
     {
         if (players_[i]->getNumCards() == 0)
         {
-            cout << players_[i]->getName() << " has gone out!\n";
+            const Player *goingOut = players_[i];
             // Remove that player using random access iterator
             // The next player is now accessed using the same index i
             players_.erase(players_.begin() + i);
+            // Broadcast the player
+            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+                (*it)->playedOut(goingOut);
         }
         else
         {

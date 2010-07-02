@@ -18,50 +18,43 @@ CLIListener::~CLIListener()
 
 void CLIListener::gameStart()
 {
-    cout << "The players are seated like:\n";
-    const vector<Player*> players = agent_->getPlayers();
-    for (auto it = players.begin(); it != players.end(); it++)
-        cout << (*it)->getName() << " ";
-    cout << '\n';
-
-    cout << agent_->getTrumpCard() << " is trump.\n";
 }
 
 void CLIListener::gameOver(const Player* biscuitPlayer)
 {
-    cout << "Game over.  ";
     if (biscuitPlayer)
         cout << "The biscuit is " << biscuitPlayer->getName() << '\n';
     else
-        cout << "The game was a tie.\n";
+        cout << "The game is a draw.\n";
 }
 
-void CLIListener::attackerChanged(const Player *newAttacker)
+void CLIListener::newRound(const Player* attacker, const Player* defender)
 {
-    attacker_ = newAttacker;
-    cout << "The attacker is now " << attacker_->getName() << '\n';
+    attacker_ = attacker;
+    defender_ = defender;
+
+    cout << "---------------------------------------------------\n"
+         << "Start of a new round\n"
+         << "Attacker: " << attacker_->getName() << '\n'
+         << "Defender: " << defender_->getName() << "\n\n";
 }
 
-void CLIListener::defenderChanged(const Player *newDefender)
+void CLIListener::attackerChanged(const Player *attacker)
 {
-    defender_ = newDefender;
-    cout << "The defender is now " << defender_->getName() << '\n';
+    attacker_ = attacker;
 }
 
-void CLIListener::defenderLost()
+void CLIListener::endRound(bool successfulDefend)
 {
-    cout << "The defender " << defender_->getName() << " has lost\n";
-}
-
-void CLIListener::defenderWon()
-{
-    cout << "The defender " << defender_->getName() << " has successfully"
-        " defended\n";
+    if (successfulDefend)
+        cout << defender_->getName() << " has successfully defended!\n";
+    else
+        cout << defender_->getName() << " was unable to defend.\n";
 }
 
 void CLIListener::attackingCard(const Card &c)
 {
-    cout << attacker_->getName() << " played " << c << '\n';
+    cout << attacker_->getName() << " attacked with " << c << '\n';
 }
 
 void CLIListener::defendingCard(const Card &c)
@@ -69,17 +62,16 @@ void CLIListener::defendingCard(const Card &c)
     cout << defender_->getName() << " defended with " << c << '\n';
 }
 
+void CLIListener::piledOnCard(const Card &c)
+{
+    cout << c << " was piled on\n";
+}
+
 void CLIListener::playedOut(const Player *player)
 {
-    cout << player->getName() << " has gone out\n";
-    cout << "The remaining players are seated like:\n";
-    const vector<Player*> players = agent_->getPlayers();
-    for (auto it = players.begin(); it != players.end(); it++)
-        cout << (*it)->getName() << " ";
-    cout << '\n';
+    cout << player->getName() << " has gone out!\n";
 }
 
 void CLIListener::givenCards(const Player *player, int numCards)
 {
-    cout << player->getName() << " has been given " << numCards << " cards.\n";
 }
