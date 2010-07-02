@@ -281,6 +281,7 @@ void Game::removeFinishedPlayers()
     }
 }
 
+// TODO:2010-07-01:zack: This is bugged, still need to fix this.
 void Game::nextDefender(bool successfulDefend)
 {
     // If is one or less player there is no next defender
