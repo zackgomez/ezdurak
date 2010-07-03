@@ -48,10 +48,11 @@ void Game::run()
             (*it)->endRound(successfulDefend);
         // If the defender loses, then they must take all of the played cards.
         if (!successfulDefend)
-        {
             // And the attackers can pile on cards
             pileOn();
-        }
+        else
+            // Otherwise they can refill cards
+            refillOrder_.push_back(defender_);
         // Refill
         refill();
         // Go out
@@ -133,6 +134,7 @@ bool Game::doRound()
     assert(tricksLeft_ > 0); // Sanity Check, defender must have at least 1 card
     playedCards_.clear();
     playableRanks_.clear();
+    refillOrder_.clear();
 
     // Loop invariant: There are still attacking cards to be played
     while (tricksLeft_ > 0)
@@ -142,7 +144,7 @@ bool Game::doRound()
         // Did they all pass?
         if (!attC)
             // If so, the defender won!
-            return true;
+            break;
         
         // Record the card
         playedCards_.push_back(attC);
@@ -151,6 +153,12 @@ bool Game::doRound()
         // Broadcast the card
         for (auto it = listeners_.begin(); it != listeners_.end(); it++)
             (*it)->attackingCard(attC);
+
+        // Now record the player in the refill order, if they're already there
+        // don't readd them
+        if (find(refillOrder_.begin(), refillOrder_.end(), attacker_)
+            == refillOrder_.end())
+            refillOrder_.push_back(attacker_);
 
         // Get the card from the defender
         Card defC = defender_->defend(attC, trumpCard_.getSuit());
@@ -219,6 +227,11 @@ void Game::pileOn()
             // Record it
             playedCards_.push_back(attC);
             --tricksLeft_;
+            // Now record the player in the refill order, if they're already there
+            // don't readd them
+            if (find(refillOrder_.begin(), refillOrder_.end(), attacker_)
+                == refillOrder_.end())
+                refillOrder_.push_back(attacker_);
             // Broadcast it
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
                 (*it)->piledOnCard(attC);
@@ -239,23 +252,20 @@ void Game::pileOn()
         (*it)->givenCards(defender_, playedCards_.size());
 }
 
-// TODO:2010-06-30:zack: Smart refill.
-// The game should give players cards in the order that they attacked, with
-// the defender always last.
 void Game::refill()
 {
-    for (int i = 0; i < players_.size(); i++)
+    for (int i = 0; i < refillOrder_.size(); i++)
     {
         // You refill to HAND_SIZE, but only if there are enough cards.
-        int neededCards = min(HAND_SIZE - players_[i]->getNumCards(),
+        int neededCards = min(HAND_SIZE - refillOrder_[i]->getNumCards(),
                               deck_.getNumCards());
         if (neededCards > 0)
         {
             vector<Card> refillCards = deck_.deal(neededCards);
-            players_[i]->addCards(refillCards);
+            refillOrder_[i]->addCards(refillCards);
             // Broadcast the drawing
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-                (*it)->givenCards(players_[i], neededCards);
+                (*it)->givenCards(refillOrder_[i], neededCards);
         }
     }
 }

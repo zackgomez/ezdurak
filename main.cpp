@@ -35,12 +35,12 @@ int main(int argc, char** argv)
         Game game(players);
 
         CLIListener listener(&game);
-	game.addListener(&sk);
+	//game.addListener(&sk);
 
         game.run();
     }
 
-    sk.print();
+    //sk.print();
 
     return 0;
 }

@@ -38,6 +38,7 @@ private:
     int tricksLeft_;
     std::vector<Card> playedCards_;
     std::set<int> playableRanks_;
+    std::vector<Player*> refillOrder_;
 
     std::set<GameListener*> listeners_;
 
