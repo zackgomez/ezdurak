@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
     ScoreKeeper sk;
 
-    for (int games = 0; games < 10000; games++)
+    for (int games = 0; games < 1; games++)
     {
         std::vector<Player*> players(4);
         //players[0] = new CLIPlayer("zack");
@@ -30,11 +30,11 @@ int main(int argc, char** argv)
             players[i] = new AIPlayer(name);
         }
 
-        random_shuffle(players.begin(), players.end());
+        //random_shuffle(players.begin(), players.end());
 
         Game game(players);
 
-        //CLIListener listener(&game);
+        CLIListener listener(&game);
 	game.addListener(&sk);
 
         game.run();

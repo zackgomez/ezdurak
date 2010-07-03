@@ -18,6 +18,7 @@ Game::Game(const vector<Player*>& players) :
     attacker_ = players_[0];
     attackerIdx_ = 0;
     defender_ = players_[1];
+    defenderIdx_ = 1;
 }
 
 Game::~Game()
@@ -270,6 +271,9 @@ void Game::removeFinishedPlayers()
             // Remove that player using random access iterator
             // The next player is now accessed using the same index i
             players_.erase(players_.begin() + i);
+            // Check to see if they were before the defender, update the idx
+            // if they were
+            defenderIdx_ = (i >= defenderIdx_) ? defenderIdx_  : defenderIdx_-1;
             // Broadcast the player
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
                 (*it)->playedOut(goingOut);
@@ -281,27 +285,19 @@ void Game::removeFinishedPlayers()
     }
 }
 
-// TODO:2010-07-01:zack: This is bugged, still need to fix this.
 void Game::nextDefender(bool successfulDefend)
 {
-    // If is one or less player there is no next defender
-    if (players_.size() <= 1)
-        return;
-
-    // If there is a successful defend, the current defender is the new attacker
-    attacker_ = defender_;
-    // Set the attackerIdx_ variable
-    attackerIdx_ = find(players_.begin(), players_.end(), attacker_)
-        - players_.begin();
-    // If not, then the current attacker is the "nextAttacker" from the point 
-    // of view of the defender.
+    // If they lost, it skips them
     if (!successfulDefend)
-        nextAttacker();
+        defenderIdx_ = (defenderIdx_ + 1) % players_.size();
+    // New attacker is old defender
+    attackerIdx_ = defenderIdx_;
+    // The defender is to their right
+    defenderIdx_ = (defenderIdx_ + 1) % players_.size();
 
-    // Now we have the correct attacker set, the defender is always the person
-    // after the initial attacker.
-    int defenderIdx = (attackerIdx_ + 1) % players_.size();
-    defender_ = players_[defenderIdx];
+    // Update variables
+    attacker_ = players_[attackerIdx_];
+    defender_ = players_[defenderIdx_];
 }
 
 // ------------------ GameAgent Interface -------------------------

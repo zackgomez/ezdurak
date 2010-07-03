@@ -33,9 +33,8 @@ private:
 
     Player *attacker_;
     Player *defender_;
-    // TODO:2010-06-30:zack: Rename this variable to be clearer.
-    // It should signify that it is the number of attacking cards that can be
-    // played.
+    int attackerIdx_;
+    int defenderIdx_;
     int tricksLeft_;
     std::vector<Card> playedCards_;
     std::set<int> playableRanks_;
@@ -59,8 +58,6 @@ private:
     Card getAttackingCard();
     /** Moves to the next attacker, making sure to skip the current defender. */
     void nextAttacker();
-    /** Used by nextAttacker. */
-    int attackerIdx_;
     /**
      * Continues to put cards on playableCards until the attackers all pass or
      * the maximum number of tricks is reached.  It then gives all of the cards
