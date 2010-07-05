@@ -20,9 +20,9 @@ int main(int argc, char** argv)
     for (int games = 0; games < 1; games++)
     {
         std::vector<Player*> players(4);
-        //players[0] = new CLIPlayer("zack");
+        players[0] = new CLIPlayer("Zack");
         //players[1] = new CLIPlayer("erin");
-        for (int i = 0; i < players.size(); i++)
+        for (int i = 1; i < players.size(); i++)
         {
             std::stringstream ss;
             ss << "AIPlayer" << i;

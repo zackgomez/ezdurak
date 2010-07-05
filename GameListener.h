@@ -21,7 +21,7 @@ public:
      * Called when the game is over.
      * @param biscuit The losing "biscuit" player or NULL if it was a tie.
      */
-    virtual void gameOver(const Player* biscuit) { agent_->removeListener(this); }
+    virtual void gameOver(const Player* biscuit) = 0;
 
     virtual void newRound(const Player* attacker, const Player* defender) = 0;
     virtual void attackerPassed(const Player* newAttacker) = 0;
