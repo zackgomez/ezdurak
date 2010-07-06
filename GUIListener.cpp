@@ -1,4 +1,5 @@
 #include "GUIListener.h"
+#include <SDL/SDL.h>
 
 GUIListener::GUIListener(GameAgent *agent)
     : GameListener()

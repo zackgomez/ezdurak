@@ -1,4 +1,5 @@
 *.o
 ezdurak
+ezdurak-gui
 test
 *.swp
