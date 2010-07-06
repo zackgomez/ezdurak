@@ -38,18 +38,21 @@ void GUIListener::attackingCard(const Card &c)
 {
     vector<Card> playedCards = agent_->getPlayedCards();
     impl_->setPlayedCards(playedCards);
+    impl_->wait(400);
 }
 
 void GUIListener::defendingCard(const Card &c)
 {
     vector<Card> playedCards = agent_->getPlayedCards();
     impl_->setPlayedCards(playedCards);
+    impl_->wait(400);
 }
 
 void GUIListener::piledOnCard(const Card &c)
 {
     vector<Card> playedCards = agent_->getPlayedCards();
     impl_->setPlayedCards(playedCards);
+    impl_->wait(400);
 }
 
 void GUIListener::playedOut(const Player *player)

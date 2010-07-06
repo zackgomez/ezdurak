@@ -7,17 +7,20 @@
 #include "AIPlayer.h"
 #include "Game.h"
 #include "CLIListener.h"
+#include "CLIPlayer.h"
 
 using namespace std;
 
 void * gui_main(void *guiobj);
+void * game_main(void *gameobj);
 
 int main(int argc, char **argv)
 {
     srand(time(NULL));
 
     std::vector<Player*> players(4);
-    for (int i = 0; i < players.size(); i++)
+    players[0] = new CLIPlayer("zack");
+    for (int i = 1; i < players.size(); i++)
     {
         stringstream ss;
         ss << "AIPlayer" << i;
@@ -33,15 +36,26 @@ int main(int argc, char **argv)
     pthread_t gui_thread;
     pthread_create(&gui_thread, NULL, gui_main, &gui);
 
-    game.run();
+    pthread_t game_thread;
+    pthread_create(&game_thread, NULL, game_main, &game);
 
     pthread_join(gui_thread, NULL);
+
+    return 0;
 }
 
 void* gui_main(void *guiobj)
 {
     GUIImpl *gui = (GUIImpl*) guiobj;
     gui->run();
+
+    pthread_exit(NULL);
+}
+
+void* game_main(void *gameobj)
+{
+    Game *game = (Game*) gameobj;
+    game->run();
 
     pthread_exit(NULL);
 }

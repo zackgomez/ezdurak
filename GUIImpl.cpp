@@ -43,6 +43,11 @@ void GUIImpl::setPlayedCards(const vector<Card>& newCards)
     pthread_mutex_unlock(&playedCardsLock);
 }
 
+void GUIImpl::wait(int ms)
+{
+    SDL_Delay(ms);
+}
+
 void GUIImpl::initGL()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);

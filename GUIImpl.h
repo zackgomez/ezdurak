@@ -15,6 +15,8 @@ public:
 
     void setPlayedCards(const std::vector<Card>& newCards);
 
+    void wait(int ms);
+
 private:
     bool cont;
     std::vector<Card> playedCards;
