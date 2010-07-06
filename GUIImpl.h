@@ -19,6 +19,7 @@ private:
     bool cont;
     std::vector<Card> playedCards;
     GLuint cardtex;
+    pthread_mutex_t playedCardsLock;
 
     // Helper functions
     void initGL();

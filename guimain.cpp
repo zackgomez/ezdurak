@@ -1,7 +1,10 @@
-#include "GUIImpl.h"
+#include <pthread.h>
 #include <vector>
 #include <ctime>
+#include "GUIImpl.h"
 #include "Deck.h"
+
+void * game_main(void *guiobj);
 
 int main(int argc, char **argv)
 {
@@ -12,8 +15,20 @@ int main(int argc, char **argv)
     std::vector<Card> playedCards = deck.deal(9);
 
     GUIImpl gui;
-    gui.setPlayedCards(playedCards);
-    gui.run();
 
-    return 0;
+    pthread_t game_thread;
+    pthread_create(&game_thread, NULL, game_main, &gui);
+
+    sleep(2);
+    gui.setPlayedCards(playedCards);
+
+    pthread_join(game_thread, NULL);
+}
+
+void* game_main(void *guiobj)
+{
+    GUIImpl *gui = (GUIImpl*) guiobj;
+    gui->run();
+
+    pthread_exit(NULL);
 }

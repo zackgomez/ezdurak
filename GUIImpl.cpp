@@ -7,7 +7,9 @@
 using namespace std;
 
 GUIImpl::GUIImpl()
-{ /* Empty */ }
+{
+    playedCardsLock = PTHREAD_MUTEX_INITIALIZER;
+}
 
 GUIImpl::~GUIImpl()
 {
@@ -34,9 +36,11 @@ void GUIImpl::run()
 void GUIImpl::setPlayedCards(const vector<Card>& newCards)
 {
     // Lock
+    pthread_mutex_lock(&playedCardsLock);
     // Update
     playedCards = newCards;
     // Unlock
+    pthread_mutex_unlock(&playedCardsLock);
 }
 
 void GUIImpl::initGL()
@@ -70,6 +74,8 @@ void GUIImpl::render()
     glBindTexture(GL_TEXTURE_RECTANGLE, cardtex);
 
     glScalef(70, 96, 0);
+    // Lock
+    pthread_mutex_lock(&playedCardsLock);
     for (int i = 0; i < playedCards.size(); i++)
     {
         glColor3f(1,1,1);
@@ -92,6 +98,8 @@ void GUIImpl::render()
         else
             glTranslatef(1.2, 0, 0);
     }
+    // Unlock
+    pthread_mutex_unlock(&playedCardsLock);
 
     SDL_GL_SwapBuffers();
 }
