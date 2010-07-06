@@ -1,8 +1,13 @@
 #include "GUIListener.h"
 #include <SDL/SDL.h>
+#include <vector>
+#include "GUIImpl.h"
 
-GUIListener::GUIListener(GameAgent *agent)
-    : GameListener()
+using std::vector;
+
+GUIListener::GUIListener(GameAgent *agent, GUIImpl *impl)
+    : GameListener(),
+    impl_(impl)
 {
     agent_ = agent;
     agent_->addListener(this);
@@ -18,7 +23,10 @@ void GUIListener::gameOver(const Player *biscuit)
 { /* Empty */ }
 
 void GUIListener::newRound(const Player *attacker, const Player *defender)
-{ /* Empty */ }
+{
+    vector<Card> playedCards = agent_->getPlayedCards();
+    impl_->setPlayedCards(playedCards);
+}
 
 void GUIListener::attackerPassed(const Player *newAttacker)
 { /* Empty */ }
@@ -27,13 +35,22 @@ void GUIListener::endRound(bool successfulDefend)
 { /* Empty */ }
 
 void GUIListener::attackingCard(const Card &c)
-{ /* Empty */ }
+{
+    vector<Card> playedCards = agent_->getPlayedCards();
+    impl_->setPlayedCards(playedCards);
+}
 
 void GUIListener::defendingCard(const Card &c)
-{ /* Empty */ }
+{
+    vector<Card> playedCards = agent_->getPlayedCards();
+    impl_->setPlayedCards(playedCards);
+}
 
 void GUIListener::piledOnCard(const Card &c)
-{ /* Empty */ }
+{
+    vector<Card> playedCards = agent_->getPlayedCards();
+    impl_->setPlayedCards(playedCards);
+}
 
 void GUIListener::playedOut(const Player *player)
 { /* Empty */ }

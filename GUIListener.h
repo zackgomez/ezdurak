@@ -1,11 +1,13 @@
 #pragma once
 #include "GameListener.h"
 
+class GUIImpl;
+
 class GUIListener :
     public GameListener
 {
 public:
-    GUIListener(GameAgent *agent);
+    GUIListener(GameAgent *agent, GUIImpl *impl);
     ~GUIListener();
 
     // Functions inherited from GameListener Interface
@@ -21,5 +23,6 @@ public:
     void givenCards(const Player *player, int numCard);
 
 private:
+    GUIImpl *impl_;
 };
 

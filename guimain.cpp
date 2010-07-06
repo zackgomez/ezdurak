@@ -1,31 +1,44 @@
 #include <pthread.h>
 #include <vector>
 #include <ctime>
+#include <sstream>
+#include "GUIListener.h"
 #include "GUIImpl.h"
-#include "Deck.h"
+#include "AIPlayer.h"
+#include "Game.h"
+#include "CLIListener.h"
 
-void * game_main(void *guiobj);
+using namespace std;
+
+void * gui_main(void *guiobj);
 
 int main(int argc, char **argv)
 {
     srand(time(NULL));
 
-    Deck deck;
-    deck.shuffle();
-    std::vector<Card> playedCards = deck.deal(9);
+    std::vector<Player*> players(4);
+    for (int i = 0; i < players.size(); i++)
+    {
+        stringstream ss;
+        ss << "AIPlayer" << i;
+        std::string name = ss.str();
+        players[i] = new AIPlayer(name);
+    }
 
     GUIImpl gui;
+    Game game(players);
+    GUIListener listener(&game, &gui);
+    CLIListener text(&game);
 
-    pthread_t game_thread;
-    pthread_create(&game_thread, NULL, game_main, &gui);
+    pthread_t gui_thread;
+    pthread_create(&gui_thread, NULL, gui_main, &gui);
 
-    sleep(2);
-    gui.setPlayedCards(playedCards);
+    game.run();
 
-    pthread_join(game_thread, NULL);
+    pthread_join(gui_thread, NULL);
 }
 
-void* game_main(void *guiobj)
+void* gui_main(void *guiobj)
 {
     GUIImpl *gui = (GUIImpl*) guiobj;
     gui->run();
