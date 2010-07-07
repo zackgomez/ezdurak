@@ -16,6 +16,9 @@ public:
     virtual void addCards(const std::vector<Card>& cards);
 
 private:
+    GameAgent *agent_;
     CLIPlayer(const CLIPlayer&);
     void operator=(const Player&);
+
+    void sortHand();
 };

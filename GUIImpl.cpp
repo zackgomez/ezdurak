@@ -127,7 +127,7 @@ void GUIImpl::render()
     // Lock
     pthread_mutex_lock(&playersLock_);
     // Update
-    float angle = 3*M_PI/2.;
+    float angle = M_PI/2;
     for (int i = 0; i < players_.size(); i++)
     {
         int numCards = players_[i]->getNumCards();

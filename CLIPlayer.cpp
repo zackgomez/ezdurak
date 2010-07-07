@@ -1,11 +1,14 @@
 #include "CLIPlayer.h"
 #include <iostream>
+#include <algorithm>
+#include "GameAgent.h"
 
 using std::cout;
 using std::cin;
 using std::string;
 using std::vector;
 using std::set;
+using std::sort;
 
 CLIPlayer::CLIPlayer(const string& name)
     : Player(name)
@@ -15,10 +18,13 @@ CLIPlayer::~CLIPlayer()
 {}
 
 void CLIPlayer::gameStarting(GameAgent *agent)
-{ /* Empty */ }
+{
+    agent_ = agent;
+}
 
 Card CLIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {
+    sortHand();
     for (;;)
     {
         cout << "Defend: " << attackingCard << '\n';
@@ -67,6 +73,7 @@ Card CLIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 
 Card CLIPlayer::attack(set<int> playableRanks)
 {
+    sortHand();
     for (;;)
     {
         cout << "Attack:\n";
@@ -135,4 +142,35 @@ void CLIPlayer::addCards(const std::vector<Card>& cards)
     cout << '\n';
 
     Player::addCards(cards);
+}
+
+class CardComp
+{
+private:
+    Card::cardsuit trump;
+public:
+    CardComp(Card::cardsuit trumpsuit) :
+        trump(trumpsuit)
+    {}
+
+    bool operator()(const Card &a, const Card &b)
+    {
+        Card::cardsuit aSuit = a.getSuit();
+        Card::cardsuit bSuit = b.getSuit();
+
+        // Case 1: one trump, one not trump
+        if ((aSuit == trump && bSuit != trump) || 
+            (bSuit == trump && aSuit != trump))
+        {
+            return a.getSuit() != trump;
+        }
+        // Case 2: both trump or both not trump
+        return a.getNum() < b.getNum();
+    }
+};
+
+void CLIPlayer::sortHand()
+{
+    Card::cardsuit trump = agent_->getTrumpCard().getSuit();
+    sort(hand_.begin(), hand_.end(), CardComp(trump));
 }
