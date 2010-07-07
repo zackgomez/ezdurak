@@ -2,13 +2,19 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <cassert>
+#include <cmath>
 #include <iostream>
+#include "Player.h"
 
 using namespace std;
 
+const float CARDX = 70;
+const float CARDY = 96;
+
 GUIImpl::GUIImpl()
 {
-    playedCardsLock = PTHREAD_MUTEX_INITIALIZER;
+    playedCardsLock_ = PTHREAD_MUTEX_INITIALIZER;
+    playersLock_     = PTHREAD_MUTEX_INITIALIZER;
 }
 
 GUIImpl::~GUIImpl()
@@ -19,9 +25,9 @@ GUIImpl::~GUIImpl()
 void GUIImpl::run()
 {
     initGL();
-    cont = true;
+    cont_ = true;
 
-    while (cont)
+    while (cont_)
     {
 	render();
 
@@ -33,14 +39,25 @@ void GUIImpl::run()
     SDL_Quit();
 }
 
+void GUIImpl::setPlayers(const vector<Player*>& players)
+{
+    // Lock
+    pthread_mutex_lock(&playersLock_);
+    // Update
+    players_ = players;
+    // Unlock
+    pthread_mutex_unlock(&playersLock_);
+}
+
+
 void GUIImpl::setPlayedCards(const vector<Card>& newCards)
 {
     // Lock
-    pthread_mutex_lock(&playedCardsLock);
+    pthread_mutex_lock(&playedCardsLock_);
     // Update
-    playedCards = newCards;
+    playedCards_ = newCards;
     // Unlock
-    pthread_mutex_unlock(&playedCardsLock);
+    pthread_mutex_unlock(&playedCardsLock_);
 }
 
 void GUIImpl::wait(int ms)
@@ -55,7 +72,7 @@ void GUIImpl::initGL()
     SDL_SetVideoMode(800, 600, 32, SDL_OPENGL);
 
     glEnable(GL_TEXTURE_RECTANGLE);
-    cardtex = loadTexture("resources/cards3.png");
+    cardtex_ = loadTexture("resources/cards3.png");
 
     glViewport(0, 0, 800, 600);
     glMatrixMode(GL_PROJECTION);
@@ -76,19 +93,20 @@ void GUIImpl::render()
     glLoadIdentity();
 
     glEnable(GL_TEXTURE_RECTANGLE);
-    glBindTexture(GL_TEXTURE_RECTANGLE, cardtex);
+    glBindTexture(GL_TEXTURE_RECTANGLE, cardtex_);
 
-    glScalef(70, 96, 0);
+    glTranslatef(200, 300-CARDY/2, 0);
+    glScalef(CARDX, CARDY, 0);
     // Lock
-    pthread_mutex_lock(&playedCardsLock);
-    for (int i = 0; i < playedCards.size(); i++)
+    pthread_mutex_lock(&playedCardsLock_);
+    for (int i = 0; i < playedCards_.size(); i++)
     {
         glColor3f(1,1,1);
 
-        int col = playedCards[i].getNum();
+        int col = playedCards_[i].getNum();
         col = (col == Card::ACE) ? 0 : col-1;
         int row;
-        switch (playedCards[i].getSuit())
+        switch (playedCards_[i].getSuit())
         {
         case Card::clubs:    row = 0; break;
         case Card::diamonds: row = 1; break;
@@ -104,7 +122,42 @@ void GUIImpl::render()
             glTranslatef(1.2, 0, 0);
     }
     // Unlock
-    pthread_mutex_unlock(&playedCardsLock);
+    pthread_mutex_unlock(&playedCardsLock_);
+
+    // Lock
+    pthread_mutex_lock(&playersLock_);
+    // Update
+    float angle = 3*M_PI/2.;
+    for (int i = 0; i < players_.size(); i++)
+    {
+        int numCards = players_[i]->getNumCards();
+        float x = cos(angle);
+        float y = sin(angle);
+        float xvel = y;
+        float yvel = -x;
+
+        // Center
+        glLoadIdentity();
+        glTranslatef(400-CARDX/2, 300-CARDY/2, 0);
+        // Move outwards
+        glTranslatef(x*350, y*235, 0);
+        // Adjust so cards are centered
+        glTranslatef(-xvel*CARDX*(0.2*(numCards-1)/2),
+                     -yvel*CARDX*(0.2*(numCards-1)/2), 0);
+        // Draw each card back
+        for (int j = 0; j < numCards; j++)
+        {
+            glPushMatrix();
+            glScalef(CARDX, CARDY, 0);
+            drawCard(4, 2);
+            glPopMatrix();
+            glTranslatef(xvel*0.2*CARDX, yvel*0.2*CARDX, 0);
+        }
+
+        angle += M_PI/2.;
+    }
+    // Unlock
+    pthread_mutex_unlock(&playersLock_);
 
     SDL_GL_SwapBuffers();
 }
@@ -117,9 +170,9 @@ void GUIImpl::processEvents()
         switch(e.type)
         {
         case SDL_QUIT:
-            cont = false; break;
+            cont_ = false; break;
         case SDL_KEYDOWN:
-            cont = false; break;
+            cont_ = false; break;
         }
     }
 }

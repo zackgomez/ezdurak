@@ -17,7 +17,10 @@ GUIListener::~GUIListener()
 { /* Empty */ }
 
 void GUIListener::gameStart()
-{ /* Empty */ }
+{
+    const vector<Player*> players = agent_->getPlayers();
+    impl_->setPlayers(players);
+}
 
 void GUIListener::gameOver(const Player *biscuit)
 { /* Empty */ }

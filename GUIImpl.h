@@ -5,6 +5,8 @@
 #include <string>
 #include "Card.h"
 
+class Player;
+
 class GUIImpl
 {
 public:
@@ -13,15 +15,18 @@ public:
 
     void run();
 
+    void setPlayers(const std::vector<Player*>& players);
     void setPlayedCards(const std::vector<Card>& newCards);
 
     void wait(int ms);
 
 private:
-    bool cont;
-    std::vector<Card> playedCards;
-    GLuint cardtex;
-    pthread_mutex_t playedCardsLock;
+    bool cont_;
+    GLuint cardtex_;
+    std::vector<Card> playedCards_;
+    pthread_mutex_t playedCardsLock_;
+    std::vector<Player*> players_;
+    pthread_mutex_t playersLock_;
 
     // Helper functions
     void initGL();
