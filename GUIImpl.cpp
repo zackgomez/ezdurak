@@ -95,7 +95,7 @@ void GUIImpl::render()
     glEnable(GL_TEXTURE_RECTANGLE);
     glBindTexture(GL_TEXTURE_RECTANGLE, cardtex_);
 
-    glTranslatef(200, 300-CARDY/2, 0);
+    glTranslatef(113, 300-CARDY/2, 0);
     glScalef(CARDX, CARDY, 0);
     // Lock
     pthread_mutex_lock(&playedCardsLock_);

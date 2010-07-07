@@ -38,6 +38,11 @@ void Game::run()
     // The game continues while there is more than 1 player
     while (players_.size() > 1)
     {
+        // Reset variables
+        tricksLeft_ = min(defender_->getNumCards(), HAND_SIZE);
+        playedCards_.clear();
+        playableRanks_.clear();
+        refillOrder_.clear();
         // Broadcast start of a round
         for (auto it = listeners_.begin(); it != listeners_.end(); it++)
             (*it)->newRound(attacker_, defender_);
@@ -130,11 +135,7 @@ bool Game::validateHands(const vector<vector<Card> >& hands) const
 // a playable card, and that defC beats attC.
 bool Game::doRound()
 {
-    tricksLeft_ = min(defender_->getNumCards(), HAND_SIZE);
     assert(tricksLeft_ > 0); // Sanity Check, defender must have at least 1 card
-    playedCards_.clear();
-    playableRanks_.clear();
-    refillOrder_.clear();
 
     // Loop invariant: There are still attacking cards to be played
     while (tricksLeft_ > 0)
