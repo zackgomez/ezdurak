@@ -184,8 +184,10 @@ void GUIImpl::render()
         }
 
         // Draw the name
-        glTranslatef(-xvel*0.2*CARDX, -yvel*0.2*CARDX, 0);
-        glTranslatef(xvel*CARDX, yvel*CARDY, 0);
+        glLoadIdentity();
+        glTranslatef(400, 300, 0);
+        glTranslatef(x*300, y*170, 0);
+        glRotatef(180*angle/M_PI - 90, 0, 0, 1);
         glBindTexture(GL_TEXTURE_RECTANGLE, nameTextures_[i]);
         drawName(i);
 
@@ -235,16 +237,16 @@ void GUIImpl::drawName(int i)
     int y = nameTextureSizes_[i].second;
     glBegin(GL_QUADS);
         glTexCoord2i(0, 0);
-        glVertex3f(0, 0, 0);
+        glVertex3f(-x/2, -y/2, 0);
 
         glTexCoord2i(0, y);
-        glVertex3f(0, y, 0);
+        glVertex3f(-x/2, y/2, 0);
 
         glTexCoord2i(x, y);
-        glVertex3f(x, y, 0);
+        glVertex3f(x/2, y/2, 0);
 
         glTexCoord2i(x, 0);
-        glVertex3f(x, 0, 0);
+        glVertex3f(x/2, -y/2, 0);
     glEnd();
 }
 
