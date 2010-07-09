@@ -107,7 +107,7 @@ void GUIImpl::render()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(113, 300-GUICard::CARDY/2, 0);
+    glTranslatef(113+GUICard::CARDX/2, 300, 0);
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
     for (int i = 0; i < playedCards_.size(); i++)
@@ -150,7 +150,7 @@ void GUIImpl::render()
 
         // Center
         glLoadIdentity();
-        glTranslatef(400-GUICard::CARDX/2, 300-GUICard::CARDY/2, 0);
+        glTranslatef(400, 300, 0);
         // Move outwards
         glTranslatef(x*350, y*235, 0);
         // Adjust so cards are centered

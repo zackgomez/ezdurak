@@ -26,16 +26,16 @@ void GUICard::draw(const Card& card)
     glBindTexture(GL_TEXTURE_RECTANGLE, cardtex);
     glBegin(GL_QUADS);
         glTexCoord2i(col * SOURCEX, row * SOURCEY);
-        glVertex3f(0, 0, 0);
+        glVertex3f(-0.5, -0.5, 0);
 
         glTexCoord2i(col * SOURCEX, (row+1) * SOURCEY);
-        glVertex3f(0, 1, 0);
+        glVertex3f(-0.5, 0.5, 0);
 
         glTexCoord2i((col+1) * SOURCEX, (row+1) * SOURCEY);
-        glVertex3f(1, 1, 0);
+        glVertex3f(0.5, 0.5, 0);
 
         glTexCoord2i((col+1) * SOURCEX, row * SOURCEY);
-        glVertex3f(1, 0, 0);
+        glVertex3f(0.5, -0.5, 0);
     glEnd();
     glPopMatrix();
 }
@@ -50,16 +50,16 @@ void GUICard::drawCardBack()
     glBindTexture(GL_TEXTURE_RECTANGLE, cardtex);
     glBegin(GL_QUADS);
         glTexCoord2i(col * SOURCEX, row * SOURCEY);
-        glVertex3f(0, 0, 0);
+        glVertex3f(-0.5, -0.5, 0);
 
         glTexCoord2i(col * SOURCEX, (row+1) * SOURCEY);
-        glVertex3f(0, 1, 0);
+        glVertex3f(-0.5, 0.5, 0);
 
         glTexCoord2i((col+1) * SOURCEX, (row+1) * SOURCEY);
-        glVertex3f(1, 1, 0);
+        glVertex3f(0.5, 0.5, 0);
 
         glTexCoord2i((col+1) * SOURCEX, row * SOURCEY);
-        glVertex3f(1, 0, 0);
+        glVertex3f(0.5, -0.5, 0);
     glEnd();
     glPopMatrix();
 }
