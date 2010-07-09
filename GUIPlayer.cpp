@@ -21,10 +21,7 @@ void GUIPlayer::draw()
     int numCards = player_->getNumCards();
 
     glPushMatrix();
-    /*
-    glTranslatef(-xvel*GUICard::CARDX*(0.2*(numCards-1)/2),
-                 -yvel*GUICard::CARDX*(0.2*(numCards-1)/2), 0);
-                 */
+    glTranslatef(-GUICard::CARDX*(0.2*(numCards-1)/2), 0, 0);
     // Draw each card back
     for (int j = 0; j < numCards; j++)
     {
@@ -35,8 +32,7 @@ void GUIPlayer::draw()
 
     // Draw the name
     glPushMatrix();
-    glTranslatef(0, -(GUICard::CARDX/2 + 20), 0);
-    glTranslatef(400, 300, 0);
+    glTranslatef(0, -(GUICard::CARDX/2 + 25), 0);
     name_->draw();
     glPopMatrix();
 }

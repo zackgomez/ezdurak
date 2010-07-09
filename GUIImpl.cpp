@@ -5,9 +5,9 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
-#include "Player.h"
 #include "GUIString.h"
 #include "GUICard.h"
+#include "GUIPlayer.h"
 
 using namespace std;
 
@@ -15,8 +15,7 @@ GUIImpl::GUIImpl()
 {
     playedCardsLock_ = PTHREAD_MUTEX_INITIALIZER;
     playersLock_     = PTHREAD_MUTEX_INITIALIZER;
-    font = 0;
-    badNames_ = true;
+    badPlayers_ = true;
 }
 
 GUIImpl::~GUIImpl()
@@ -33,10 +32,9 @@ void GUIImpl::run()
         cout << "TTF_Init: " << TTF_GetError() << '\n';
         exit(2);
     }
-    font = TTF_OpenFont("resources/FreeMono.ttf", 18);
-    if (!font)
+    GUIString::font_ = TTF_OpenFont("resources/FreeMono.ttf", 18);
+    if (!GUIString::font_)
         cout << "Unable to open font: " << TTF_GetError() << '\n';
-    GUIString::font_ = font;
 
     cont_ = true;
 
@@ -59,7 +57,7 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
     pthread_mutex_lock(&playersLock_);
     // Update
     players_ = players;
-    badNames_ = true;
+    badPlayers_ = true;
     // Unlock
     pthread_mutex_unlock(&playersLock_);
 }
@@ -128,47 +126,33 @@ void GUIImpl::render()
     // Lock
     pthread_mutex_lock(&playersLock_);
     // Update the name textures, first delete the old ones
-    if (badNames_)
+    if (badPlayers_)
     {
-        for (int i = 0; i < nameStrings_.size(); i++)
-            delete nameStrings_[i];
-        nameStrings_.resize(players_.size());
+        for (int i = 0; i < playersDisplay_.size(); i++)
+            delete playersDisplay_[i];
+        playersDisplay_.resize(players_.size());
 
         for (int i = 0; i < players_.size(); i++)
-            nameStrings_[i] = new GUIString(players_[i]->getName());
-        badNames_ = false;
+            playersDisplay_[i] = new GUIPlayer(players_[i]);
+        badPlayers_ = false;
     }
     // Update
     float angle = M_PI/2;
     for (int i = 0; i < players_.size(); i++)
     {
-        int numCards = players_[i]->getNumCards();
         float x = cos(angle);
         float y = sin(angle);
-        float xvel = y;
-        float yvel = -x;
 
         // Center
         glLoadIdentity();
         glTranslatef(400, 300, 0);
         // Move outwards
         glTranslatef(x*350, y*235, 0);
-        // Adjust so cards are centered
-        glTranslatef(-xvel*GUICard::CARDX*(0.2*(numCards-1)/2),
-                     -yvel*GUICard::CARDX*(0.2*(numCards-1)/2), 0);
-        // Draw each card back
-        for (int j = 0; j < numCards; j++)
-        {
-            GUICard::drawCardBack();
-            glTranslatef(xvel*0.2*GUICard::CARDX, yvel*0.2*GUICard::CARDX, 0);
-        }
+        // Rotate
+        glRotatef(angle*180/M_PI - 90, 0, 0, 1);
 
-        // Draw the name
-        glLoadIdentity();
-        glTranslatef(400, 300, 0);
-        glTranslatef(x*300, y*170, 0);
-        glRotatef(180*angle/M_PI - 90, 0, 0, 1);
-        nameStrings_[i]->draw();
+        // Draw the player
+        playersDisplay_[i]->draw();
 
         angle += M_PI/2.;
     }

@@ -8,6 +8,7 @@
 
 class Player;
 class GUIString;
+class GUIPlayer;
 
 class GUIImpl
 {
@@ -30,9 +31,8 @@ private:
     std::vector<Player*> players_;
     pthread_mutex_t playersLock_;
 
-    TTF_Font *font;
-    bool badNames_;
-    std::vector<GUIString*> nameStrings_;
+    bool badPlayers_;
+    std::vector<GUIPlayer*> playersDisplay_;
 
     // Helper functions
     void initGL();
