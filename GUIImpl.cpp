@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iostream>
 #include "Player.h"
+#include "GUIString.h"
 
 using namespace std;
 
@@ -37,6 +38,7 @@ void GUIImpl::run()
     font = TTF_OpenFont("resources/FreeMono.ttf", 18);
     if (!font)
         cout << "Unable to open font: " << TTF_GetError() << '\n';
+    GUIString::font_ = font;
 
     cont_ = true;
 
@@ -107,9 +109,6 @@ void GUIImpl::render()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glEnable(GL_TEXTURE_RECTANGLE);
-    glBindTexture(GL_TEXTURE_RECTANGLE, cardtex_);
-
     glTranslatef(113, 300-CARDY/2, 0);
     glScalef(CARDX, CARDY, 0);
     // Lock
@@ -127,6 +126,7 @@ void GUIImpl::render()
         case Card::diamonds: row = 1; break;
         case Card::hearts:   row = 2; break;
         case Card::spades:   row = 3; break;
+        case Card::none:     row = 4; break;
         }
 
         drawCard(row, col);
@@ -145,13 +145,12 @@ void GUIImpl::render()
     // Update the name textures, first delete the old ones
     if (badNames_)
     {
-        for (int i = 0; i < nameTextures_.size(); i++)
-            glDeleteTextures(1, &nameTextures_[i]);
-        nameTextures_.resize(players_.size());
-        nameTextureSizes_.resize(players_.size());
+        for (int i = 0; i < nameStrings_.size(); i++)
+            delete nameStrings_[i];
+        nameStrings_.resize(players_.size());
 
         for (int i = 0; i < players_.size(); i++)
-            makeStringTexture(i, players_[i]->getName());
+            nameStrings_[i] = new GUIString(players_[i]->getName());
         badNames_ = false;
     }
     // Update
@@ -176,7 +175,6 @@ void GUIImpl::render()
         for (int j = 0; j < numCards; j++)
         {
             glPushMatrix();
-            glBindTexture(GL_TEXTURE_RECTANGLE, cardtex_);
             glScalef(CARDX, CARDY, 0);
             drawCard(4, 2);
             glPopMatrix();
@@ -188,8 +186,7 @@ void GUIImpl::render()
         glTranslatef(400, 300, 0);
         glTranslatef(x*300, y*170, 0);
         glRotatef(180*angle/M_PI - 90, 0, 0, 1);
-        glBindTexture(GL_TEXTURE_RECTANGLE, nameTextures_[i]);
-        drawName(i);
+        nameStrings_[i]->draw();
 
         angle += M_PI/2.;
     }
@@ -216,6 +213,7 @@ void GUIImpl::processEvents()
 
 void GUIImpl::drawCard(int row, int col)
 {
+    glBindTexture(GL_TEXTURE_RECTANGLE, cardtex_);
     glBegin(GL_QUADS);
         glTexCoord2i(col * 79, row * 123);
         glVertex3f(0, 0, 0);
@@ -228,25 +226,6 @@ void GUIImpl::drawCard(int row, int col)
 
         glTexCoord2i((col+1) * 79, row * 123);
         glVertex3f(1, 0, 0);
-    glEnd();
-}
-
-void GUIImpl::drawName(int i)
-{
-    int x = nameTextureSizes_[i].first;
-    int y = nameTextureSizes_[i].second;
-    glBegin(GL_QUADS);
-        glTexCoord2i(0, 0);
-        glVertex3f(-x/2, -y/2, 0);
-
-        glTexCoord2i(0, y);
-        glVertex3f(-x/2, y/2, 0);
-
-        glTexCoord2i(x, y);
-        glVertex3f(x/2, y/2, 0);
-
-        glTexCoord2i(x, 0);
-        glVertex3f(x/2, -y/2, 0);
     glEnd();
 }
 
@@ -282,40 +261,4 @@ GLuint GUIImpl::loadTexture(const string& filename)
     SDL_FreeSurface(tex);
 
     return texture;
-}
-
-void GUIImpl::makeStringTexture(int i, const string& str)
-{
-    SDL_Color color = {0,0,0};
-    SDL_Surface *fontsurf = TTF_RenderText_Blended(font, str.c_str(), color);
-
-    if (!fontsurf)
-    {
-        cout << "Tried to render.. " << str << '\n';
-        cout << "Unable to render text: " << TTF_GetError() << '\n';
-        return;
-    }
-
-    GLenum texture_format;
-    if (fontsurf->format->BytesPerPixel == 4 )
-        texture_format = (fontsurf->format->Rmask == 0x000000ff) ? GL_RGBA : GL_BGRA;
-    else if (fontsurf->format->BytesPerPixel == 3 )
-        texture_format = (fontsurf->format->Rmask == 0x000000ff) ? GL_RGB : GL_BGR;
-    else
-    {
-        cout << "BPP: " << fontsurf->format->BytesPerPixel << '\n';
-        assert(false && "Image is not in the proper format.");
-    }
-
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_RECTANGLE, texture);
-
-    glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 4, fontsurf->w, fontsurf->h, 0,
-                 texture_format, GL_UNSIGNED_BYTE, fontsurf->pixels);
-    nameTextureSizes_[i].first = fontsurf->w;
-    nameTextureSizes_[i].second = fontsurf->h;
-    SDL_FreeSurface(fontsurf);
-
-    nameTextures_[i] = texture;
 }

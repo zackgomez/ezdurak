@@ -1,7 +1,8 @@
 CPPFLAGS   = -Wall -O0 -g -Wno-sign-compare -std=c++0x
 COMMONOBJS = obj/Card.o obj/Deck.o obj/Player.o obj/Game.o obj/CLIPlayer.o \
 	   obj/CLIListener.o obj/AIPlayer.o obj/ScoreKeeper.o
-GUIOBJS    = obj/GUIListener.o obj/guimain.o obj/GUIImpl.o
+GUIOBJS    = obj/GUIListener.o obj/guimain.o obj/GUIImpl.o obj/GUIString.o \
+	     obj/GUIPlayer.o
 GUILDFLAGS = -lSDL -lGL -lSDL_image -lSDL_ttf -lpthread
 
 all: ezdurak ezdurak-gui

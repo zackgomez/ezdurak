@@ -7,6 +7,7 @@
 #include "Card.h"
 
 class Player;
+class GUIString;
 
 class GUIImpl
 {
@@ -31,15 +32,13 @@ private:
 
     TTF_Font *font;
     bool badNames_;
-    std::vector<GLuint> nameTextures_;
-    std::vector<std::pair<int, int> > nameTextureSizes_;
+    std::vector<GUIString*> nameStrings_;
 
     // Helper functions
     void initGL();
     void render();
     void processEvents();
     void drawCard(int row, int col);
-    void drawName(int i);
     GLuint loadTexture(const std::string& filename);
     void makeStringTexture(int i, const std::string& str);
 };
