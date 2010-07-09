@@ -154,7 +154,7 @@ void GUIImpl::render()
         // Draw the player
         playersDisplay_[i]->draw();
 
-        angle += M_PI/2.;
+        angle += 2*M_PI/ players_.size();
     }
     // Unlock
     pthread_mutex_unlock(&playersLock_);
