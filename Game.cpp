@@ -3,7 +3,6 @@
 #include <algorithm>
 #include "Player.h"
 #include "GameListener.h"
-
 #include <iostream>
 
 using namespace std;
@@ -334,6 +333,17 @@ int Game::getTricksLeft() const
 int Game::getDeckSize() const
 { 
     return deck_.getNumCards();
+}
+
+int Game::getDiscardSize() const
+{
+    int aliveCards = deck_.getNumCards();
+    for (int i = 0; i < players_.size(); i++)
+    {
+        aliveCards += players_[i]->getNumCards();
+    }
+    
+    return 36 - aliveCards;
 }
 
 const Player * Game::getAttacker() const

@@ -26,6 +26,12 @@ public:
     virtual int getDeckSize() const = 0;
 
     /**
+     * Returns the number of cards that are not in the deck or in a player's 
+     * hand.  I.e. "Dead cards".
+     */
+    virtual int getDiscardSize() const = 0;
+
+    /**
      * Returns the number of tricks left to play on the current defender.
      */
     virtual int getTricksLeft() const = 0;
