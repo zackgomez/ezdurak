@@ -23,6 +23,7 @@ public:
     Card getTrumpCard() const;
     int getTricksLeft() const;
     int getDeckSize() const;
+    int getDiscardSize() const;
     const Player * getAttacker() const; const Player * getDefender() const; const std::vector<Player*>& getPlayers() const;
     const std::vector<Card>& getPlayedCards() const;
 
