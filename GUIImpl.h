@@ -19,15 +19,20 @@ public:
     void run();
 
     void setPlayers(const std::vector<Player*>& players);
-    void setPlayedCards(const std::vector<Card>& newCards);
+    void clearPlayedCards();
+    void addAttackingCard(const Card& c);
+    void addDefendingCard(const Card& c);
 
     void wait(int ms);
 
 private:
     bool cont_;
     GLuint cardtex_;
-    std::vector<Card> playedCards_;
+
+    std::vector<Card> attackingCards_;
+    std::vector<Card> defendingCards_;
     pthread_mutex_t playedCardsLock_;
+
     std::vector<Player*> players_;
     pthread_mutex_t playersLock_;
 

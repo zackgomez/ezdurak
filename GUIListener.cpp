@@ -27,8 +27,7 @@ void GUIListener::gameOver(const Player *biscuit)
 
 void GUIListener::newRound(const Player *attacker, const Player *defender)
 {
-    vector<Card> playedCards = agent_->getPlayedCards();
-    impl_->setPlayedCards(playedCards);
+    impl_->clearPlayedCards();
 }
 
 void GUIListener::attackerPassed(const Player *newAttacker)
@@ -39,22 +38,22 @@ void GUIListener::endRound(bool successfulDefend)
 
 void GUIListener::attackingCard(const Card &c)
 {
-    vector<Card> playedCards = agent_->getPlayedCards();
-    impl_->setPlayedCards(playedCards);
+    impl_->addAttackingCard(c);
+
     impl_->wait(400);
 }
 
 void GUIListener::defendingCard(const Card &c)
 {
-    vector<Card> playedCards = agent_->getPlayedCards();
-    impl_->setPlayedCards(playedCards);
+    impl_->addDefendingCard(c);
+
     impl_->wait(400);
 }
 
 void GUIListener::piledOnCard(const Card &c)
 {
-    vector<Card> playedCards = agent_->getPlayedCards();
-    impl_->setPlayedCards(playedCards);
+    impl_->addAttackingCard(c);
+
     impl_->wait(400);
 }
 

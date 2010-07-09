@@ -32,7 +32,7 @@ void GUIImpl::run()
         cout << "TTF_Init: " << TTF_GetError() << '\n';
         exit(2);
     }
-    GUIString::font_ = TTF_OpenFont("resources/FreeMono.ttf", 18);
+    GUIString::font_ = TTF_OpenFont("resources/FreeMono.ttf", 16);
     if (!GUIString::font_)
         cout << "Unable to open font: " << TTF_GetError() << '\n';
 
@@ -62,13 +62,33 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
     pthread_mutex_unlock(&playersLock_);
 }
 
-
-void GUIImpl::setPlayedCards(const vector<Card>& newCards)
+void GUIImpl::clearPlayedCards()
 {
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
     // Update
-    playedCards_ = newCards;
+    attackingCards_.clear();
+    defendingCards_.clear();
+    // Unlock
+    pthread_mutex_unlock(&playedCardsLock_);
+}
+
+void GUIImpl::addAttackingCard(const Card& c)
+{
+    // Lock
+    pthread_mutex_lock(&playedCardsLock_);
+    // Update
+    attackingCards_.push_back(c);
+    // Unlock
+    pthread_mutex_unlock(&playedCardsLock_);
+}
+
+void GUIImpl::addDefendingCard(const Card& c)
+{
+    // Lock
+    pthread_mutex_lock(&playedCardsLock_);
+    // Update
+    defendingCards_.push_back(c);
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
 }
@@ -102,22 +122,31 @@ void GUIImpl::initGL()
 void GUIImpl::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1,1,1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(113+GUICard::CARDX/2, 300, 0);
+    glTranslatef(400, 300, 0);
+    glTranslatef(-1.*GUICard::CARDX - 0.4*GUICard::CARDX,
+                 -.6*GUICard::CARDY, 0);
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
-    for (int i = 0; i < playedCards_.size(); i++)
+    for (int i = 0; i < attackingCards_.size(); i++)
     {
-        glColor3f(1,1,1);
+        // Draw attacking Card
+        GUICard::draw(attackingCards_[i]);
+        // Move over for defending card
+        glTranslatef(GUICard::CARDX * 0.2, 0, 0);
+        // Draw defending card if it exists
+        if (defendingCards_.size() > i)
+            GUICard::draw(defendingCards_[i]);
 
-        GUICard::draw(playedCards_[i]);
-
-        if (i % 2 == 0)
-            glTranslatef(.2 * GUICard::CARDX, 0, 0);
+        // Move over for next set
+        if (i == 2)
+            glTranslatef(-2*(GUICard::CARDX * 1.2) - 3*GUICard::CARDX*0.2,
+                         1.2 * GUICard::CARDY, 0);
         else
-            glTranslatef(1.2 * GUICard::CARDX, 0, 0);
+            glTranslatef(GUICard::CARDX * 1.2, 0, 0);
     }
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
@@ -147,7 +176,7 @@ void GUIImpl::render()
         glLoadIdentity();
         glTranslatef(400, 300, 0);
         // Move outwards
-        glTranslatef(x*350, y*235, 0);
+        glTranslatef(x*345, y*240, 0);
         // Rotate
         glRotatef(angle*180/M_PI - 90, 0, 0, 1);
 

@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 {
     srand(time(NULL));
 
-    std::vector<Player*> players(6);
+    std::vector<Player*> players(4);
     players[0] = new CLIPlayer("zack");
     for (int i = 1; i < players.size(); i++)
     {
