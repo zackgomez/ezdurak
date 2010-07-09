@@ -9,3 +9,17 @@ GUIPlayer::GUIPlayer(const Player *player) :
 {
     name_ = new GUIString(player->getName());
 }
+
+GUIPlayer::~GUIPlayer()
+{
+    delete name_;
+}
+
+void GUIPlayer::draw()
+{
+}
+
+void GUIPlayer::setStatus(Status status)
+{
+    status_ = status;
+}

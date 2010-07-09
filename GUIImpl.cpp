@@ -7,11 +7,9 @@
 #include <iostream>
 #include "Player.h"
 #include "GUIString.h"
+#include "GUICard.h"
 
 using namespace std;
-
-const float CARDX = 70;
-const float CARDY = 96;
 
 GUIImpl::GUIImpl()
 {
@@ -89,7 +87,7 @@ void GUIImpl::initGL()
     SDL_SetVideoMode(800, 600, 32, SDL_OPENGL);
 
     glEnable(GL_TEXTURE_RECTANGLE);
-    cardtex_ = loadTexture("resources/cards3.png");
+    GUICard::cardtex = loadTexture("resources/cards3.png");
 
     glViewport(0, 0, 800, 600);
     glMatrixMode(GL_PROJECTION);
@@ -109,32 +107,19 @@ void GUIImpl::render()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(113, 300-CARDY/2, 0);
-    glScalef(CARDX, CARDY, 0);
+    glTranslatef(113, 300-GUICard::CARDY/2, 0);
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
     for (int i = 0; i < playedCards_.size(); i++)
     {
         glColor3f(1,1,1);
 
-        int col = playedCards_[i].getNum();
-        col = (col == Card::ACE) ? 0 : col-1;
-        int row;
-        switch (playedCards_[i].getSuit())
-        {
-        case Card::clubs:    row = 0; break;
-        case Card::diamonds: row = 1; break;
-        case Card::hearts:   row = 2; break;
-        case Card::spades:   row = 3; break;
-        case Card::none:     row = 4; break;
-        }
-
-        drawCard(row, col);
+        GUICard::draw(playedCards_[i]);
 
         if (i % 2 == 0)
-            glTranslatef(.2, 0, 0);
+            glTranslatef(.2 * GUICard::CARDX, 0, 0);
         else
-            glTranslatef(1.2, 0, 0);
+            glTranslatef(1.2 * GUICard::CARDX, 0, 0);
     }
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
@@ -165,20 +150,17 @@ void GUIImpl::render()
 
         // Center
         glLoadIdentity();
-        glTranslatef(400-CARDX/2, 300-CARDY/2, 0);
+        glTranslatef(400-GUICard::CARDX/2, 300-GUICard::CARDY/2, 0);
         // Move outwards
         glTranslatef(x*350, y*235, 0);
         // Adjust so cards are centered
-        glTranslatef(-xvel*CARDX*(0.2*(numCards-1)/2),
-                     -yvel*CARDX*(0.2*(numCards-1)/2), 0);
+        glTranslatef(-xvel*GUICard::CARDX*(0.2*(numCards-1)/2),
+                     -yvel*GUICard::CARDX*(0.2*(numCards-1)/2), 0);
         // Draw each card back
         for (int j = 0; j < numCards; j++)
         {
-            glPushMatrix();
-            glScalef(CARDX, CARDY, 0);
-            drawCard(4, 2);
-            glPopMatrix();
-            glTranslatef(xvel*0.2*CARDX, yvel*0.2*CARDX, 0);
+            GUICard::drawCardBack();
+            glTranslatef(xvel*0.2*GUICard::CARDX, yvel*0.2*GUICard::CARDX, 0);
         }
 
         // Draw the name
@@ -209,24 +191,6 @@ void GUIImpl::processEvents()
             cont_ = false; break;
         }
     }
-}
-
-void GUIImpl::drawCard(int row, int col)
-{
-    glBindTexture(GL_TEXTURE_RECTANGLE, cardtex_);
-    glBegin(GL_QUADS);
-        glTexCoord2i(col * 79, row * 123);
-        glVertex3f(0, 0, 0);
-
-        glTexCoord2i(col * 79, (row+1) * 123);
-        glVertex3f(0, 1, 0);
-
-        glTexCoord2i((col+1) * 79, (row+1) * 123);
-        glVertex3f(1, 1, 0);
-
-        glTexCoord2i((col+1) * 79, row * 123);
-        glVertex3f(1, 0, 0);
-    glEnd();
 }
 
 GLuint GUIImpl::loadTexture(const string& filename)
