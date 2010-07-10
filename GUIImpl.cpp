@@ -267,18 +267,19 @@ void GUIImpl::render()
         }
         validStatus_ = true;
     }
-    // Update
     float angle = M_PI/2;
     for (int i = 0; i < players_.size(); i++)
     {
         float x = cos(angle);
         float y = sin(angle);
+        const float rx = 400 - GUICard::CARDY/2 - 5;
+        const float ry = 300 - GUICard::CARDY/2 - 5;
 
         // Center
         glLoadIdentity();
         glTranslatef(400, 300, 0);
         // Move outwards
-        glTranslatef(x*345, y*240, 0);
+        glTranslatef(x*rx, y*ry, 0);
         // Rotate
         glRotatef(angle*180/M_PI - 90, 0, 0, 1);
 
