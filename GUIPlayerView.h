@@ -17,5 +17,8 @@ protected:
     const Player *player_;
     GUIString *name_;
     Status status_;
+
+    void drawName();
+    void drawCards();
 };
 

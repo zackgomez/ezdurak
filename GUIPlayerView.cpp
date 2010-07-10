@@ -18,20 +18,17 @@ GUIPlayerView::~GUIPlayerView()
 
 void GUIPlayerView::draw()
 {
-    int numCards = player_->getNumCards();
+    drawCards();
+    drawName();
+}
 
-    glPushMatrix();
-    glTranslatef(-GUICard::CARDX*(0.2*(numCards-1)/2), 0, 0);
-    // Draw each card back
-    for (int j = 0; j < numCards; j++)
-    {
-        glColor3f(1,1,1);
-        GUICard::drawCardBack();
-        glTranslatef(0.2*GUICard::CARDX, 0, 0);
-    }
-    glPopMatrix();
+void GUIPlayerView::setStatus(Status status)
+{
+    status_ = status;
+}
 
-    // Draw the name
+void GUIPlayerView::drawName()
+{
     glPushMatrix();
     glTranslatef(0, -(GUICard::CARDX/2 + 25), 0);
     if (status_ == ATTACKER)
@@ -44,7 +41,18 @@ void GUIPlayerView::draw()
     glPopMatrix();
 }
 
-void GUIPlayerView::setStatus(Status status)
+void GUIPlayerView::drawCards()
 {
-    status_ = status;
+    int numCards = player_->getNumCards();
+
+    glPushMatrix();
+    glTranslatef(-GUICard::CARDX*(0.2*(numCards-1)/2), 0, 0);
+    // Draw each card back
+    for (int j = 0; j < numCards; j++)
+    {
+        glColor3f(1,1,1);
+        GUICard::drawCardBack();
+        glTranslatef(0.2*GUICard::CARDX, 0, 0);
+    }
+    glPopMatrix();
 }

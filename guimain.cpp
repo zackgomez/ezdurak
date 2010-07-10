@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "CLIListener.h"
 #include "CLIPlayer.h"
+#include "GUIPlayer.h"
 
 using namespace std;
 
@@ -18,8 +19,9 @@ int main(int argc, char **argv)
 {
     srand(time(NULL));
 
-    std::vector<Player*> players(4);
-    players[0] = new CLIPlayer("zack");
+    std::vector<Player*> players(5);
+    //players[0] = new CLIPlayer("zack");
+    players[0] = new GUIPlayer("guiplayer");
     for (int i = 1; i < players.size(); i++)
     {
         stringstream ss;

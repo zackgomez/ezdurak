@@ -9,6 +9,7 @@
 #include "GUIString.h"
 #include "GUICard.h"
 #include "GUIPlayerView.h"
+#include "GUIHumanView.h"
 
 using namespace std;
 
@@ -248,7 +249,8 @@ void GUIImpl::render()
             delete playersDisplay_[i];
         playersDisplay_.resize(players_.size());
 
-        for (int i = 0; i < players_.size(); i++)
+        playersDisplay_[0] = new GUIHumanView((GUIPlayer *) players_[0]);
+        for (int i = 1; i < players_.size(); i++)
             playersDisplay_[i] = new GUIPlayerView(players_[i]);
         badPlayers_ = false;
     }
@@ -300,8 +302,10 @@ void GUIImpl::processEvents()
         {
         case SDL_QUIT:
             cont_ = false; break;
+            /*
         case SDL_KEYDOWN:
             cont_ = false; break;
+            */
         }
     }
 }
