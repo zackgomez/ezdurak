@@ -30,7 +30,7 @@ void GUIPlayerView::setStatus(Status status)
 void GUIPlayerView::drawName()
 {
     glPushMatrix();
-    glTranslatef(0, -(GUICard::CARDX/2 + 25), 0);
+    glTranslatef(0, -(GUICard::CARDY/2 + 15), 0);
     if (status_ == ATTACKER)
         glColor3f(1,0,0);
     else if (status_ == DEFENDER)

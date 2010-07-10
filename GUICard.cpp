@@ -3,6 +3,8 @@
 #include <iostream>
 
 GLuint GUICard::cardtex = 0;
+int GUICard::CARDX = 70;
+int GUICard::CARDY = 96;
 
 static const int SOURCEX = 79;
 static const int SOURCEY = 123;

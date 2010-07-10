@@ -77,6 +77,11 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
             break;
         }
     }
+
+    // TODO Fix this
+    // Make the cards bigger
+    GUICard::CARDX *= 1.2;
+    GUICard::CARDY *= 1.2;
     // Unlock
     pthread_mutex_unlock(&playersLock_);
 }

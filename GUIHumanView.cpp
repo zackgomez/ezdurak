@@ -5,11 +5,14 @@
 
 GUIHumanView::GUIHumanView(const GUIPlayer *player) :
     GUIPlayerView(player),
-    player_(player)
-{ /* Empty */ }
+    player_(player),
+    passString_("PASS")
+{
+}
 
 GUIHumanView::~GUIHumanView()
-{ /* Empty */ }
+{
+}
 
 void GUIHumanView::draw()
 {
@@ -31,5 +34,15 @@ void GUIHumanView::drawCards()
         GUICard::draw(cards[j]);
         glTranslatef(0.2*GUICard::CARDX, 0, 0);
     }
+
+    if (status_ != NONE)
+    {
+        glTranslatef(GUICard::CARDX, 0, 0);
+        glColor3f(0,0,0);
+        GUICard::drawCardBack();
+        glColor3f(1,1,1);
+        passString_.draw();
+    }
+
     glPopMatrix();
 }

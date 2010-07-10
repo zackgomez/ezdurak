@@ -1,5 +1,6 @@
 #pragma once
 #include "GUIPlayerView.h"
+#include "GUIString.h"
 
 class GUIPlayer;
 
@@ -15,5 +16,5 @@ public:
 private:
     const GUIPlayer *player_;
     void drawCards();
-
+    GUIString passString_;
 };
