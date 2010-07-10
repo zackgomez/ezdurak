@@ -19,6 +19,7 @@ public:
     void run();
 
     void setPlayers(const std::vector<Player*>& players);
+    void setTrumpCard(const Card &c);
     void clearPlayedCards();
     void addAttackingCard(const Card& c);
     void addDefendingCard(const Card& c);
@@ -45,6 +46,8 @@ private:
     bool validSizes_;
     GUIString *deckString_;
     GUIString *discardString_;
+    
+    Card trumpCard_;
 
     // Helper functions
     void initGL();

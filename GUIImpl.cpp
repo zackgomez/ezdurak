@@ -68,6 +68,16 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
     pthread_mutex_unlock(&playersLock_);
 }
 
+void GUIImpl::setTrumpCard(const Card &c)
+{
+    // Lock
+    pthread_mutex_lock(&playedCardsLock_);
+    // Update
+    trumpCard_ = c;
+    // Unlock
+    pthread_mutex_unlock(&playedCardsLock_);
+}
+
 void GUIImpl::clearPlayedCards()
 {
     // Lock
@@ -176,6 +186,13 @@ void GUIImpl::render()
     glLoadIdentity();
     glTranslatef(10 + GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
     glColor3f(1, 1, 1);
+    // First draw the trump, rotated and moved
+    glPushMatrix();
+    glTranslatef(GUICard::CARDY/2 - GUICard::CARDX/2, 0, 0);
+    glRotatef(90, 0, 0, 1);
+    GUICard::draw(trumpCard_);
+    glPopMatrix();
+
     GUICard::drawCardBack();
     glColor3f(1, 0, 0);
     deckString_->draw();

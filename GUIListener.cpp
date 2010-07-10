@@ -20,6 +20,7 @@ void GUIListener::gameStart()
 {
     const vector<Player*> players = agent_->getPlayers();
     impl_->setPlayers(players);
+    impl_->setTrumpCard(agent_->getTrumpCard());
 }
 
 void GUIListener::gameOver(const Player *biscuit)
