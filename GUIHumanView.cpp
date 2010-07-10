@@ -32,7 +32,7 @@ void GUIHumanView::mouseClick(int x, int y)
         // Figure out which card they clicked
         x += rx;
         int idx = std::min((int)(x / (0.2 * GUICard::CARDX)), numCards-1);
-        std::cout << "Main cards hit - Index: " << idx << '\n';
+        //std::cout << "Main cards hit - Index: " << idx << '\n';
         queue_.enqueue(idx);
     }
 
@@ -41,7 +41,7 @@ void GUIHumanView::mouseClick(int x, int y)
 
     if (x < passxmax && x > passxmin && y < ry && y > -ry)
     {
-        std::cout << "Pass card hit\n";
+        //std::cout << "Pass card hit\n";
         queue_.enqueue(-1);
     }
 }

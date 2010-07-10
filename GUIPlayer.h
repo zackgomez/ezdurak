@@ -16,7 +16,10 @@ public:
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump);
     virtual Card attack(std::set<int> playableRanks = std::set<int>());
     virtual Card pileOn(std::set<int> playableRanks);
+    virtual void addCards(const std::vector<Card>& cards);
 private:
+    void sortHand();
     SynchronizedQueue<int> &queue_;
+    GameAgent *agent_;
 };
 
