@@ -54,6 +54,8 @@ void GUIHumanView::draw()
 
 void GUIHumanView::drawCards()
 {
+    if (player_->getNumCards() == 0)
+        return;
     const std::vector<Card> cards = player_->getHand();
     int numCards = cards.size();
 

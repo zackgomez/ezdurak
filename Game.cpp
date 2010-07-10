@@ -283,7 +283,7 @@ void Game::removeFinishedPlayers()
             players_.erase(players_.begin() + i);
             // Check to see if they were before the defender, update the idx
             // if they were
-            defenderIdx_ = (i >= defenderIdx_) ? defenderIdx_  : defenderIdx_-1;
+            defenderIdx_ = (i > defenderIdx_) ? defenderIdx_  : defenderIdx_-1;
             // Broadcast the player
             for (auto it = listeners_.begin(); it != listeners_.end(); it++)
                 (*it)->playedOut(goingOut);
@@ -300,10 +300,10 @@ void Game::nextDefender(bool successfulDefend)
     // If they lost, it skips them
     if (!successfulDefend)
         defenderIdx_ = (defenderIdx_ + 1) % players_.size();
+    // Old defender is new attacker
+    attackerIdx_ = defenderIdx_;
     // Defender moves one place
     defenderIdx_ = (defenderIdx_ + 1) % players_.size();
-    // New attacker is to the left
-    attackerIdx_ = (defenderIdx_ - 1) % players_.size();
 
     // Update variables
     attacker_ = players_[attackerIdx_];
