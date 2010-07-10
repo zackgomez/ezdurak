@@ -18,6 +18,7 @@ GUIImpl::GUIImpl()
     playersLock_     = PTHREAD_MUTEX_INITIALIZER;
     badPlayers_ = true;
     validSizes_ = false;
+    validStatus_ = true;
     discardSize_ = 0;
     deckSize_ = 0;
     deckString_ = 0;
@@ -64,6 +65,28 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
     // Update
     players_ = players;
     badPlayers_ = true;
+    // Unlock
+    pthread_mutex_unlock(&playersLock_);
+}
+
+void GUIImpl::setAttacker(const Player *player)
+{
+    // Lock
+    pthread_mutex_lock(&playersLock_);
+    // Update
+    attacker_ = player;
+    validStatus_ = false;
+    // Unlock
+    pthread_mutex_unlock(&playersLock_);
+}
+
+void GUIImpl::setDefender(const Player *player)
+{
+    // Lock
+    pthread_mutex_lock(&playersLock_);
+    // Update
+    defender_ = player;
+    validStatus_ = false;
     // Unlock
     pthread_mutex_unlock(&playersLock_);
 }
@@ -228,6 +251,19 @@ void GUIImpl::render()
         for (int i = 0; i < players_.size(); i++)
             playersDisplay_[i] = new GUIPlayer(players_[i]);
         badPlayers_ = false;
+    }
+    if (!validStatus_)
+    {
+        for (int i = 0; i < players_.size(); i++)
+        {
+            if (players_[i] == attacker_)
+                playersDisplay_[i]->setStatus(GUIPlayer::ATTACKER);
+            else if (players_[i] == defender_)
+                playersDisplay_[i]->setStatus(GUIPlayer::DEFENDER);
+            else
+                playersDisplay_[i]->setStatus(GUIPlayer::NONE);
+        }
+        validStatus_ = true;
     }
     // Update
     float angle = M_PI/2;

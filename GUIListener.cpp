@@ -30,10 +30,14 @@ void GUIListener::newRound(const Player *attacker, const Player *defender)
 {
     impl_->clearPlayedCards();
     impl_->setPileSizes(agent_->getDeckSize(), agent_->getDiscardSize());
+    impl_->setAttacker(attacker);
+    impl_->setDefender(defender);
 }
 
 void GUIListener::attackerPassed(const Player *newAttacker)
-{ /* Empty */ }
+{
+    impl_->setAttacker(newAttacker);
+}
 
 void GUIListener::endRound(bool successfulDefend)
 { /* Empty */ }

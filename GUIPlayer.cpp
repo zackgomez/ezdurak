@@ -34,7 +34,12 @@ void GUIPlayer::draw()
     // Draw the name
     glPushMatrix();
     glTranslatef(0, -(GUICard::CARDX/2 + 25), 0);
-    glColor3i(0,0,0);
+    if (status_ == ATTACKER)
+        glColor3f(1,0,0);
+    else if (status_ == DEFENDER)
+        glColor3f(0,0,1);
+    else
+        glColor3i(0,0,0);
     name_->draw();
     glPopMatrix();
 }
