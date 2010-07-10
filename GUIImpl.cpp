@@ -8,7 +8,7 @@
 #include <sstream>
 #include "GUIString.h"
 #include "GUICard.h"
-#include "GUIPlayer.h"
+#include "GUIPlayerView.h"
 
 using namespace std;
 
@@ -249,7 +249,7 @@ void GUIImpl::render()
         playersDisplay_.resize(players_.size());
 
         for (int i = 0; i < players_.size(); i++)
-            playersDisplay_[i] = new GUIPlayer(players_[i]);
+            playersDisplay_[i] = new GUIPlayerView(players_[i]);
         badPlayers_ = false;
     }
     if (!validStatus_)
@@ -257,11 +257,11 @@ void GUIImpl::render()
         for (int i = 0; i < players_.size(); i++)
         {
             if (players_[i] == attacker_)
-                playersDisplay_[i]->setStatus(GUIPlayer::ATTACKER);
+                playersDisplay_[i]->setStatus(GUIPlayerView::ATTACKER);
             else if (players_[i] == defender_)
-                playersDisplay_[i]->setStatus(GUIPlayer::DEFENDER);
+                playersDisplay_[i]->setStatus(GUIPlayerView::DEFENDER);
             else
-                playersDisplay_[i]->setStatus(GUIPlayer::NONE);
+                playersDisplay_[i]->setStatus(GUIPlayerView::NONE);
         }
         validStatus_ = true;
     }
