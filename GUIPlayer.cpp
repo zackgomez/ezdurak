@@ -25,6 +25,7 @@ void GUIPlayer::draw()
     // Draw each card back
     for (int j = 0; j < numCards; j++)
     {
+        glColor3f(1,1,1);
         GUICard::drawCardBack();
         glTranslatef(0.2*GUICard::CARDX, 0, 0);
     }
@@ -33,6 +34,7 @@ void GUIPlayer::draw()
     // Draw the name
     glPushMatrix();
     glTranslatef(0, -(GUICard::CARDX/2 + 25), 0);
+    glColor3i(0,0,0);
     name_->draw();
     glPopMatrix();
 }

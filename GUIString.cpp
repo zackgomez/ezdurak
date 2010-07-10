@@ -8,7 +8,7 @@ GUIString::GUIString(const std::string &str) :
     width_(0),
     height_(0)
 {
-    SDL_Color color = {0,0,0};
+    SDL_Color color = {255,255,255};
     SDL_Surface *fontsurf = TTF_RenderText_Blended(font_, str.c_str(), color);
 
     if (!fontsurf)

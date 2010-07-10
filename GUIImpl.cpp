@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 #include "GUIString.h"
 #include "GUICard.h"
 #include "GUIPlayer.h"
@@ -16,6 +17,11 @@ GUIImpl::GUIImpl()
     playedCardsLock_ = PTHREAD_MUTEX_INITIALIZER;
     playersLock_     = PTHREAD_MUTEX_INITIALIZER;
     badPlayers_ = true;
+    validSizes_ = false;
+    discardSize_ = 0;
+    deckSize_ = 0;
+    deckString_ = 0;
+    discardString_ = 0;
 }
 
 GUIImpl::~GUIImpl()
@@ -32,7 +38,7 @@ void GUIImpl::run()
         cout << "TTF_Init: " << TTF_GetError() << '\n';
         exit(2);
     }
-    GUIString::font_ = TTF_OpenFont("resources/FreeMono.ttf", 16);
+    GUIString::font_ = TTF_OpenFont("resources/FreeMonoBold.ttf", 16);
     if (!GUIString::font_)
         cout << "Unable to open font: " << TTF_GetError() << '\n';
 
@@ -93,6 +99,12 @@ void GUIImpl::addDefendingCard(const Card& c)
     pthread_mutex_unlock(&playedCardsLock_);
 }
 
+void GUIImpl::setPileSizes(int deckSize, int discardSize)
+{
+    deckSize_ = deckSize;
+    discardSize_ = discardSize;
+}
+
 void GUIImpl::wait(int ms)
 {
     SDL_Delay(ms);
@@ -148,6 +160,33 @@ void GUIImpl::render()
         else
             glTranslatef(GUICard::CARDX * 1.2, 0, 0);
     }
+    if (!validSizes_)
+    {
+        delete deckString_;
+        delete discardString_;
+        stringstream deckss, discardss;
+        deckss << deckSize_;
+        discardss << discardSize_;
+
+        deckString_ = new GUIString(deckss.str());
+        discardString_ = new GUIString(discardss.str());
+    }
+        
+    // Draw the deck and discard pile
+    glLoadIdentity();
+    glTranslatef(10 + GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
+    glColor3f(1, 1, 1);
+    GUICard::drawCardBack();
+    glColor3f(1, 0, 0);
+    deckString_->draw();
+
+    glLoadIdentity();
+    glTranslatef(800 - 10 - GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
+    glColor3f(1, 1, 1);
+    GUICard::drawCardBack();
+    glColor3f(1, 0, 0);
+    discardString_->draw();
+
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
 

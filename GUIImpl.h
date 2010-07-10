@@ -22,6 +22,7 @@ public:
     void clearPlayedCards();
     void addAttackingCard(const Card& c);
     void addDefendingCard(const Card& c);
+    void setPileSizes(int deckSize, int discardSize);
 
     void wait(int ms);
 
@@ -31,6 +32,8 @@ private:
 
     std::vector<Card> attackingCards_;
     std::vector<Card> defendingCards_;
+    int deckSize_;
+    int discardSize_;
     pthread_mutex_t playedCardsLock_;
 
     std::vector<Player*> players_;
@@ -38,6 +41,10 @@ private:
 
     bool badPlayers_;
     std::vector<GUIPlayer*> playersDisplay_;
+
+    bool validSizes_;
+    GUIString *deckString_;
+    GUIString *discardString_;
 
     // Helper functions
     void initGL();

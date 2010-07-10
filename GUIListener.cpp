@@ -28,6 +28,7 @@ void GUIListener::gameOver(const Player *biscuit)
 void GUIListener::newRound(const Player *attacker, const Player *defender)
 {
     impl_->clearPlayedCards();
+    impl_->setPileSizes(agent_->getDeckSize(), agent_->getDiscardSize());
 }
 
 void GUIListener::attackerPassed(const Player *newAttacker)
