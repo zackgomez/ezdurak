@@ -34,7 +34,6 @@ int main(int argc, char **argv)
     GUIImpl gui;
     Game game(players);
     GUIListener listener(&game, &gui);
-    CLIListener text(&game);
 
     pthread_t gui_thread;
     pthread_create(&gui_thread, NULL, gui_main, &gui);

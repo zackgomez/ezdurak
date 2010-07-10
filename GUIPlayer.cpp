@@ -2,7 +2,7 @@
 #include <iostream>
 
 GUIPlayer::GUIPlayer(const std::string &name, SynchronizedQueue<int> &q) :
-    CLIPlayer(name),
+    Player(name),
     queue_(q)
 { /* Empty */ }
 
@@ -18,6 +18,9 @@ SynchronizedQueue<int>& GUIPlayer::getQueue() const
 {
     return queue_;
 }
+
+void GUIPlayer::gameStarting(GameAgent *agent)
+{ /* Empty */ }
 
 Card GUIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {
