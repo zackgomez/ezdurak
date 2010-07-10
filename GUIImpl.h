@@ -9,6 +9,7 @@
 class Player;
 class GUIString;
 class GUIPlayerView;
+class GUIHumanView;
 
 class GUIImpl
 {
@@ -43,6 +44,7 @@ private:
     pthread_mutex_t playersLock_;
 
     bool badPlayers_;
+    GUIHumanView *humanView_;
     std::vector<GUIPlayerView*> playersDisplay_;
     bool validStatus_;
     const Player *attacker_, *defender_;

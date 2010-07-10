@@ -1,5 +1,6 @@
 #include "GUIHumanView.h"
 #include <GL/gl.h>
+#include <iostream>
 #include "GUIPlayer.h"
 #include "GUICard.h"
 
@@ -13,6 +14,30 @@ GUIHumanView::GUIHumanView(const GUIPlayer *player) :
 
 GUIHumanView::~GUIHumanView()
 {
+}
+
+void GUIHumanView::mouseClick(int x, int y)
+{
+    // If we're not attacking or defending, get outta here!
+    if (status_ == NONE)
+        return;
+    // Figure out if the clicked on a card...
+    int numCards = player_->getNumCards();
+    int rx = GUICard::CARDX*(0.2*(numCards-1)/2) + GUICard::CARDX/2;
+    int ry = GUICard::CARDY/2;
+
+    if ((x < rx && x > -rx) && (y < ry && y > -ry))
+    {
+        //std::cout << "Main cards hit\n";
+    }
+
+    int passxmin = rx + GUICard::CARDX*0.2;
+    int passxmax = passxmin + GUICard::CARDX;
+
+    if (x < passxmax && x > passxmin && y < ry && y > -ry)
+    {
+        //std::cout << "Pass card hit\n";
+    }
 }
 
 void GUIHumanView::draw()

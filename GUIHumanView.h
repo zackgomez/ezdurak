@@ -11,7 +11,10 @@ public:
     GUIHumanView(const GUIPlayer *player);
     ~GUIHumanView();
 
+    void mouseClick(int x, int y);
+
     virtual void draw();
+
 
 private:
     const GUIPlayer *player_;

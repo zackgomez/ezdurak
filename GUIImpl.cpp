@@ -26,6 +26,7 @@ GUIImpl::GUIImpl()
     deckSize_ = 0;
     deckString_ = 0;
     discardString_ = 0;
+    humanView_ = NULL;
 }
 
 GUIImpl::~GUIImpl()
@@ -251,10 +252,8 @@ void GUIImpl::render()
         glColor3f(1, 0, 0);
         discardString_->draw();
     }
-
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
-
 
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -265,7 +264,8 @@ void GUIImpl::render()
             delete playersDisplay_[i];
         playersDisplay_.resize(players_.size());
 
-        playersDisplay_[0] = new GUIHumanView((GUIPlayer *) players_[0]);
+        humanView_ = new GUIHumanView((GUIPlayer *) players_[0]);
+        playersDisplay_[0] = humanView_;
         for (int i = 1; i < players_.size(); i++)
             playersDisplay_[i] = new GUIPlayerView(players_[i]);
         badPlayers_ = false;
@@ -319,6 +319,16 @@ void GUIImpl::processEvents()
         {
         case SDL_QUIT:
             cont_ = false; break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (e.button.button != 1)
+                break;
+            int x = e.button.x;
+            int y = e.button.y;
+            x -= 400;
+            y -= 300 + 300 - GUICard::CARDY/2 - 5;
+            if (humanView_)
+                humanView_->mouseClick(x, y);
+            break;
             /*
         case SDL_KEYDOWN:
             cont_ = false; break;
