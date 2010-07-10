@@ -6,6 +6,8 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
+#include "Player.h"
 #include "GUIString.h"
 #include "GUICard.h"
 #include "GUIPlayerView.h"
@@ -66,6 +68,15 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
     // Update
     players_ = players;
     badPlayers_ = true;
+
+    for (auto it = players_.begin(); it != players_.end(); it++)
+    {
+        if ((*it)->getName() == "guiplayer")
+        {
+            std::rotate(players_.begin(), it, players_.end());
+            break;
+        }
+    }
     // Unlock
     pthread_mutex_unlock(&playersLock_);
 }

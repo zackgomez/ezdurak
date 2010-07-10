@@ -2,14 +2,14 @@
 #include <vector>
 #include <ctime>
 #include <sstream>
+#include <algorithm>
 #include "GUIListener.h"
 #include "GUIImpl.h"
 #include "AIPlayer.h"
 #include "Game.h"
 #include "CLIListener.h"
 #include "CLIPlayer.h"
-#include "GUIPlayer.h"
-
+#include "GUIPlayer.h" 
 using namespace std;
 
 void * gui_main(void *guiobj);
@@ -28,6 +28,7 @@ int main(int argc, char **argv)
         std::string name = ss.str();
         players[i] = new AIPlayer(name);
     }
+    std::random_shuffle(players.begin(), players.end());
 
     GUIImpl gui;
     Game game(players);
