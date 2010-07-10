@@ -19,8 +19,9 @@ int main(int argc, char **argv)
 {
     srand(time(NULL));
 
+    SynchronizedQueue<int> q;
     std::vector<Player*> players(4);
-    players[0] = new GUIPlayer("guiplayer");
+    players[0] = new GUIPlayer("guiplayer", q);
     for (int i = 1; i < players.size(); i++)
     {
         stringstream ss;

@@ -1,6 +1,7 @@
 #pragma once
 #include "GUIPlayerView.h"
 #include "GUIString.h"
+#include "SynchronizedQueue.h"
 
 class GUIPlayer;
 
@@ -18,6 +19,7 @@ public:
 
 private:
     const GUIPlayer *player_;
+    SynchronizedQueue<int> &queue_;
     void drawCards();
     GUIString passString_;
     GUIString giveUpString_;
