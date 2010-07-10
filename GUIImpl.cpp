@@ -187,22 +187,30 @@ void GUIImpl::render()
     glTranslatef(10 + GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
     glColor3f(1, 1, 1);
     // First draw the trump, rotated and moved
-    glPushMatrix();
-    glTranslatef(GUICard::CARDY/2 - GUICard::CARDX/2, 0, 0);
-    glRotatef(90, 0, 0, 1);
-    GUICard::draw(trumpCard_);
-    glPopMatrix();
+    if (deckSize_ > 0)
+    {
+        glPushMatrix();
+        glTranslatef(GUICard::CARDY/2 - GUICard::CARDX/2, 0, 0);
+        glRotatef(90, 0, 0, 1);
+        GUICard::draw(trumpCard_);
+        glPopMatrix();
+    }
+    if (deckSize_ > 1)
+    {
+        GUICard::drawCardBack();
+        glColor3f(1, 0, 0);
+        deckString_->draw();
+    }
 
-    GUICard::drawCardBack();
-    glColor3f(1, 0, 0);
-    deckString_->draw();
-
-    glLoadIdentity();
-    glTranslatef(800 - 10 - GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
-    glColor3f(1, 1, 1);
-    GUICard::drawCardBack();
-    glColor3f(1, 0, 0);
-    discardString_->draw();
+    if (discardSize_ > 0)
+    {
+        glLoadIdentity();
+        glTranslatef(800 - 10 - GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
+        glColor3f(1, 1, 1);
+        GUICard::drawCardBack();
+        glColor3f(1, 0, 0);
+        discardString_->draw();
+    }
 
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
