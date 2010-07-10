@@ -15,10 +15,10 @@
 
 using namespace std;
 
-GUIImpl::GUIImpl()
+GUIImpl::GUIImpl() :
+    playedCardsLock_(PTHREAD_MUTEX_INITIALIZER),
+    playersLock_(PTHREAD_MUTEX_INITIALIZER)
 {
-    playedCardsLock_ = PTHREAD_MUTEX_INITIALIZER;
-    playersLock_     = PTHREAD_MUTEX_INITIALIZER;
     badPlayers_ = true;
     validSizes_ = false;
     validStatus_ = true;
@@ -70,7 +70,8 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
     players_ = players;
     badPlayers_ = true;
 
-    for (auto it = players_.begin(); it != players_.end(); it++)
+    vector<Player*>::iterator it;
+    for (it = players_.begin(); it != players_.end(); it++)
     {
         if ((*it)->getName() == "guiplayer")
         {
@@ -319,6 +320,10 @@ void GUIImpl::processEvents()
         {
         case SDL_QUIT:
             cont_ = false; break;
+        case SDL_KEYDOWN:
+            if (e.key.keysym.sym == SDLK_ESCAPE)
+                cont_ = false;
+            break;
         case SDL_MOUSEBUTTONDOWN:
             if (e.button.button != 1)
                 break;
@@ -329,10 +334,6 @@ void GUIImpl::processEvents()
             if (humanView_)
                 humanView_->mouseClick(x, y);
             break;
-            /*
-        case SDL_KEYDOWN:
-            cont_ = false; break;
-            */
         }
     }
 }

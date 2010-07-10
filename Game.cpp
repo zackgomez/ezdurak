@@ -29,10 +29,11 @@ void Game::run()
     deal();
 
     // The game begins
-    for (auto it = players_.begin(); it != players_.end(); it++)
+    vector<Player*>::iterator it;
+    for (it = players_.begin(); it != players_.end(); it++)
         (*it)->gameStarting(this);
-    for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-        (*it)->gameStart();
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->gameStart();
 
     // The game continues while there is more than 1 player
     while (players_.size() > 1)
@@ -43,13 +44,13 @@ void Game::run()
         playableRanks_.clear();
         refillOrder_.clear();
         // Broadcast start of a round
-        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-            (*it)->newRound(attacker_, defender_);
+        for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+            (*lit_)->newRound(attacker_, defender_);
         // Round
         bool successfulDefend = doRound();
         // Broadcast end of round
-        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-            (*it)->endRound(successfulDefend);
+        for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+            (*lit_)->endRound(successfulDefend);
         // If the defender loses, then they must take all of the played cards.
         if (!successfulDefend)
             // And the attackers can pile on cards
@@ -70,8 +71,8 @@ void Game::run()
     if (players_.size() == 1)
         biscuit = players_[0];
     // Broadcast the game over with the loser or NULL
-    for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-        (*it)->gameOver(biscuit);
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->gameOver(biscuit);
 }
 
 void Game::deal()
@@ -151,8 +152,8 @@ bool Game::doRound()
         playableRanks_.insert(attC.getNum());
         --tricksLeft_;
         // Broadcast the card
-        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-            (*it)->attackingCard(attC);
+        for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+            (*lit_)->attackingCard(attC);
 
         // Now record the player in the refill order, if they're already there
         // don't readd them
@@ -171,8 +172,8 @@ bool Game::doRound()
         playedCards_.push_back(defC);
         playableRanks_.insert(defC.getNum());
         // Broadcast the card
-        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-            (*it)->defendingCard(defC);
+        for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+            (*lit_)->defendingCard(defC);
     }
 
     // If there are no tricks left to play, then the defender has won!
@@ -197,8 +198,8 @@ Card Game::getAttackingCard()
         // If they did pass...
         nextAttacker();
         // Broadcast it
-        for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-            (*it)->attackerPassed(attacker_);
+        for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+            (*lit_)->attackerPassed(attacker_);
     } while (attacker_ != initialAttacker);
 
     return Card();
@@ -233,8 +234,8 @@ void Game::pileOn()
                 == refillOrder_.end())
                 refillOrder_.push_back(attacker_);
             // Broadcast it
-            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-                (*it)->piledOnCard(attC);
+            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+                (*lit_)->piledOnCard(attC);
         }
         // Did they all pass?
         else
@@ -245,11 +246,11 @@ void Game::pileOn()
     // Finally, the defender has to take all of the played cards.
     defender_->addCards(playedCards_);
     // Broadcast the event
-    for (auto it = listeners_.begin(); it != listeners_.end(); it++)
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         // TODO:2010-07-01:zack: Use a different message for this specifying the
         // cards given, or modify the current message to take a list of cards if
         // known.
-        (*it)->givenCards(defender_, playedCards_.size());
+        (*lit_)->givenCards(defender_, playedCards_.size());
 }
 
 void Game::refill()
@@ -264,8 +265,8 @@ void Game::refill()
             vector<Card> refillCards = deck_.deal(neededCards);
             refillOrder_[i]->addCards(refillCards);
             // Broadcast the drawing
-            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-                (*it)->givenCards(refillOrder_[i], neededCards);
+            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+                (*lit_)->givenCards(refillOrder_[i], neededCards);
         }
     }
 }
@@ -285,8 +286,8 @@ void Game::removeFinishedPlayers()
             // if they were
             defenderIdx_ = (i > defenderIdx_) ? defenderIdx_  : defenderIdx_-1;
             // Broadcast the player
-            for (auto it = listeners_.begin(); it != listeners_.end(); it++)
-                (*it)->playedOut(goingOut);
+            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+                (*lit_)->playedOut(goingOut);
         }
         else
         {

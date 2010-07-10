@@ -12,7 +12,8 @@ ScoreKeeper::~ScoreKeeper()
 void ScoreKeeper::print()
 {
     std::cout << "There were " << numDraws_ << " draws\n";
-    for (auto it = scores_.begin(); it != scores_.end(); it++)
+    std::map<std::string, int>::iterator it;
+    for (it = scores_.begin(); it != scores_.end(); it++)
     {
         std::cout << (*it).first << " had " << (*it).second << " losses\n";
     }

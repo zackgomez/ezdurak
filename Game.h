@@ -41,6 +41,7 @@ private:
     std::set<int> playableRanks_;
     std::vector<Player*> refillOrder_;
 
+    std::set<GameListener*>::iterator lit_;
     std::set<GameListener*> listeners_;
 
     /** Deals a the initial hands to the players */
