@@ -300,10 +300,10 @@ void Game::nextDefender(bool successfulDefend)
     // If they lost, it skips them
     if (!successfulDefend)
         defenderIdx_ = (defenderIdx_ + 1) % players_.size();
-    // New attacker is old defender
-    attackerIdx_ = defenderIdx_;
-    // The defender is to their right
+    // Defender moves one place
     defenderIdx_ = (defenderIdx_ + 1) % players_.size();
+    // New attacker is to the left
+    attackerIdx_ = (defenderIdx_ - 1) % players_.size();
 
     // Update variables
     attacker_ = players_[attackerIdx_];

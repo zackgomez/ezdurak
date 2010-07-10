@@ -6,7 +6,8 @@
 GUIHumanView::GUIHumanView(const GUIPlayer *player) :
     GUIPlayerView(player),
     player_(player),
-    passString_("PASS")
+    passString_("PASS"),
+    giveUpString_("GIVE UP")
 {
 }
 
@@ -41,7 +42,10 @@ void GUIHumanView::drawCards()
         glColor3f(0,0,0);
         GUICard::drawCardBack();
         glColor3f(1,1,1);
-        passString_.draw();
+        if (status_ == ATTACKER)
+            passString_.draw();
+        else
+            giveUpString_.draw();
     }
 
     glPopMatrix();

@@ -17,4 +17,5 @@ private:
     const GUIPlayer *player_;
     void drawCards();
     GUIString passString_;
+    GUIString giveUpString_;
 };
