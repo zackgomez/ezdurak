@@ -32,7 +32,6 @@ public:
 
 private:
     bool cont_;
-    GLuint cardtex_;
 
     std::vector<Card> attackingCards_;
     std::vector<Card> defendingCards_;
@@ -43,7 +42,7 @@ private:
     std::vector<Player*> players_;
     pthread_mutex_t playersLock_;
 
-    bool badPlayers_;
+    bool validPlayerDisplays_;
     GUIHumanView *humanView_;
     std::vector<GUIPlayerView*> playersDisplay_;
     bool validStatus_;
@@ -57,9 +56,12 @@ private:
 
     // Helper functions
     void initGL();
-    void render();
     void processEvents();
-    void drawCard(int row, int col);
+    void render();
+    void drawPlayedCards();
+    void drawPiles();
+    void drawPlayers();
+    void updatePlayers();
+
     GLuint loadTexture(const std::string& filename);
-    void makeStringTexture(int i, const std::string& str);
 };

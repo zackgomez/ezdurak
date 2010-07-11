@@ -15,11 +15,14 @@
 
 using namespace std;
 
-GUIImpl::GUIImpl() :
-    playedCardsLock_(PTHREAD_MUTEX_INITIALIZER),
-    playersLock_(PTHREAD_MUTEX_INITIALIZER)
+const int SCREENX = 800;
+const int SCREENY = 600;
+
+GUIImpl::GUIImpl()
 {
-    badPlayers_ = true;
+    pthread_mutex_init(&playedCardsLock_, NULL);
+    pthread_mutex_init(&playersLock_, NULL);
+    validPlayerDisplays_ = false;
     validSizes_ = false;
     validStatus_ = true;
     discardSize_ = 0;
@@ -31,6 +34,8 @@ GUIImpl::GUIImpl() :
 
 GUIImpl::~GUIImpl()
 {
+    pthread_mutex_destroy(&playedCardsLock_);
+    pthread_mutex_destroy(&playersLock_);
     SDL_Quit();
 }
 
@@ -68,7 +73,7 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
     pthread_mutex_lock(&playersLock_);
     // Update
     players_ = players;
-    badPlayers_ = true;
+    validPlayerDisplays_ = false;
 
     vector<Player*>::iterator it;
     for (it = players_.begin(); it != players_.end(); it++)
@@ -166,14 +171,14 @@ void GUIImpl::initGL()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 
-    SDL_SetVideoMode(800, 600, 32, SDL_OPENGL);
+    SDL_SetVideoMode(SCREENX, SCREENY, 32, SDL_OPENGL);
 
     glEnable(GL_TEXTURE_RECTANGLE);
     GUICard::cardtex = loadTexture("resources/cards3.png");
 
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, SCREENX, SCREENY);
     glMatrixMode(GL_PROJECTION);
-    glOrtho(0, 800, 600, 0, -1, 1);
+    glOrtho(0, SCREENX, SCREENY, 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -183,6 +188,33 @@ void GUIImpl::initGL()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+void GUIImpl::processEvents()
+{
+    SDL_Event e;
+    while (SDL_PollEvent(&e))
+    {
+        switch(e.type)
+        {
+        case SDL_QUIT:
+            cont_ = false; break;
+        case SDL_KEYDOWN:
+            if (e.key.keysym.sym == SDLK_ESCAPE)
+                cont_ = false;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (e.button.button != 1)
+                break;
+            int x = e.button.x;
+            int y = e.button.y;
+            x -= SCREENX/2;
+            y -= SCREENY/2 + SCREENY/2 - GUICard::CARDY/2 - 5;
+            if (humanView_)
+                humanView_->mouseClick(x, y);
+            break;
+        }
+    }
+}
+
 void GUIImpl::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -190,11 +222,23 @@ void GUIImpl::render()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(400, 300, 0);
-    glTranslatef(-1.*GUICard::CARDX - 0.4*GUICard::CARDX,
-                 -.6*GUICard::CARDY, 0);
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
+    drawPlayedCards();
+    drawPiles();
+    // Unlock
+    pthread_mutex_unlock(&playedCardsLock_);
+
+    drawPlayers();
+
+    SDL_GL_SwapBuffers();
+}
+
+void GUIImpl::drawPlayedCards()
+{
+    glTranslatef(SCREENX/2, SCREENY/2, 0);
+    glTranslatef(-1.*GUICard::CARDX - 0.4*GUICard::CARDX,
+                 -.6*GUICard::CARDY, 0);
     for (int i = 0; i < attackingCards_.size(); i++)
     {
         // Draw attacking Card
@@ -212,6 +256,10 @@ void GUIImpl::render()
         else
             glTranslatef(GUICard::CARDX * 1.2, 0, 0);
     }
+}
+
+void GUIImpl::drawPiles()
+{
     if (!validSizes_)
     {
         delete deckString_;
@@ -247,19 +295,48 @@ void GUIImpl::render()
     if (discardSize_ > 0)
     {
         glLoadIdentity();
-        glTranslatef(800 - 10 - GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
+        glTranslatef(SCREENX - 10 - GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
         glColor3f(1, 1, 1);
         GUICard::drawCardBack();
         glColor3f(1, 0, 0);
         discardString_->draw();
     }
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
+}
 
+void GUIImpl::drawPlayers()
+{
     // Lock
     pthread_mutex_lock(&playersLock_);
+    updatePlayers();
+    float angle = M_PI/2;
+    for (int i = 0; i < players_.size(); i++)
+    {
+        float x = cos(angle);
+        float y = sin(angle);
+        const float rx = SCREENX/2 - GUICard::CARDY/2 - 5;
+        const float ry = SCREENY/2 - GUICard::CARDY/2 - 5;
+
+        // Center
+        glLoadIdentity();
+        glTranslatef(SCREENX/2, SCREENY/2, 0);
+        // Move outwards
+        glTranslatef(x*rx, y*ry, 0);
+        // Rotate
+        glRotatef(angle*180/M_PI - 90, 0, 0, 1);
+
+        // Draw the player
+        playersDisplay_[i]->draw();
+
+        angle += 2*M_PI/ players_.size();
+    }
+    // Unlock
+    pthread_mutex_unlock(&playersLock_);
+}
+
+void GUIImpl::updatePlayers()
+{
     // Update the name textures, first delete the old ones
-    if (badPlayers_)
+    if (!validPlayerDisplays_)
     {
         for (int i = 0; i < playersDisplay_.size(); i++)
             delete playersDisplay_[i];
@@ -269,7 +346,7 @@ void GUIImpl::render()
         playersDisplay_[0] = humanView_;
         for (int i = 1; i < players_.size(); i++)
             playersDisplay_[i] = new GUIPlayerView(players_[i]);
-        badPlayers_ = false;
+        validPlayerDisplays_ = true;
     }
     if (!validStatus_)
     {
@@ -283,58 +360,6 @@ void GUIImpl::render()
                 playersDisplay_[i]->setStatus(GUIPlayerView::NONE);
         }
         validStatus_ = true;
-    }
-    float angle = M_PI/2;
-    for (int i = 0; i < players_.size(); i++)
-    {
-        float x = cos(angle);
-        float y = sin(angle);
-        const float rx = 400 - GUICard::CARDY/2 - 5;
-        const float ry = 300 - GUICard::CARDY/2 - 5;
-
-        // Center
-        glLoadIdentity();
-        glTranslatef(400, 300, 0);
-        // Move outwards
-        glTranslatef(x*rx, y*ry, 0);
-        // Rotate
-        glRotatef(angle*180/M_PI - 90, 0, 0, 1);
-
-        // Draw the player
-        playersDisplay_[i]->draw();
-
-        angle += 2*M_PI/ players_.size();
-    }
-    // Unlock
-    pthread_mutex_unlock(&playersLock_);
-
-    SDL_GL_SwapBuffers();
-}
-
-void GUIImpl::processEvents()
-{
-    SDL_Event e;
-    while (SDL_PollEvent(&e))
-    {
-        switch(e.type)
-        {
-        case SDL_QUIT:
-            cont_ = false; break;
-        case SDL_KEYDOWN:
-            if (e.key.keysym.sym == SDLK_ESCAPE)
-                cont_ = false;
-            break;
-        case SDL_MOUSEBUTTONDOWN:
-            if (e.button.button != 1)
-                break;
-            int x = e.button.x;
-            int y = e.button.y;
-            x -= 400;
-            y -= 300 + 300 - GUICard::CARDY/2 - 5;
-            if (humanView_)
-                humanView_->mouseClick(x, y);
-            break;
-        }
     }
 }
 
