@@ -2,7 +2,7 @@ include ../Makefile.inc
 
 CXXFLAGS = $(PRJCPPFLAGS) -I..
 OBJLIBS  = ../libezdurakcore.a
-OBJS = Game.o AIPlayer.o Card.o Player.o Deck.o ScoreKeeper.o
+OBJS = Game.o Card.o Player.o Deck.o ScoreKeeper.o
 
 .PHONY: all
 all: $(OBJLIBS)

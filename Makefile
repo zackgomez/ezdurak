@@ -3,18 +3,18 @@ include Makefile.inc
 DIRS	= gui core cli
 EXE	= ezdurak-gui ezdurak-cli
 OBJS	= guimain.o
-OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a
+OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a libezdurakai.a
 LIBS	= -L.
 GUILIBS = `sdl-config --libs` -lSDL_ttf -lSDL_image -lGL
 CXXFLAGS = -I.
 
 all: $(EXE)
 
-ezdurak-gui: guimain.o libezdurakcore.a libezdurakgui.a
+ezdurak-gui: guimain.o libezdurakcore.a libezdurakgui.a libezdurakai.a
 	$(ECHO) $(LD) -o $(EXE) $(OBJS) $(LIBS)
 	$(LD) -o $@ $^ $(LIBS) $(GUILIBS)
 
-ezdurak-cli: climain.o libezdurakcore.a libezdurakcli.a
+ezdurak-cli: climain.o libezdurakcore.a libezdurakcli.a libezdurakai.a
 	$(ECHO) $(LD) -o $(EXE) $(OBJS) $(LIBS)
 	$(LD) -o $@ $^ $(LIBS)
 
@@ -30,6 +30,10 @@ libezdurakcore.a: force_look
 libezdurakcli.a: force_look
 	$(ECHO) looking into cli : $(MAKE) $(MFLAGS)
 	cd cli; $(MAKE) $(MFLAGS)
+
+libezdurakai.a: force_look
+	$(ECHO) looking into ai : $(MAKE) $(MFLAGS)
+	cd ai; $(MAKE) $(MFLAGS)
 
 clean:
 	$(ECHO) $(RM) -f $(EXE) $(OBJS) $(OBJLIBS)

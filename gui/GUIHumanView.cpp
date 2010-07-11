@@ -54,19 +54,20 @@ void GUIHumanView::draw()
 
 void GUIHumanView::drawCards()
 {
-    if (player_->getNumCards() == 0)
-        return;
-    const std::vector<Card> cards = player_->getHand();
-    int numCards = cards.size();
 
     glPushMatrix();
+    int numCards = player_->getNumCards();
     glTranslatef(-GUICard::CARDX*(0.2*(numCards-1)/2), 0, 0);
-    // Draw each card back
-    for (int j = 0; j < numCards; j++)
+    if (numCards > 0)
     {
-        glColor3f(1,1,1);
-        GUICard::draw(cards[j]);
-        glTranslatef(0.2*GUICard::CARDX, 0, 0);
+        const std::vector<Card> cards = player_->getHand();
+        // Draw each card back
+        for (int j = 0; j < numCards; j++)
+        {
+            glColor3f(1,1,1);
+            GUICard::draw(cards[j]);
+            glTranslatef(0.2*GUICard::CARDX, 0, 0);
+        }
     }
 
     if (status_ != NONE)

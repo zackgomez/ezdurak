@@ -4,7 +4,7 @@
 #include <sstream>
 #include <algorithm>
 #include "core/Game.h"
-#include "core/AIPlayer.h"
+#include "ai/AIPlayer.h"
 #include "gui/GUIListener.h"
 #include "gui/GUIImpl.h"
 #include "gui/GUIPlayer.h" 
