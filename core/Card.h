@@ -18,7 +18,7 @@ public:
 
 
     // Member Functions
-    bool beats(const Card &rhs, cardsuit trump);
+    bool beats(const Card &rhs, cardsuit trump) const;
 
     // Accessors
     int getNum() const;

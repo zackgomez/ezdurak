@@ -2,8 +2,10 @@
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
+#include <iostream>
 #include "core/GameAgent.h"
 
+using std::cout;
 using std::vector;
 using std::set;
 using std::string;
@@ -42,6 +44,13 @@ Card AIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 
 Card AIPlayer::attack(set<int> playableRanks)
 {
+    // Don't attack our partner, unless we have to
+    if (isPartner(agent_->getDefender()) && !playableRanks.empty())
+    {
+        cout << name_ << ": Skipping " << agent_->getDefender()->getName()
+            << " because they're my partner.\n";
+        return Card();
+    }
     vector<Card> playable = playableCards(playableRanks);
 
     // If we have no cards that are playable, we must pass
@@ -98,7 +107,7 @@ void AIPlayer::removeCard(const Card& card)
     assert(false && "Tried to remove a card that wasn't in the hand");
 }
 
-vector<Card> AIPlayer::playableCards(set<int> playableRanks)
+vector<Card> AIPlayer::playableCards(set<int> playableRanks) const
 {
     if (playableRanks.size() == 0)
         return hand_;
@@ -114,7 +123,7 @@ vector<Card> AIPlayer::playableCards(set<int> playableRanks)
 }
 
 vector<Card> AIPlayer::defendableCards(const Card& attackingCard,
-                                       Card::cardsuit trump)
+                                       Card::cardsuit trump) const
 {
     vector<Card> playable;
 
@@ -152,8 +161,25 @@ public:
     }
 };
 
-void AIPlayer::orderCards(std::vector<Card>& cards)
+void AIPlayer::orderCards(std::vector<Card>& cards) const
 {
     Card::cardsuit trump = agent_->getTrumpCard().getSuit();
     sort(cards.begin(), cards.end(), CardComp(trump));
+}
+
+bool AIPlayer::isPartner(const Player *p) const
+{
+    const std::vector<Player*> players = agent_->getPlayers();
+
+    int thisIdx = -1;
+    int pIdx = -1;
+    for (int i = 0; i < players.size(); i++)
+    {
+        if (players[i] == this)
+            thisIdx = i;
+        if (players[i] == p)
+            pIdx = i;
+    }
+
+    return ((pIdx + 2) % players.size()) == thisIdx;
 }

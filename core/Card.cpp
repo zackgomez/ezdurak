@@ -24,7 +24,7 @@ Card::cardsuit Card::getSuit() const
     return suit_;
 }
 
-bool Card::beats(const Card &rhs, cardsuit trump)
+bool Card::beats(const Card &rhs, cardsuit trump) const
 {
     // We only care if we are trump and they are not, we beat them then, other
     // case falls through to the return false.

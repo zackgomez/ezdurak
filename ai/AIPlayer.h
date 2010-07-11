@@ -20,7 +20,9 @@ protected:
     GameAgent *agent_;
     // Helper functions
     void removeCard(const Card& card);
-    std::vector<Card> playableCards(std::set<int> playableRanks);
-    std::vector<Card> defendableCards(const Card& card, Card::cardsuit trump);
-    void orderCards(std::vector<Card>& cards);
+    std::vector<Card> playableCards(std::set<int> playableRanks) const;
+    std::vector<Card> defendableCards(const Card& card, Card::cardsuit trump) const;
+    void orderCards(std::vector<Card>& cards) const;
+
+    bool isPartner(const Player *p) const;
 };
