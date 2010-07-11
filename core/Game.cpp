@@ -298,6 +298,9 @@ void Game::removeFinishedPlayers()
 
 void Game::nextDefender(bool successfulDefend)
 {
+    // If the game is over, don't bother
+    if (players_.size() < 2)
+        return;
     // If they lost, it skips them
     if (!successfulDefend)
         defenderIdx_ = (defenderIdx_ + 1) % players_.size();

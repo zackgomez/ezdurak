@@ -59,12 +59,23 @@ Card AIPlayer::attack(set<int> playableRanks)
 
 Card AIPlayer::pileOn(set<int> playableRanks)
 {
-    Card pileC = attack(playableRanks);
-    // Only pile on non-trump cards
-    if (pileC.getSuit() != agent_->getTrumpCard().getSuit())
-        return pileC;
+    vector<Card> playable = playableCards(playableRanks);
 
-    return Card();
+    // If we have no cards that are playable, we must pass
+    if (playable.size() == 0)
+        return Card();
+
+    // Order tha cards..
+    orderCards(playable);
+    Card attC = playable[0];
+
+    // Don't pile on trump
+    if (attC.getSuit() == agent_->getTrumpCard().getSuit())
+        return Card();
+
+    // Otherwise pile it on
+    removeCard(attC);
+    return attC;
 }
 
 void AIPlayer::addCards(const vector<Card>& cards)
