@@ -16,8 +16,11 @@ public:
     virtual void addCards(const std::vector<Card>& cards);
 
 protected:
+    // Members
+    GameAgent *agent_;
     // Helper functions
+    void removeCard(const Card& card);
     std::vector<Card> playableCards(std::set<int> playableRanks);
     std::vector<Card> defendableCards(const Card& card, Card::cardsuit trump);
-    void removeCard(const Card& card);
+    void orderCards(std::vector<Card>& cards);
 };

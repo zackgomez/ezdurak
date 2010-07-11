@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-CXXFLAGS = $(PRJCPPFLAGS) -I..
+CXXFLAGS = $(PRJCXXFLAGS) -I..
 OBJLIBS  = ../libezdurakcli.a
 OBJS = CLIListener.o CLIPlayer.o
 

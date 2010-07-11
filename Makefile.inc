@@ -1,5 +1,5 @@
 CXX     = g++
-PRJCFLAGS = -Wall -O0 -g -Wno-sign-compare
+PRJCXXFLAGS = -Wall -O0 -g -Wno-sign-compare
 LD      = g++
 AR      = ar
 RANLIB  = ranlib

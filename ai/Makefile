@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-CXXFLAGS = $(PRJCPPFLAGS) -I..
+CXXFLAGS = $(PRJCXXFLAGS) -I..
 OBJLIBS  = ../libezdurakai.a
 OBJS = AIPlayer.o
 

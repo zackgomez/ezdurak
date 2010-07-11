@@ -1,14 +1,13 @@
 #include "AIPlayer.h"
-#include <vector>
-#include <set>
 #include <cassert>
-#include <iostream>
 #include <cstdlib>
+#include <algorithm>
+#include "core/GameAgent.h"
 
-using std::cout;
 using std::vector;
 using std::set;
 using std::string;
+using std::sort;
 
 AIPlayer::AIPlayer(const string& name) :
     Player(name)
@@ -19,17 +18,22 @@ AIPlayer::~AIPlayer()
 
 void AIPlayer::gameStarting(GameAgent *agent)
 {
+    agent_ = agent;
 }
 
 Card AIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {
     vector<Card> playable = defendableCards(attackingCard, trump);
 
+    // If we have no cards that will defend it, we have to give up
     if (playable.size() == 0)
         return Card();
 
-    int idx = (rand() % playable.size());
-    Card defC = playable[idx];
+    // Sort them in order of goodness
+    orderCards(playable);
+
+    // Use the lowest to defend, note, at least one card in playable
+    Card defC = playable[0];
 
     removeCard(defC);
 
@@ -40,11 +44,13 @@ Card AIPlayer::attack(set<int> playableRanks)
 {
     vector<Card> playable = playableCards(playableRanks);
 
+    // If we have no cards that are playable, we must pass
     if (playable.size() == 0)
         return Card();
 
-    int idx = (rand() % playable.size());
-    Card attC = playable[idx];
+    // Order tha cards..
+    orderCards(playable);
+    Card attC = playable[0];
 
     removeCard(attC);
 
@@ -53,12 +59,32 @@ Card AIPlayer::attack(set<int> playableRanks)
 
 Card AIPlayer::pileOn(set<int> playableRanks)
 {
-    return attack(playableRanks);
+    Card pileC = attack(playableRanks);
+    // Only pile on non-trump cards
+    if (pileC.getSuit() != agent_->getTrumpCard().getSuit())
+        return pileC;
+
+    return Card();
 }
 
 void AIPlayer::addCards(const vector<Card>& cards)
 {
     Player::addCards(cards);
+}
+
+void AIPlayer::removeCard(const Card& card)
+{
+    for (int i = 0; i < hand_.size(); i++)
+    {
+        if (hand_[i] == card)
+        {
+            hand_[i] = hand_[hand_.size() - 1];
+            hand_.pop_back();
+            return;
+        }
+    }
+
+    assert(false && "Tried to remove a card that wasn't in the hand");
 }
 
 vector<Card> AIPlayer::playableCards(set<int> playableRanks)
@@ -90,17 +116,33 @@ vector<Card> AIPlayer::defendableCards(const Card& attackingCard,
     return playable;
 }
 
-void AIPlayer::removeCard(const Card& card)
+class CardComp
 {
-    for (int i = 0; i < hand_.size(); i++)
-    {
-        if (hand_[i] == card)
-        {
-            hand_[i] = hand_[hand_.size() - 1];
-            hand_.pop_back();
-            return;
-        }
-    }
+private:
+    Card::cardsuit trump;
+public:
+    CardComp(Card::cardsuit trumpsuit) :
+        trump(trumpsuit)
+    {}
 
-    assert(false && "Tried to remove a card that wasn't in the hand");
+    bool operator()(const Card &a, const Card &b)
+    {
+        Card::cardsuit aSuit = a.getSuit();
+        Card::cardsuit bSuit = b.getSuit();
+
+        // Case 1: one trump, one not trump
+        if ((aSuit == trump && bSuit != trump) || 
+            (bSuit == trump && aSuit != trump))
+        {
+            return a.getSuit() != trump;
+        }
+        // Case 2: both trump or both not trump
+        return a.getNum() < b.getNum();
+    }
+};
+
+void AIPlayer::orderCards(std::vector<Card>& cards)
+{
+    Card::cardsuit trump = agent_->getTrumpCard().getSuit();
+    sort(cards.begin(), cards.end(), CardComp(trump));
 }

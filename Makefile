@@ -6,7 +6,7 @@ OBJS	= guimain.o climain.o
 OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a libezdurakai.a
 LIBS	= -L.
 GUILIBS = `sdl-config --libs` -lSDL_ttf -lSDL_image -lGL
-CXXFLAGS = -I.
+CXXFLAGS = -I. $(PRJCXXFLAGS)
 
 all: $(EXE)
 
