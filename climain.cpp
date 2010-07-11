@@ -4,7 +4,7 @@
 #include <string>
 #include <algorithm>
 #include "core/Game.h"
-#include "core/AIPlayer.h"
+#include "ai/AIPlayer.h"
 #include "core/ScoreKeeper.h"
 #include "cli/CLIListener.h"
 #include "cli/CLIPlayer.h"
