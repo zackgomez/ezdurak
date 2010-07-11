@@ -2,7 +2,7 @@ include Makefile.inc
 
 DIRS	= gui core cli
 EXE	= ezdurak-gui ezdurak-cli
-OBJS	= guimain.o
+OBJS	= guimain.o climain.o
 OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a libezdurakai.a
 LIBS	= -L.
 GUILIBS = `sdl-config --libs` -lSDL_ttf -lSDL_image -lGL
