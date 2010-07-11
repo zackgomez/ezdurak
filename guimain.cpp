@@ -3,13 +3,11 @@
 #include <ctime>
 #include <sstream>
 #include <algorithm>
-#include "GUIListener.h"
-#include "GUIImpl.h"
-#include "AIPlayer.h"
-#include "Game.h"
-#include "CLIListener.h"
-#include "CLIPlayer.h"
-#include "GUIPlayer.h" 
+#include "core/Game.h"
+#include "core/AIPlayer.h"
+#include "gui/GUIListener.h"
+#include "gui/GUIImpl.h"
+#include "gui/GUIPlayer.h" 
 using namespace std;
 
 void * gui_main(void *guiobj);

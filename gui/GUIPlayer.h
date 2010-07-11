@@ -1,6 +1,6 @@
 #pragma once
 #include "SynchronizedQueue.h"
-#include "Player.h"
+#include "../core/Player.h"
 
 class GUIPlayer :
     public Player

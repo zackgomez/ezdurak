@@ -4,7 +4,7 @@
 #include <SDL/SDL_ttf.h>
 #include <vector>
 #include <string>
-#include "Card.h"
+#include "../core/Card.h"
 
 class Player;
 class GUIString;

@@ -1,5 +1,5 @@
 #include "GUIPlayerView.h"
-#include "Player.h"
+#include "../core/Player.h"
 #include "GUIString.h"
 #include "GUICard.h"
 

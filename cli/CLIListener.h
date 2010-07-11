@@ -1,4 +1,4 @@
-#include "GameListener.h"
+#include "../core/GameListener.h"
 
 class CLIListener : public GameListener
 {

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-#include "Player.h"
+#include "../core/Player.h"
 #include "GUIString.h"
 #include "GUICard.h"
 #include "GUIPlayerView.h"

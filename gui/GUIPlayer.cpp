@@ -1,5 +1,5 @@
 #include "GUIPlayer.h"
-#include "GameAgent.h"
+#include "../core/GameAgent.h"
 #include <algorithm>
 
 GUIPlayer::GUIPlayer(const std::string &name, SynchronizedQueue<int> &q) :

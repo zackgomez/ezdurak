@@ -1,7 +1,7 @@
 #include "CLIPlayer.h"
 #include <iostream>
 #include <algorithm>
-#include "GameAgent.h"
+#include "../core/GameAgent.h"
 
 using std::cout;
 using std::cin;

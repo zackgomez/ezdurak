@@ -1,23 +1,40 @@
-CPPFLAGS   = -Wall -O0 -g -Wno-sign-compare `sdl-config --cflags`
-COMMONOBJS = obj/Card.o obj/Deck.o obj/Player.o obj/Game.o obj/CLIPlayer.o \
-	   obj/CLIListener.o obj/AIPlayer.o obj/ScoreKeeper.o
-GUIOBJS    = obj/GUIListener.o obj/guimain.o obj/GUIImpl.o obj/GUIString.o \
-	     obj/GUIPlayer.o obj/GUICard.o obj/GUIPlayerView.o obj/GUIHumanView.o
-GUILDFLAGS = `sdl-config --libs` -lGL -lSDL_image -lSDL_ttf -lpthread
+include Makefile.inc
 
-all: ezdurak ezdurak-gui
+DIRS	= gui core cli
+EXE	= ezdurak-gui ezdurak-cli
+OBJS	= guimain.o
+OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a
+LIBS	= -L. -lezdurakgui
+GUILIBS = `sdl-config --libs` -lSDL_ttf -lSDL_image -lGL
 
-ezdurak: $(COMMONOBJS) obj/climain.o
-	$(CXX) $^ $(CPPFLAGS) $(LDFLAGS) -o $@
+all: $(EXE)
 
-ezdurak-gui: $(COMMONOBJS) $(GUIOBJS)
-	$(CXX) $^ $(CPPFLAGS) $(LDFLAGS) $(GUILDFLAGS) -o $@
+ezdurak-gui: guimain.o libezdurakcore.a libezdurakgui.a
+	$(ECHO) $(LD) -o $(EXE) $(OBJS) $(LIBS)
+	$(LD) -o $@ $^ $(LIBS) $(GUILIBS)
 
-obj/%.o: %.cpp
-	$(CXX) -c $(CPPFLAGS) -o $@ $<
+ezdurak-cli: climain.o libezdurakcore.a libezdurakcli.a
+	$(ECHO) $(LD) -o $(EXE) $(OBJS) $(LIBS)
+	$(LD) -o $@ $^ $(LIBS)
+
+
+libezdurakgui.a: force_look
+	$(ECHO) looking into gui : $(MAKE) $(MFLAGS)
+	cd gui; $(MAKE) $(MFLAGS)
+
+libezdurakcore.a: force_look
+	$(ECHO) looking into core : $(MAKE) $(MFLAGS)
+	cd core; $(MAKE) $(MFLAGS)
+
+libezdurakcli.a: force_look
+	$(ECHO) looking into cli : $(MAKE) $(MFLAGS)
+	cd cli; $(MAKE) $(MFLAGS)
 
 clean:
-	rm -rf obj/* ezdurak ezdurak-gui
+	$(ECHO) $(RM) -f $(EXE) $(OBJS) $(OBJLIBS)
+	$(RM) -f $(EXE) $(OBJS) $(OBJLIBS)
+	-for d in $(DIRS); do (cd $$d; $(MAKE) clean ); done
 
-obj:
-	mkdir -p obj
+.PHONY: force_look
+force_look:
+	true

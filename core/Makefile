@@ -1,0 +1,21 @@
+include ../Makefile.inc
+
+CXXFLAGS = $(PRJCPPFLAGS)
+OBJLIBS  = ../libezdurakcore.a
+OBJS = Game.o AIPlayer.o Card.o Player.o Deck.o ScoreKeeper.o
+
+.PHONY: all
+all: $(OBJLIBS)
+
+../libezdurakcore.a: $(OBJS)
+	echo $(ARFLAGS)
+	$(AR) $(ARFLAGS) ../libezdurakcore.a $?
+	$(RANLIB) ../libezdurakcore.a
+
+clean:
+	$(ECHO) clean up core
+	-$(RM) -f $(OBJS)
+
+.PHONY: force_look
+force_look:
+	true

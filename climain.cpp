@@ -3,11 +3,11 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
-#include "Game.h"
-#include "CLIListener.h"
-#include "CLIPlayer.h"
-#include "AIPlayer.h"
-#include "ScoreKeeper.h"
+#include "core/Game.h"
+#include "core/AIPlayer.h"
+#include "core/ScoreKeeper.h"
+#include "cli/CLIListener.h"
+#include "cli/CLIPlayer.h"
 
 // TODO:2010-06-29:zack: Make this take in some command line arguments.
 // Like the number of players and AI players and whatnot.
