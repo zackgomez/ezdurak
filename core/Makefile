@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-CXXFLAGS = $(PRJCPPFLAGS)
+CXXFLAGS = $(PRJCPPFLAGS) -I..
 OBJLIBS  = ../libezdurakcore.a
 OBJS = Game.o AIPlayer.o Card.o Player.o Deck.o ScoreKeeper.o
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "../core/GameListener.h"
+#include "core/GameListener.h"
 
 class GUIImpl;
 

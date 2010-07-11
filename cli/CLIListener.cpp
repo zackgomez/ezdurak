@@ -1,7 +1,7 @@
 #include "CLIListener.h"
 #include <vector>
 #include <iostream>
-#include "../core/Player.h"
+#include "core/Player.h"
 
 using std::vector;
 using std::cout;

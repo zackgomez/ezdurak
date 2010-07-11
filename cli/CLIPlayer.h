@@ -1,5 +1,5 @@
 #pragma once
-#include "../core/Player.h"
+#include "core/Player.h"
 
 class CLIPlayer : public Player
 {

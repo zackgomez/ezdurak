@@ -4,8 +4,9 @@ DIRS	= gui core cli
 EXE	= ezdurak-gui ezdurak-cli
 OBJS	= guimain.o
 OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a
-LIBS	= -L. -lezdurakgui
+LIBS	= -L.
 GUILIBS = `sdl-config --libs` -lSDL_ttf -lSDL_image -lGL
+CXXFLAGS = -I.
 
 all: $(EXE)
 

@@ -1,5 +1,5 @@
 #include "GUICard.h"
-#include "../core/Card.h"
+#include "core/Card.h"
 #include <iostream>
 
 GLuint GUICard::cardtex = 0;

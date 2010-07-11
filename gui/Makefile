@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-CXXFLAGS = $(PRJCPPFLAGS) `sdl-config --cflags`
+CXXFLAGS = $(PRJCPPFLAGS) `sdl-config --cflags` -I..
 OBJLIBS  = ../libezdurakgui.a
 OBJS = GUIListener.o GUIImpl.o GUIString.o GUIPlayer.o GUICard.o \
        GUIPlayerView.o GUIHumanView.o
@@ -9,8 +9,9 @@ OBJS = GUIListener.o GUIImpl.o GUIString.o GUIPlayer.o GUICard.o \
 all: $(OBJLIBS)
 
 ../libezdurakgui.a: $(OBJS)
-	echo $(ARFLAGS)
+	$(ECHO) $(AR) $(ARFLAGS) ../libezdurakgui.a $?
 	$(AR) $(ARFLAGS) ../libezdurakgui.a $?
+	$(ECHO) $(RANLIB) ../libezdurakgui.a
 	$(RANLIB) ../libezdurakgui.a
 
 clean:

@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-CXXFLAGS = $(PRJCPPFLAGS) `sdl-config --cflags`
+CXXFLAGS = $(PRJCPPFLAGS) `sdl-config --cflags` -I..
 OBJLIBS  = ../libezdurakcli.a
 OBJS = CLIListener.o CLIPlayer.o
 
