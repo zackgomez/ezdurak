@@ -18,8 +18,7 @@ public:
     virtual void gameStarting(GameAgent *agent) = 0;
 
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump) = 0;
-    // TODO:2010-07-10:zack: Removed the default argument.
-    virtual Card attack(std::set<int> playableRanks = std::set<int>()) = 0;
+    virtual Card attack(std::set<int> playableRanks) = 0;
     virtual Card pileOn(std::set<int> playableRanks) = 0;
 
     virtual void addCards(const std::vector<Card>& cards);

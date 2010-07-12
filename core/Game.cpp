@@ -284,7 +284,9 @@ void Game::removeFinishedPlayers()
             players_.erase(players_.begin() + i);
             // Check to see if they were before the defender, update the idx
             // if they were
-            defenderIdx_ = (i >= defenderIdx_) ? defenderIdx_  : defenderIdx_-1;
+            defenderIdx_ = (i >= defenderIdx_) ?
+                defenderIdx_ % players_.size()  :
+                defenderIdx_ - 1;
             // Broadcast the player
             for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
                 (*lit_)->playedOut(goingOut);

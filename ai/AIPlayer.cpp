@@ -46,11 +46,8 @@ Card AIPlayer::attack(set<int> playableRanks)
 {
     // Don't attack our partner, unless we have to
     if (isPartner(agent_->getDefender()) && !playableRanks.empty())
-    {
-        cout << name_ << ": Skipping " << agent_->getDefender()->getName()
-            << " because they're my partner.\n";
         return Card();
-    }
+
     vector<Card> playable = playableCards(playableRanks);
 
     // If we have no cards that are playable, we must pass
