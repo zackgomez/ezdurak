@@ -1,6 +1,6 @@
 #pragma once
 #include <pthread.h>
-#include <GL/gl.h>
+#include "gl.h"
 #include <SDL/SDL_ttf.h>
 #include <vector>
 #include <string>

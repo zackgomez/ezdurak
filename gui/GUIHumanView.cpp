@@ -1,5 +1,5 @@
 #include "GUIHumanView.h"
-#include <GL/gl.h>
+#include "gl.h"
 #include <iostream>
 #include "GUIPlayer.h"
 #include "GUICard.h"

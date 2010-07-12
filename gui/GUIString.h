@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <GL/gl.h>
+#include "gl.h"
 #include <SDL/SDL_ttf.h>
 
 class GUIString
