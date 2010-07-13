@@ -27,8 +27,9 @@ GUIImpl::GUIImpl()
     validStatus_ = true;
     discardSize_ = 0;
     deckSize_ = 0;
-    deckString_ = 0;
-    discardString_ = 0;
+    deckString_ = NULL;
+    discardString_ = NULL;
+    biscuitName_ = NULL;
     humanView_ = NULL;
 }
 
@@ -87,8 +88,8 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
 
     // TODO Fix this
     // Make the cards bigger
-    GUICard::CARDX *= 1.2;
-    GUICard::CARDY *= 1.2;
+    GUICard::CARDX *= 1.3;
+    GUICard::CARDY *= 1.3;
     // Unlock
     pthread_mutex_unlock(&playersLock_);
 }
@@ -162,6 +163,18 @@ void GUIImpl::setPileSizes(int deckSize, int discardSize)
     discardSize_ = discardSize;
 }
 
+void GUIImpl::setBiscuit(const Player *p)
+{
+    // Lock
+    pthread_mutex_lock(&playersLock_);
+    // Update
+    stringstream ss;
+    ss << p->getName() << " is the biscuit!";
+    biscuitName_ = new GUIString(ss.str());
+    // Unlock
+    pthread_mutex_unlock(&playersLock_);
+}
+
 void GUIImpl::wait(int ms)
 {
     SDL_Delay(ms);
@@ -174,7 +187,7 @@ void GUIImpl::initGL()
     SDL_SetVideoMode(SCREENX, SCREENY, 32, SDL_OPENGL);
 
     glEnable(GL_TEXTURE_RECTANGLE);
-    GUICard::cardtex = loadTexture("resources/cards3.png");
+    GUICard::cardtex = loadTexture("resources/cards.png");
 
     glViewport(0, 0, SCREENX, SCREENY);
     glMatrixMode(GL_PROJECTION);
@@ -307,6 +320,12 @@ void GUIImpl::drawPlayers()
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
+    if (biscuitName_)
+    {
+        glLoadIdentity();
+        glTranslatef(SCREENX/2, SCREENY/2, 0);
+        biscuitName_->draw();
+    }
     updatePlayers();
     float angle = M_PI/2;
     for (int i = 0; i < players_.size(); i++)

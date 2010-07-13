@@ -27,6 +27,7 @@ public:
     void addAttackingCard(const Card& c);
     void addDefendingCard(const Card& c);
     void setPileSizes(int deckSize, int discardSize);
+    void setBiscuit(const Player* p);
 
     void wait(int ms);
 
@@ -51,6 +52,7 @@ private:
     bool validSizes_;
     GUIString *deckString_;
     GUIString *discardString_;
+    GUIString *biscuitName_;
     
     Card trumpCard_;
 

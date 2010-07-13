@@ -6,8 +6,8 @@ GLuint GUICard::cardtex = 0;
 int GUICard::CARDX = 70;
 int GUICard::CARDY = 96;
 
-static const int SOURCEX = 79;
-static const int SOURCEY = 123;
+static const int SOURCEX = 144;
+static const int SOURCEY = 194;
 
 void GUICard::draw(const Card& card)
 {
@@ -45,7 +45,7 @@ void GUICard::draw(const Card& card)
 void GUICard::drawCardBack()
 {
     int row = 4;
-    int col = 2;
+    int col = 0;
 
     glPushMatrix();
     glScalef(CARDX, CARDY, 0);
