@@ -46,16 +46,20 @@ int main(int argc, char **argv)
 
 void* gui_main(void *guiobj)
 {
+    srand(time(NULL));
     GUIImpl *gui = (GUIImpl*) guiobj;
     gui->run();
 
     pthread_exit(NULL);
+	return NULL;
 }
 
 void* game_main(void *gameobj)
 {
+    srand(time(NULL));
     Game *game = (Game*) gameobj;
     game->run();
 
     pthread_exit(NULL);
+	return NULL;
 }

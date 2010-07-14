@@ -17,6 +17,7 @@ using namespace std;
 
 const int SCREENX = 800;
 const int SCREENY = 600;
+#define M_PI 3.141592653589793238462643
 
 GUIImpl::GUIImpl() :
     deckString_(),
