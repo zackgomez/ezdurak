@@ -5,9 +5,9 @@
 #include <vector>
 #include <string>
 #include "core/Card.h"
+#include "GUIString.h"
 
 class Player;
-class GUIString;
 class GUIPlayerView;
 class GUIHumanView;
 
@@ -50,9 +50,11 @@ private:
     const Player *attacker_, *defender_;
 
     bool validSizes_;
-    GUIString *deckString_;
-    GUIString *discardString_;
-    GUIString *biscuitName_;
+    GUIStringPtr deckString_;
+    GUIStringPtr discardString_;
+    bool validBiscuit_;
+    std::string biscuit_;
+    GUIStringPtr biscuitStr_;
     
     Card trumpCard_;
 

@@ -18,18 +18,19 @@ using namespace std;
 const int SCREENX = 800;
 const int SCREENY = 600;
 
-GUIImpl::GUIImpl()
+GUIImpl::GUIImpl() :
+    deckString_(),
+    discardString_(),
+    biscuitStr_()
 {
     pthread_mutex_init(&playedCardsLock_, NULL);
     pthread_mutex_init(&playersLock_, NULL);
     validPlayerDisplays_ = false;
     validSizes_ = false;
     validStatus_ = true;
+    validBiscuit_ = true;
     discardSize_ = 0;
     deckSize_ = 0;
-    deckString_ = NULL;
-    discardString_ = NULL;
-    biscuitName_ = NULL;
     humanView_ = NULL;
 }
 
@@ -169,8 +170,12 @@ void GUIImpl::setBiscuit(const Player *p)
     pthread_mutex_lock(&playersLock_);
     // Update
     stringstream ss;
-    ss << p->getName() << " is the biscuit!";
-    biscuitName_ = new GUIString(ss.str());
+    if (p)
+        ss << p->getName() << " is the biscuit!";
+    else
+        ss << "The game is a tie.";
+    biscuit_ = ss.str();
+    validBiscuit_ = false;
     // Unlock
     pthread_mutex_unlock(&playersLock_);
 }
@@ -275,14 +280,12 @@ void GUIImpl::drawPiles()
 {
     if (!validSizes_)
     {
-        delete deckString_;
-        delete discardString_;
         stringstream deckss, discardss;
         deckss << deckSize_;
         discardss << discardSize_;
 
-        deckString_ = new GUIString(deckss.str());
-        discardString_ = new GUIString(discardss.str());
+        deckString_ = GUIStringPtr(new GUIString(deckss.str()));
+        discardString_ = GUIStringPtr(new GUIString(discardss.str()));
     }
         
     // Draw the deck and discard pile
@@ -320,11 +323,12 @@ void GUIImpl::drawPlayers()
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
-    if (biscuitName_)
+    if (biscuitStr_.get())
     {
         glLoadIdentity();
         glTranslatef(SCREENX/2, SCREENY/2, 0);
-        biscuitName_->draw();
+        glColor3f(1,1,1);
+        biscuitStr_->draw();
     }
     updatePlayers();
     float angle = M_PI/2;
@@ -379,6 +383,11 @@ void GUIImpl::updatePlayers()
                 playersDisplay_[i]->setStatus(GUIPlayerView::NONE);
         }
         validStatus_ = true;
+    }
+    if (!validBiscuit_)
+    {
+        biscuitStr_ = GUIStringPtr(new GUIString(biscuit_));
+        validBiscuit_ = true;
     }
 }
 

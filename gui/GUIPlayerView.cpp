@@ -8,12 +8,11 @@ GUIPlayerView::GUIPlayerView(const Player *player) :
     name_(0),
     status_(NONE)
 {
-    name_ = new GUIString(player->getName());
+    name_ = GUIStringPtr(new GUIString(player->getName()));
 }
 
 GUIPlayerView::~GUIPlayerView()
 {
-    delete name_;
 }
 
 void GUIPlayerView::draw()

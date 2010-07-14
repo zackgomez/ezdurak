@@ -1,7 +1,7 @@
 #pragma once
+#include "GUIString.h"
 
 class Player;
-class GUIString;
 
 class GUIPlayerView
 {
@@ -15,7 +15,7 @@ public:
 
 protected:
     const Player *player_;
-    GUIString *name_;
+    GUIStringPtr name_;
     Status status_;
 
     void drawName();

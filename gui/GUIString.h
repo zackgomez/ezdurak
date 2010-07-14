@@ -2,6 +2,7 @@
 #include <string>
 #include "gl.h"
 #include <SDL/SDL_ttf.h>
+#include <memory>
 
 class GUIString
 {
@@ -18,3 +19,4 @@ private:
     int width_, height_;
 };
 
+typedef std::auto_ptr<GUIString> GUIStringPtr;
