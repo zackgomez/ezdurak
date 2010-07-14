@@ -36,6 +36,8 @@ GUIImpl::GUIImpl() :
 
 GUIImpl::~GUIImpl()
 {
+    for (int i = 0; i < playersDisplay_.size(); i++)
+        delete playersDisplay_[i];
     pthread_mutex_destroy(&playedCardsLock_);
     pthread_mutex_destroy(&playersLock_);
     SDL_Quit();
