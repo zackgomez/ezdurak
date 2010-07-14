@@ -1,8 +1,8 @@
 #pragma once
-#include "core/Player.h"
+#include "core/PlayerImpl.h"
 
 class AIPlayer :
-    public Player
+    public PlayerImpl
 {
 public:
     AIPlayer(const std::string& name);
@@ -13,11 +13,8 @@ public:
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump);
     virtual Card attack(std::set<int> playableRanks = std::set<int>());
     virtual Card pileOn(std::set<int> playableRanks);
-    virtual void addCards(const std::vector<Card>& cards);
 
 protected:
-    // Members
-    GameAgent *agent_;
     // Helper functions
     void removeCard(const Card& card);
     std::vector<Card> playableCards(std::set<int> playableRanks) const;

@@ -1,9 +1,9 @@
 #pragma once
 #include "SynchronizedQueue.h"
-#include "core/Player.h"
+#include "core/PlayerImpl.h"
 
 class GUIPlayer :
-    public Player
+    public PlayerImpl
 {
 public:
     GUIPlayer(const std::string &name, SynchronizedQueue<int> &q);

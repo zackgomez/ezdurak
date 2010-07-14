@@ -1,20 +1,19 @@
 #include "PlayerImpl.h"
 #include <iostream>
 
-using std::cout;
-using std::cin;
-using std::string;
-using std::vector;
-using std::set;
-
-PlayerImpl::PlayerImpl(const string& name)
-    : hand_(), name_(name)
+PlayerImpl::PlayerImpl(const std::string& name)
+    : Player(), hand_(), name_(name)
 {}
 
 PlayerImpl::~PlayerImpl()
 {}
 
-void PlayerImpl::addCards(const vector<Card>& cards)
+void PlayerImpl::gameStarting(GameAgent *agent)
+{
+    agent_ = agent;
+}
+
+void PlayerImpl::addCards(const std::vector<Card>& cards)
 {
     hand_.insert(hand_.end(), cards.begin(), cards.end());
 }
@@ -31,20 +30,20 @@ std::string PlayerImpl::getName() const
 
 void PlayerImpl::print() const
 {
-    cout << name_ << ":\n";
+    std::cout << name_ << ":\n";
     // Print numbers
     for (int i = 0; i < hand_.size(); i++)
     {
-        cout << ' ' << i + 1;
+        std::cout << ' ' << i + 1;
         if (i + 1 < 10)
-            cout << "  ";
+            std::cout << "  ";
         else
-            cout << ' ';
+            std::cout << ' ';
     }
-    cout << '\n';
+    std::cout << '\n';
 
     // Print cards
     for (int i = 0; i < hand_.size(); i++)
-        cout << hand_[i] << ' ';
-    cout << '\n';
+        std::cout << hand_[i] << ' ';
+    std::cout << '\n';
 }

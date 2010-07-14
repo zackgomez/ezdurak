@@ -11,16 +11,11 @@ using std::set;
 using std::sort;
 
 CLIPlayer::CLIPlayer(const string& name)
-    : Player(name)
+    : PlayerImpl(name)
 {}
 
 CLIPlayer::~CLIPlayer()
 {}
-
-void CLIPlayer::gameStarting(GameAgent *agent)
-{
-    agent_ = agent;
-}
 
 Card CLIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {

@@ -12,7 +12,7 @@ using std::string;
 using std::sort;
 
 AIPlayer::AIPlayer(const string& name) :
-    Player(name)
+    PlayerImpl(name)
 { /* Empty */ }
 
 AIPlayer::~AIPlayer()
@@ -82,11 +82,6 @@ Card AIPlayer::pileOn(set<int> playableRanks)
     // Otherwise pile it on
     removeCard(attC);
     return attC;
-}
-
-void AIPlayer::addCards(const vector<Card>& cards)
-{
-    Player::addCards(cards);
 }
 
 void AIPlayer::removeCard(const Card& card)

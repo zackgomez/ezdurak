@@ -14,7 +14,7 @@ public:
     /**
      * Called at the start of the game.
      */
-    virtual void gameStarting(GameAgent *agent) = 0;
+    virtual void gameStarting(GameAgent *agent);
 
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump) = 0;
     virtual Card attack(std::set<int> playableRanks) = 0;
@@ -29,5 +29,6 @@ public:
 protected:
     std::vector<Card> hand_;
     std::string name_;
+    GameAgent *agent_;
 };
 

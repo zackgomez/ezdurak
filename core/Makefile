@@ -2,14 +2,15 @@ include ../Makefile.inc
 
 CXXFLAGS = $(PRJCXXFLAGS) -I..
 OBJLIBS  = ../libezdurakcore.a
-OBJS = Game.o Card.o Player.o Deck.o ScoreKeeper.o
+OBJS = Game.o Card.o Deck.o ScoreKeeper.o PlayerImpl.o
 
 .PHONY: all
 all: $(OBJLIBS)
 
 ../libezdurakcore.a: $(OBJS)
-	echo $(ARFLAGS)
-	$(AR) $(ARFLAGS) ../libezdurakcore.a $?
+	$(ECHO) $(AR) $(ARFLAGS) ../libezdurakcore.a $^
+	$(AR) $(ARFLAGS) ../libezdurakcore.a $^
+	$(ECHO) $(RANLIB) ../libezdurakcore.a
 	$(RANLIB) ../libezdurakcore.a
 
 clean:

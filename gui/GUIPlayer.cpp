@@ -3,7 +3,7 @@
 #include <algorithm>
 
 GUIPlayer::GUIPlayer(const std::string &name, SynchronizedQueue<int> &q) :
-    Player(name),
+    PlayerImpl(name),
     queue_(q),
     agent_(NULL)
 { /* Empty */ }
@@ -23,7 +23,7 @@ SynchronizedQueue<int>& GUIPlayer::getQueue() const
 
 void GUIPlayer::gameStarting(GameAgent *agent)
 {
-    agent_ = agent;
+    PlayerImpl::gameStarting(agent);
     sortHand();
 }
 
@@ -83,7 +83,7 @@ Card GUIPlayer::pileOn(std::set<int> playableRanks)
 
 void GUIPlayer::addCards(const std::vector<Card>& cards)
 {
-    Player::addCards(cards);
+    PlayerImpl::addCards(cards);
     if (agent_)
         sortHand();
 }
