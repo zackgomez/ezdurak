@@ -51,6 +51,10 @@ Card GUIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 
 Card GUIPlayer::attack(std::set<int> playableRanks)
 {
+    // If we have no cards... auto pass
+    if (hand_.size() == 0)
+        return Card();
+
     queue_.clear();
 
     int cnum;
