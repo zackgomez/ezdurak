@@ -194,6 +194,8 @@ void GUIImpl::initGL()
 
     SDL_SetVideoMode(SCREENX, SCREENY, 32, SDL_OPENGL);
 
+    SDL_WM_SetCaption("EZDurak", "EZDurak");
+
     glEnable(GL_TEXTURE_RECTANGLE);
     GUICard::cardtex = loadTexture("resources/cards.png");
 
