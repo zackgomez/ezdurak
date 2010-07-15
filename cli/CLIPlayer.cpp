@@ -136,7 +136,7 @@ void CLIPlayer::addCards(const std::vector<Card>& cards)
         cout << cards[i] << ' ';
     cout << '\n';
 
-    Player::addCards(cards);
+    PlayerImpl::addCards(cards);
 }
 
 class CardComp

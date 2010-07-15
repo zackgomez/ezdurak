@@ -55,9 +55,16 @@ void GUIImpl::run()
         cout << "TTF_Init: " << TTF_GetError() << '\n';
         exit(2);
     }
+#ifndef MAC_OSX
     GUIString::font_ = TTF_OpenFont("resources/FreeMonoBold.ttf", 16);
+#else
+	GUIString::font_ = TTF_OpenFont("../Resources/FreeMonoBold.ttf", 16);
+#endif
     if (!GUIString::font_)
+	{
         cout << "Unable to open font: " << TTF_GetError() << '\n';
+		exit(3);
+	}
 
     cont_ = true;
 
@@ -199,7 +206,11 @@ void GUIImpl::initGL()
     SDL_WM_SetCaption("EZDurak", "EZDurak");
 
     glEnable(GL_TEXTURE_RECTANGLE);
+#ifndef MAC_OSX
     GUICard::cardtex = loadTexture("resources/cards.png");
+#else
+	GUICard::cardtex = loadTexture("cards.png");
+#endif
 
     glViewport(0, 0, SCREENX, SCREENY);
     glMatrixMode(GL_PROJECTION);

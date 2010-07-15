@@ -1,0 +1,504 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		002F39FA09D0881F00EBEB88 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F39F909D0881F00EBEB88 /* SDL.framework */; };
+		002F3A0009D0884600EBEB88 /* SDL.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 002F39F909D0881F00EBEB88 /* SDL.framework */; };
+		002F3A2E09D0888800EBEB88 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 002F3A2C09D0888800EBEB88 /* SDLMain.m */; };
+		002F3C0109D093BD00EBEB88 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F3C0009D093BD00EBEB88 /* OpenGL.framework */; };
+		002F3C6109D0951E00EBEB88 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F3C6009D0951E00EBEB88 /* GLUT.framework */; };
+		144AD36A11EEDF600080D7F0 /* AIPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD34011EEDF600080D7F0 /* AIPlayer.cpp */; };
+		144AD36B11EEDF600080D7F0 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 144AD34211EEDF600080D7F0 /* Makefile */; };
+		144AD36C11EEDF600080D7F0 /* CLIListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD34411EEDF600080D7F0 /* CLIListener.cpp */; };
+		144AD36D11EEDF600080D7F0 /* CLIPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD34611EEDF600080D7F0 /* CLIPlayer.cpp */; };
+		144AD36E11EEDF600080D7F0 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 144AD34811EEDF600080D7F0 /* Makefile */; };
+		144AD36F11EEDF600080D7F0 /* Card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD34A11EEDF600080D7F0 /* Card.cpp */; };
+		144AD37011EEDF600080D7F0 /* Deck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD34C11EEDF600080D7F0 /* Deck.cpp */; };
+		144AD37111EEDF600080D7F0 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD34E11EEDF600080D7F0 /* Game.cpp */; };
+		144AD37211EEDF600080D7F0 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35211EEDF600080D7F0 /* Makefile */; };
+		144AD37311EEDF600080D7F0 /* PlayerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35411EEDF600080D7F0 /* PlayerImpl.cpp */; };
+		144AD37411EEDF600080D7F0 /* ScoreKeeper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35611EEDF600080D7F0 /* ScoreKeeper.cpp */; };
+		144AD37511EEDF600080D7F0 /* GUICard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35911EEDF600080D7F0 /* GUICard.cpp */; };
+		144AD37611EEDF600080D7F0 /* GUIHumanView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35B11EEDF600080D7F0 /* GUIHumanView.cpp */; };
+		144AD37711EEDF600080D7F0 /* GUIImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35D11EEDF600080D7F0 /* GUIImpl.cpp */; };
+		144AD37811EEDF600080D7F0 /* GUIListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35F11EEDF600080D7F0 /* GUIListener.cpp */; };
+		144AD37911EEDF600080D7F0 /* GUIPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD36111EEDF600080D7F0 /* GUIPlayer.cpp */; };
+		144AD37A11EEDF600080D7F0 /* GUIPlayerView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD36311EEDF600080D7F0 /* GUIPlayerView.cpp */; };
+		144AD37B11EEDF600080D7F0 /* GUIString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD36511EEDF600080D7F0 /* GUIString.cpp */; };
+		144AD37C11EEDF600080D7F0 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 144AD36711EEDF600080D7F0 /* Makefile */; };
+		144AD3B211EEE2590080D7F0 /* SDL_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 144AD3B111EEE2590080D7F0 /* SDL_image.framework */; };
+		144AD3BC11EEE2DC0080D7F0 /* guimain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD3BB11EEE2DC0080D7F0 /* guimain.cpp */; };
+		144AD3CD11EEE30D0080D7F0 /* SDL_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 144AD3CC11EEE30D0080D7F0 /* SDL_ttf.framework */; };
+		144AD3E411EEE3860080D7F0 /* cards.png in Resources */ = {isa = PBXBuildFile; fileRef = 144AD3E211EEE3860080D7F0 /* cards.png */; };
+		144AD3E511EEE3860080D7F0 /* FreeMonoBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 144AD3E311EEE3860080D7F0 /* FreeMonoBold.ttf */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		002F39FD09D0883400EBEB88 /* Copy Frameworks into .app bundle */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				002F3A0009D0884600EBEB88 /* SDL.framework in Copy Frameworks into .app bundle */,
+			);
+			name = "Copy Frameworks into .app bundle";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		002F39F909D0881F00EBEB88 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
+		002F3A2B09D0888800EBEB88 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = SOURCE_ROOT; };
+		002F3A2C09D0888800EBEB88 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = SOURCE_ROOT; };
+		002F3C0009D093BD00EBEB88 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		002F3C6009D0951E00EBEB88 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../../../../../../../System/Library/Frameworks/GLUT.framework; sourceTree = SOURCE_ROOT; };
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		14382CED11EEED02006B082D /* ezdurak_xcode_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ezdurak_xcode_Prefix.pch; sourceTree = "<group>"; };
+		144AD34011EEDF600080D7F0 /* AIPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AIPlayer.cpp; sourceTree = "<group>"; };
+		144AD34111EEDF600080D7F0 /* AIPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIPlayer.h; sourceTree = "<group>"; };
+		144AD34211EEDF600080D7F0 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		144AD34411EEDF600080D7F0 /* CLIListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CLIListener.cpp; sourceTree = "<group>"; };
+		144AD34511EEDF600080D7F0 /* CLIListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLIListener.h; sourceTree = "<group>"; };
+		144AD34611EEDF600080D7F0 /* CLIPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CLIPlayer.cpp; sourceTree = "<group>"; };
+		144AD34711EEDF600080D7F0 /* CLIPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLIPlayer.h; sourceTree = "<group>"; };
+		144AD34811EEDF600080D7F0 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		144AD34A11EEDF600080D7F0 /* Card.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Card.cpp; sourceTree = "<group>"; };
+		144AD34B11EEDF600080D7F0 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		144AD34C11EEDF600080D7F0 /* Deck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Deck.cpp; sourceTree = "<group>"; };
+		144AD34D11EEDF600080D7F0 /* Deck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deck.h; sourceTree = "<group>"; };
+		144AD34E11EEDF600080D7F0 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
+		144AD34F11EEDF600080D7F0 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+		144AD35011EEDF600080D7F0 /* GameAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameAgent.h; sourceTree = "<group>"; };
+		144AD35111EEDF600080D7F0 /* GameListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameListener.h; sourceTree = "<group>"; };
+		144AD35211EEDF600080D7F0 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		144AD35311EEDF600080D7F0 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		144AD35411EEDF600080D7F0 /* PlayerImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerImpl.cpp; sourceTree = "<group>"; };
+		144AD35511EEDF600080D7F0 /* PlayerImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerImpl.h; sourceTree = "<group>"; };
+		144AD35611EEDF600080D7F0 /* ScoreKeeper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreKeeper.cpp; sourceTree = "<group>"; };
+		144AD35711EEDF600080D7F0 /* ScoreKeeper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreKeeper.h; sourceTree = "<group>"; };
+		144AD35911EEDF600080D7F0 /* GUICard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUICard.cpp; sourceTree = "<group>"; };
+		144AD35A11EEDF600080D7F0 /* GUICard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUICard.h; sourceTree = "<group>"; };
+		144AD35B11EEDF600080D7F0 /* GUIHumanView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIHumanView.cpp; sourceTree = "<group>"; };
+		144AD35C11EEDF600080D7F0 /* GUIHumanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIHumanView.h; sourceTree = "<group>"; };
+		144AD35D11EEDF600080D7F0 /* GUIImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIImpl.cpp; sourceTree = "<group>"; };
+		144AD35E11EEDF600080D7F0 /* GUIImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIImpl.h; sourceTree = "<group>"; };
+		144AD35F11EEDF600080D7F0 /* GUIListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIListener.cpp; sourceTree = "<group>"; };
+		144AD36011EEDF600080D7F0 /* GUIListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIListener.h; sourceTree = "<group>"; };
+		144AD36111EEDF600080D7F0 /* GUIPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPlayer.cpp; sourceTree = "<group>"; };
+		144AD36211EEDF600080D7F0 /* GUIPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPlayer.h; sourceTree = "<group>"; };
+		144AD36311EEDF600080D7F0 /* GUIPlayerView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPlayerView.cpp; sourceTree = "<group>"; };
+		144AD36411EEDF600080D7F0 /* GUIPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPlayerView.h; sourceTree = "<group>"; };
+		144AD36511EEDF600080D7F0 /* GUIString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIString.cpp; sourceTree = "<group>"; };
+		144AD36611EEDF600080D7F0 /* GUIString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIString.h; sourceTree = "<group>"; };
+		144AD36711EEDF600080D7F0 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		144AD36811EEDF600080D7F0 /* SynchronizedQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynchronizedQueue.h; sourceTree = "<group>"; };
+		144AD36911EEDF600080D7F0 /* gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl.h; sourceTree = "<group>"; };
+		144AD3B111EEE2590080D7F0 /* SDL_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_image.framework; path = Library/Frameworks/SDL_image.framework; sourceTree = SDKROOT; };
+		144AD3BB11EEE2DC0080D7F0 /* guimain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = guimain.cpp; path = ../guimain.cpp; sourceTree = SOURCE_ROOT; };
+		144AD3CC11EEE30D0080D7F0 /* SDL_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_ttf.framework; path = Library/Frameworks/SDL_ttf.framework; sourceTree = SDKROOT; };
+		144AD3E211EEE3860080D7F0 /* cards.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cards.png; path = ../resources/cards.png; sourceTree = SOURCE_ROOT; };
+		144AD3E311EEE3860080D7F0 /* FreeMonoBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FreeMonoBold.ttf; path = ../resources/FreeMonoBold.ttf; sourceTree = SOURCE_ROOT; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* ezdurak-xcode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ezdurak-xcode.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002F39FA09D0881F00EBEB88 /* SDL.framework in Frameworks */,
+				002F3C6109D0951E00EBEB88 /* GLUT.framework in Frameworks */,
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				002F3C0109D093BD00EBEB88 /* OpenGL.framework in Frameworks */,
+				144AD3B211EEE2590080D7F0 /* SDL_image.framework in Frameworks */,
+				144AD3CD11EEE30D0080D7F0 /* SDL_ttf.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				002F3A2B09D0888800EBEB88 /* SDLMain.h */,
+				002F3A2C09D0888800EBEB88 /* SDLMain.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				002F39F909D0881F00EBEB88 /* SDL.framework */,
+				002F3C6009D0951E00EBEB88 /* GLUT.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				002F3C0009D093BD00EBEB88 /* OpenGL.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		144AD33F11EEDF600080D7F0 /* ai */ = {
+			isa = PBXGroup;
+			children = (
+				144AD34011EEDF600080D7F0 /* AIPlayer.cpp */,
+				144AD34111EEDF600080D7F0 /* AIPlayer.h */,
+				144AD34211EEDF600080D7F0 /* Makefile */,
+			);
+			name = ai;
+			path = ../ai;
+			sourceTree = SOURCE_ROOT;
+		};
+		144AD34311EEDF600080D7F0 /* cli */ = {
+			isa = PBXGroup;
+			children = (
+				144AD34411EEDF600080D7F0 /* CLIListener.cpp */,
+				144AD34511EEDF600080D7F0 /* CLIListener.h */,
+				144AD34611EEDF600080D7F0 /* CLIPlayer.cpp */,
+				144AD34711EEDF600080D7F0 /* CLIPlayer.h */,
+				144AD34811EEDF600080D7F0 /* Makefile */,
+			);
+			name = cli;
+			path = ../cli;
+			sourceTree = SOURCE_ROOT;
+		};
+		144AD34911EEDF600080D7F0 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				144AD34A11EEDF600080D7F0 /* Card.cpp */,
+				144AD34B11EEDF600080D7F0 /* Card.h */,
+				144AD34C11EEDF600080D7F0 /* Deck.cpp */,
+				144AD34D11EEDF600080D7F0 /* Deck.h */,
+				144AD34E11EEDF600080D7F0 /* Game.cpp */,
+				144AD34F11EEDF600080D7F0 /* Game.h */,
+				144AD35011EEDF600080D7F0 /* GameAgent.h */,
+				144AD35111EEDF600080D7F0 /* GameListener.h */,
+				144AD35211EEDF600080D7F0 /* Makefile */,
+				144AD35311EEDF600080D7F0 /* Player.h */,
+				144AD35411EEDF600080D7F0 /* PlayerImpl.cpp */,
+				144AD35511EEDF600080D7F0 /* PlayerImpl.h */,
+				144AD35611EEDF600080D7F0 /* ScoreKeeper.cpp */,
+				144AD35711EEDF600080D7F0 /* ScoreKeeper.h */,
+			);
+			name = core;
+			path = ../core;
+			sourceTree = SOURCE_ROOT;
+		};
+		144AD35811EEDF600080D7F0 /* gui */ = {
+			isa = PBXGroup;
+			children = (
+				144AD35911EEDF600080D7F0 /* GUICard.cpp */,
+				144AD35A11EEDF600080D7F0 /* GUICard.h */,
+				144AD35B11EEDF600080D7F0 /* GUIHumanView.cpp */,
+				144AD35C11EEDF600080D7F0 /* GUIHumanView.h */,
+				144AD35D11EEDF600080D7F0 /* GUIImpl.cpp */,
+				144AD35E11EEDF600080D7F0 /* GUIImpl.h */,
+				144AD35F11EEDF600080D7F0 /* GUIListener.cpp */,
+				144AD36011EEDF600080D7F0 /* GUIListener.h */,
+				144AD36111EEDF600080D7F0 /* GUIPlayer.cpp */,
+				144AD36211EEDF600080D7F0 /* GUIPlayer.h */,
+				144AD36311EEDF600080D7F0 /* GUIPlayerView.cpp */,
+				144AD36411EEDF600080D7F0 /* GUIPlayerView.h */,
+				144AD36511EEDF600080D7F0 /* GUIString.cpp */,
+				144AD36611EEDF600080D7F0 /* GUIString.h */,
+				144AD36711EEDF600080D7F0 /* Makefile */,
+				144AD36811EEDF600080D7F0 /* SynchronizedQueue.h */,
+				144AD36911EEDF600080D7F0 /* gl.h */,
+			);
+			name = gui;
+			path = ../gui;
+			sourceTree = SOURCE_ROOT;
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* ezdurak-xcode.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* ezdurak-xcode */ = {
+			isa = PBXGroup;
+			children = (
+				14382CED11EEED02006B082D /* ezdurak_xcode_Prefix.pch */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = "ezdurak-xcode";
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				144AD3BB11EEE2DC0080D7F0 /* guimain.cpp */,
+				144AD33F11EEDF600080D7F0 /* ai */,
+				144AD34311EEDF600080D7F0 /* cli */,
+				144AD34911EEDF600080D7F0 /* core */,
+				144AD35811EEDF600080D7F0 /* gui */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				144AD3E211EEE3860080D7F0 /* cards.png */,
+				144AD3E311EEE3860080D7F0 /* FreeMonoBold.ttf */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+				144AD3B111EEE2590080D7F0 /* SDL_image.framework */,
+				144AD3CC11EEE30D0080D7F0 /* SDL_ttf.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* ezdurak-xcode */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "ezdurak-xcode" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				002F39FD09D0883400EBEB88 /* Copy Frameworks into .app bundle */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ezdurak-xcode";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "ezdurak-xcode";
+			productReference = 8D1107320486CEB800E47090 /* ezdurak-xcode.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ezdurak-xcode" */;
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* ezdurak-xcode */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* ezdurak-xcode */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				144AD3E411EEE3860080D7F0 /* cards.png in Resources */,
+				144AD3E511EEE3860080D7F0 /* FreeMonoBold.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002F3A2E09D0888800EBEB88 /* SDLMain.m in Sources */,
+				144AD36A11EEDF600080D7F0 /* AIPlayer.cpp in Sources */,
+				144AD36B11EEDF600080D7F0 /* Makefile in Sources */,
+				144AD36C11EEDF600080D7F0 /* CLIListener.cpp in Sources */,
+				144AD36D11EEDF600080D7F0 /* CLIPlayer.cpp in Sources */,
+				144AD36E11EEDF600080D7F0 /* Makefile in Sources */,
+				144AD36F11EEDF600080D7F0 /* Card.cpp in Sources */,
+				144AD37011EEDF600080D7F0 /* Deck.cpp in Sources */,
+				144AD37111EEDF600080D7F0 /* Game.cpp in Sources */,
+				144AD37211EEDF600080D7F0 /* Makefile in Sources */,
+				144AD37311EEDF600080D7F0 /* PlayerImpl.cpp in Sources */,
+				144AD37411EEDF600080D7F0 /* ScoreKeeper.cpp in Sources */,
+				144AD37511EEDF600080D7F0 /* GUICard.cpp in Sources */,
+				144AD37611EEDF600080D7F0 /* GUIHumanView.cpp in Sources */,
+				144AD37711EEDF600080D7F0 /* GUIImpl.cpp in Sources */,
+				144AD37811EEDF600080D7F0 /* GUIListener.cpp in Sources */,
+				144AD37911EEDF600080D7F0 /* GUIPlayer.cpp in Sources */,
+				144AD37A11EEDF600080D7F0 /* GUIPlayerView.cpp in Sources */,
+				144AD37B11EEDF600080D7F0 /* GUIString.cpp in Sources */,
+				144AD37C11EEDF600080D7F0 /* Makefile in Sources */,
+				144AD3BC11EEE2DC0080D7F0 /* guimain.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ezdurak_xcode_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = "ezdurak-xcode";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ezdurak_xcode_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = "ezdurak-xcode";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks",
+					/Library/Frameworks,
+					"$(FRAMEWORK_SEARCH_PATHS)",
+				);
+				GCC_VERSION = 4.0;
+				"GCC_VERSION[arch=x86_64]" = 4.2;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
+					/Library/Frameworks/SDL.framework/Headers,
+					"$(HEADER_SEARCH_PATHS)",
+					/Users/zack/programming/ezdurak,
+					/usr/local/include,
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DMAC_OSX",
+					"$(OTHER_CFLAGS)",
+				);
+				PREBINDING = NO;
+				SDKROOT = macosx10.4;
+				"SDKROOT[arch=x86_64]" = macosx10.5;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks",
+					/Library/Frameworks,
+					"$(FRAMEWORK_SEARCH_PATHS)",
+				);
+				GCC_VERSION = 4.0;
+				"GCC_VERSION[arch=x86_64]" = 4.2;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks/SDL.framework/Headers",
+					/Library/Frameworks/SDL.framework/Headers,
+					"$(HEADER_SEARCH_PATHS)",
+					/Users/zack/programming/ezdurak,
+					/usr/local/include,
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-DMAC_OSX",
+					"$(OTHER_CFLAGS)",
+				);
+				PREBINDING = NO;
+				SDKROOT = macosx10.4;
+				"SDKROOT[arch=x86_64]" = macosx10.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "ezdurak-xcode" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ezdurak-xcode" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

@@ -2,7 +2,7 @@
 #include <iostream>
 
 PlayerImpl::PlayerImpl(const std::string& name)
-    : Player(), hand_(), name_(name)
+    : Player(), hand_(), name_(name), agent_(NULL)
 {}
 
 PlayerImpl::~PlayerImpl()

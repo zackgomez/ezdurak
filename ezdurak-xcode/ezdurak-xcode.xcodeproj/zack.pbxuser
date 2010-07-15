@@ -1,0 +1,420 @@
+// !$*UTF8*$!
+{
+	002F3A2C09D0888800EBEB88 /* SDLMain.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {887, 4953}}";
+			sepNavSelRange = "{2256, 0}";
+			sepNavVisRange = "{1715, 1031}";
+			sepNavWindowFrame = "{{337, 91}, {760, 937}}";
+		};
+	};
+	14382CBF11EEEAC8006B082D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 002F3A2C09D0888800EBEB88 /* SDLMain.m */;
+		name = "SDLMain.m: 82";
+		rLen = 0;
+		rLoc = 2256;
+		rType = 0;
+		vrLen = 1031;
+		vrLoc = 1715;
+	};
+	14382CC311EEEAE4006B082D /* GUIImpl.cpp:232 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 144AD35D11EEDF600080D7F0 /* GUIImpl.cpp */;
+		functionName = "GUIImpl::processEvents()";
+		hitCount = 2;
+		ignoreCount = 0;
+		lineNumber = 232;
+		location = "ezdurak-xcode";
+		modificationTime = 300870626.708203;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	14382CCB11EEEB52006B082D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD36111EEDF600080D7F0 /* GUIPlayer.cpp */;
+		name = "GUIPlayer.cpp: 25";
+		rLen = 0;
+		rLoc = 442;
+		rType = 0;
+		vrLen = 727;
+		vrLoc = 0;
+	};
+	14382CED11EEED02006B082D /* ezdurak_xcode_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {843, 520}}";
+			sepNavSelRange = "{175, 0}";
+			sepNavVisRange = "{0, 175}";
+		};
+	};
+	14382CF211EEED27006B082D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD35D11EEDF600080D7F0 /* GUIImpl.cpp */;
+		name = "GUIImpl.cpp: 238";
+		rLen = 0;
+		rLoc = 4892;
+		rType = 0;
+		vrLen = 957;
+		vrLoc = 4320;
+	};
+	14382CF311EEED27006B082D /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 14382CED11EEED02006B082D /* ezdurak_xcode_Prefix.pch */;
+	};
+	14382CF411EEED27006B082D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 14382CED11EEED02006B082D /* ezdurak_xcode_Prefix.pch */;
+		name = "ezdurak_xcode_Prefix.pch: 10";
+		rLen = 0;
+		rLoc = 175;
+		rType = 0;
+		vrLen = 175;
+		vrLoc = 0;
+	};
+	144AD32B11EEDF450080D7F0 /* ezdurak-xcode */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = "ezdurak-xcode";
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	144AD33B11EEDF4D0080D7F0 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	144AD33C11EEDF4D0080D7F0 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	144AD34111EEDF600080D7F0 /* AIPlayer.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {810, 480}}";
+			sepNavSelRange = "{27, 0}";
+			sepNavVisRange = "{0, 785}";
+		};
+	};
+	144AD34611EEDF600080D7F0 /* CLIPlayer.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {810, 2262}}";
+			sepNavSelRange = "{2649, 0}";
+			sepNavVisRange = "{2263, 760}";
+		};
+	};
+	144AD34A11EEDF600080D7F0 /* Card.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {843, 1131}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 889}";
+		};
+	};
+	144AD34D11EEDF600080D7F0 /* Deck.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {810, 480}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 327}";
+		};
+	};
+	144AD35011EEDF600080D7F0 /* GameAgent.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {843, 780}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 909}";
+		};
+	};
+	144AD35211EEDF600080D7F0 /* Makefile */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {843, 477}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 449}";
+		};
+	};
+	144AD35311EEDF600080D7F0 /* Player.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {843, 477}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 624}";
+		};
+	};
+	144AD35411EEDF600080D7F0 /* PlayerImpl.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {701, 786}}";
+			sepNavSelRange = "{143, 0}";
+			sepNavVisRange = "{0, 926}";
+			sepNavWindowFrame = "{{284, 91}, {760, 937}}";
+		};
+	};
+	144AD35D11EEDF600080D7F0 /* GUIImpl.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {843, 5941}}";
+			sepNavSelRange = "{4892, 0}";
+			sepNavVisRange = "{4320, 957}";
+			sepNavWindowFrame = "{{15, 91}, {760, 937}}";
+		};
+	};
+	144AD36111EEDF600080D7F0 /* GUIPlayer.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {843, 1677}}";
+			sepNavSelRange = "{442, 0}";
+			sepNavVisRange = "{0, 727}";
+			sepNavWindowFrame = "{{15, 91}, {760, 937}}";
+		};
+	};
+	144AD36211EEDF600080D7F0 /* GUIPlayer.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {701, 786}}";
+			sepNavSelRange = "{208, 0}";
+			sepNavVisRange = "{0, 681}";
+			sepNavWindowFrame = "{{317, 91}, {760, 937}}";
+		};
+	};
+	144AD36911EEDF600080D7F0 /* gl.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {701, 786}}";
+			sepNavSelRange = "{204, 0}";
+			sepNavVisRange = "{0, 204}";
+			sepNavWindowFrame = "{{15, 91}, {760, 937}}";
+		};
+	};
+	144AD3AC11EEE1DE0080D7F0 /* glew.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = glew.h;
+		path = /usr/local/include/GL/glew.h;
+		sourceTree = "<absolute>";
+	};
+	144AD3BB11EEE2DC0080D7F0 /* guimain.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {843, 858}}";
+			sepNavSelRange = "{1009, 0}";
+			sepNavVisRange = "{677, 659}";
+			sepNavWindowFrame = "{{15, 91}, {760, 937}}";
+		};
+	};
+	144AD3C611EEE2E80080D7F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD34111EEDF600080D7F0 /* AIPlayer.h */;
+		name = "AIPlayer.h: 2";
+		rLen = 0;
+		rLoc = 27;
+		rType = 0;
+		vrLen = 785;
+		vrLoc = 0;
+	};
+	144AD3C711EEE2E80080D7F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD3AC11EEE1DE0080D7F0 /* glew.h */;
+		name = "glew.h: 84";
+		rLen = 0;
+		rLoc = 4221;
+		rType = 0;
+		vrLen = 1279;
+		vrLoc = 3272;
+	};
+	144AD3C811EEE2E80080D7F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD34D11EEDF600080D7F0 /* Deck.h */;
+		name = "Deck.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 327;
+		vrLoc = 0;
+	};
+	144AD3D611EEE34E0080D7F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD34611EEDF600080D7F0 /* CLIPlayer.cpp */;
+		name = "CLIPlayer.cpp: 122";
+		rLen = 0;
+		rLoc = 2649;
+		rType = 0;
+		vrLen = 760;
+		vrLoc = 2263;
+	};
+	144AD46C11EEE8A70080D7F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD3BB11EEE2DC0080D7F0 /* guimain.cpp */;
+		name = "guimain.cpp: 42";
+		rLen = 0;
+		rLoc = 1009;
+		rType = 0;
+		vrLen = 659;
+		vrLoc = 677;
+	};
+	144AD46D11EEE8A70080D7F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD35211EEDF600080D7F0 /* Makefile */;
+		name = "Makefile: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 449;
+		vrLoc = 0;
+	};
+	144AD46E11EEE8A70080D7F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD35311EEDF600080D7F0 /* Player.h */;
+		name = "Player.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 624;
+		vrLoc = 0;
+	};
+	144AD46F11EEE8A70080D7F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD35011EEDF600080D7F0 /* GameAgent.h */;
+		name = "GameAgent.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 909;
+		vrLoc = 0;
+	};
+	144AD47011EEE8A70080D7F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 144AD34A11EEDF600080D7F0 /* Card.cpp */;
+		name = "Card.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 889;
+		vrLoc = 0;
+	};
+	144AD47311EEE8BB0080D7F0 /* GUIImpl::loadTexture */ = {
+		isa = PBXSymbolicBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 1;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		hitCount = 1;
+		ignoreCount = 0;
+		location = "ezdurak-xcode";
+		modificationTime = 300870616.422284;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+		symbolName = "GUIImpl::loadTexture";
+	};
+	144AD47411EEE8CE0080D7F0 /* 'GUIImpl::loadTexture */ = {
+		isa = PBXSymbolicBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 1;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		hitCount = 0;
+		ignoreCount = 0;
+		location = "ezdurak-xcode";
+		modificationTime = 300870614.462371;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+		symbolName = "'GUIImpl::loadTexture";
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 144AD32B11EEDF450080D7F0 /* ezdurak-xcode */;
+		activeTarget = 8D1107260486CEB800E47090 /* ezdurak-xcode */;
+		addToTargets = (
+			8D1107260486CEB800E47090 /* ezdurak-xcode */,
+		);
+		breakpoints = (
+			144AD47311EEE8BB0080D7F0 /* GUIImpl::loadTexture */,
+			144AD47411EEE8CE0080D7F0 /* 'GUIImpl::loadTexture */,
+			14382CC311EEEAE4006B082D /* GUIImpl.cpp:232 */,
+		);
+		codeSenseManager = 144AD33C11EEDF4D0080D7F0 /* Code sense */;
+		executables = (
+			144AD32B11EEDF450080D7F0 /* ezdurak-xcode */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = 1;
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					665,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 300869900;
+			PBXWorkspaceStateSaveDate = 300869900;
+		};
+		perUserProjectItems = {
+			14382CBF11EEEAC8006B082D /* PBXTextBookmark */ = 14382CBF11EEEAC8006B082D /* PBXTextBookmark */;
+			14382CCB11EEEB52006B082D /* PBXTextBookmark */ = 14382CCB11EEEB52006B082D /* PBXTextBookmark */;
+			14382CF211EEED27006B082D /* PBXTextBookmark */ = 14382CF211EEED27006B082D /* PBXTextBookmark */;
+			14382CF311EEED27006B082D /* PBXBookmark */ = 14382CF311EEED27006B082D /* PBXBookmark */;
+			14382CF411EEED27006B082D /* PBXTextBookmark */ = 14382CF411EEED27006B082D /* PBXTextBookmark */;
+			144AD3C611EEE2E80080D7F0 /* PBXTextBookmark */ = 144AD3C611EEE2E80080D7F0 /* PBXTextBookmark */;
+			144AD3C711EEE2E80080D7F0 /* PBXTextBookmark */ = 144AD3C711EEE2E80080D7F0 /* PBXTextBookmark */;
+			144AD3C811EEE2E80080D7F0 /* PBXTextBookmark */ = 144AD3C811EEE2E80080D7F0 /* PBXTextBookmark */;
+			144AD3D611EEE34E0080D7F0 /* PBXTextBookmark */ = 144AD3D611EEE34E0080D7F0 /* PBXTextBookmark */;
+			144AD46C11EEE8A70080D7F0 /* PBXTextBookmark */ = 144AD46C11EEE8A70080D7F0 /* PBXTextBookmark */;
+			144AD46D11EEE8A70080D7F0 /* PBXTextBookmark */ = 144AD46D11EEE8A70080D7F0 /* PBXTextBookmark */;
+			144AD46E11EEE8A70080D7F0 /* PBXTextBookmark */ = 144AD46E11EEE8A70080D7F0 /* PBXTextBookmark */;
+			144AD46F11EEE8A70080D7F0 /* PBXTextBookmark */ = 144AD46F11EEE8A70080D7F0 /* PBXTextBookmark */;
+			144AD47011EEE8A70080D7F0 /* PBXTextBookmark */ = 144AD47011EEE8A70080D7F0 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 144AD33B11EEDF4D0080D7F0 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	8D1107260486CEB800E47090 /* ezdurak-xcode */ = {
+		activeExec = 0;
+		executables = (
+			144AD32B11EEDF450080D7F0 /* ezdurak-xcode */,
+		);
+	};
+}

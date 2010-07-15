@@ -3,5 +3,10 @@
 #define NOMINMAX
 #include <windows.h>
 #endif
+#ifdef MAC_OSX
+#include <GL/glew.h>
+#include <OpenGL/OpenGL.h>
+#else
 #include <GL/glew.h>
 #include <GL/gl.h>
+#endif
