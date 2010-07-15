@@ -58,7 +58,7 @@ private:
      */
     bool doRound();
     /** Gets an attacking card or the null card if the attackers all pass. */
-    Card getAttackingCard();
+    Card getAttackingCard(bool pileOn = false);
     /** Moves to the next attacker, making sure to skip the current defender. */
     void nextAttacker();
     /**

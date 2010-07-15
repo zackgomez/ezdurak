@@ -180,7 +180,7 @@ bool Game::doRound()
     return true;
 }
 
-Card Game::getAttackingCard()
+Card Game::getAttackingCard(bool pileOn)
 {
     // Used to tell when all the attackers have passed
     const Player *initialAttacker = attacker_;
@@ -189,7 +189,11 @@ Card Game::getAttackingCard()
     do
     {
         // Get the card from the attacker, could be a pass
-        Card attC = attacker_->attack(playableRanks_);
+		Card attC = Card();
+		if (pileOn)
+			attC = attacker_->pileOn(playableRanks_);
+		else
+			attC = attacker_->attack(playableRanks_);
 
         // If they didn't pass
         if (attC)
@@ -221,7 +225,7 @@ void Game::pileOn()
     // loop invariant: there are cards left to play
     while (tricksLeft_ > 0)
     {
-        Card attC = getAttackingCard();
+        Card attC = getAttackingCard(true);
         // Did the play a card?
         if (attC)
         {

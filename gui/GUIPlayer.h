@@ -20,6 +20,5 @@ public:
 private:
     void sortHand();
     SynchronizedQueue<int> &queue_;
-    GameAgent *agent_;
 };
 

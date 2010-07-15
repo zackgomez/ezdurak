@@ -4,8 +4,7 @@
 
 GUIPlayer::GUIPlayer(const std::string &name, SynchronizedQueue<int> &q) :
     PlayerImpl(name),
-    queue_(q),
-    agent_(NULL)
+    queue_(q)
 { /* Empty */ }
 
 GUIPlayer::~GUIPlayer()
@@ -28,7 +27,8 @@ void GUIPlayer::gameStarting(GameAgent *agent)
 }
 
 Card GUIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
-{ queue_.clear();
+{
+    queue_.clear();
 
     int cnum;
     Card attempt;
