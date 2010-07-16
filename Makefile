@@ -11,8 +11,7 @@ CXXFLAGS = -I. $(PRJCXXFLAGS)
 all: $(EXE)
 
 ezdurak-gui: guimain.o libezdurakcore.a libezdurakgui.a libezdurakai.a
-	$(ECHO) $(LD) -o $(EXE) $(OBJS) $(LIBS) core/PlayerImpl.o
-	$(LD) -o $@ $^ $(LIBS) $(GUILIBS) core/PlayerImpl.o
+	g++ -o ezdurak-gui guimain.o libezdurakgui.a libezdurakcore.a -lSDL -lSDL_ttf -lSDL_image -lGL libezdurakai.a
 
 ezdurak-cli: climain.o libezdurakcore.a libezdurakcli.a libezdurakai.a
 	$(ECHO) $(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o

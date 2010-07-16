@@ -6,10 +6,13 @@
 #include <string>
 #include "core/Card.h"
 #include "GUIString.h"
+#include "SynchronizedQueue.h"
 
 class Player;
 class GUIPlayerView;
 class GUIHumanView;
+class GUIListener;
+class Game;
 
 class GUIImpl
 {
@@ -58,6 +61,10 @@ private:
     
     Card trumpCard_;
 
+    Game *game;
+    GUIListener *listener;
+    SynchronizedQueue<int> queue_;
+
     // Helper functions
     void initGL();
     void processEvents();
@@ -66,6 +73,8 @@ private:
     void drawPiles();
     void drawPlayers();
     void updatePlayers();
+
+    void startGame(int numPlayers);
 
     GLuint loadTexture(const std::string& filename);
 };

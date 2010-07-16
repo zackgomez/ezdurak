@@ -8,10 +8,14 @@
 #include <sstream>
 #include <algorithm>
 #include "core/Player.h"
+#include "core/Game.h"
 #include "GUIString.h"
 #include "GUICard.h"
 #include "GUIPlayerView.h"
 #include "GUIHumanView.h"
+#include "GUIPlayer.h"
+#include "GUIListener.h"
+#include "ai/AIPlayer.h"
 
 using namespace std;
 
@@ -65,6 +69,8 @@ void GUIImpl::run()
         cout << "Unable to open font: " << TTF_GetError() << '\n';
 		exit(3);
 	}
+
+    startGame(4);
 
     cont_ = true;
 
@@ -441,4 +447,34 @@ GLuint GUIImpl::loadTexture(const string& filename)
     SDL_FreeSurface(tex);
 
     return texture;
+}
+
+void* game_thread_main(void *gameobj)
+{
+    srand(time(NULL));
+    Game *game = (Game*) gameobj;
+    game->run();
+
+    pthread_exit(NULL);
+    return NULL;
+}
+
+void GUIImpl::startGame(int numPlayers)
+{
+    assert(numPlayers >= 2 && numPlayers <= 6);
+    std::vector<Player*> players(numPlayers);
+    players[0] = new GUIPlayer("guiplayer", queue_);
+    for (int i = 1; i < players.size(); i++)
+    {
+        stringstream ss;
+        ss << "AIPlayer" << i;
+        std::string name = ss.str();
+        players[i] = new AIPlayer(name);
+    }
+    std::random_shuffle(players.begin(), players.end());
+
+    game = new Game(players);
+    listener = new GUIListener(game, this);
+    pthread_t game_thread;
+    pthread_create(&game_thread, NULL, game_thread_main, game);
 }
