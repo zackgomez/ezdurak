@@ -57,7 +57,12 @@ private:
      * the defender lost.
      */
     bool doRound();
-    /** Gets an attacking card or the null card if the attackers all pass. */
+    /**
+     * Gets an attacking card or the null card if the attackers all pass.
+     * @param pileOn if true then the Player::pileOn method will be used 
+     * instead of Player::attack.
+     * @return The played card or Card() if all attackers passed.
+     */
     Card getAttackingCard(bool pileOn = false);
     /** Moves to the next attacker, making sure to skip the current defender. */
     void nextAttacker();
