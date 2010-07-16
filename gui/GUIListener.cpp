@@ -26,6 +26,8 @@ void GUIListener::gameStart()
 void GUIListener::gameOver(const Player *biscuit)
 {
     impl_->setBiscuit(biscuit);
+    impl_->setAttacker(NULL);
+    impl_->setDefender(NULL);
 }
 
 void GUIListener::newRound(const Player *attacker, const Player *defender)
