@@ -63,6 +63,7 @@ private:
 
     Game *game;
     GUIListener *listener;
+    pthread_t game_thread;
     SynchronizedQueue<int> queue_;
 
     // Helper functions
@@ -75,6 +76,7 @@ private:
     void updatePlayers();
 
     void startGame(int numPlayers);
+    void stopGame();
 
     GLuint loadTexture(const std::string& filename);
 };

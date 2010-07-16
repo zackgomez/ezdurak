@@ -43,6 +43,7 @@ GUIImpl::GUIImpl() :
 
 GUIImpl::~GUIImpl()
 {
+    stopGame();
     for (int i = 0; i < playersDisplay_.size(); i++)
         delete playersDisplay_[i];
     pthread_mutex_destroy(&playedCardsLock_);
@@ -475,6 +476,12 @@ void GUIImpl::startGame(int numPlayers)
 
     game = new Game(players);
     listener = new GUIListener(game, this);
-    pthread_t game_thread;
     pthread_create(&game_thread, NULL, game_thread_main, game);
+}
+
+void GUIImpl::stopGame()
+{
+    pthread_cancel(game_thread);
+    delete game;
+    delete listener;
 }
