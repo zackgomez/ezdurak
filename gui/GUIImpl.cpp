@@ -322,7 +322,7 @@ void GUIImpl::drawPiles()
     if (deckSize_ > 1)
     {
         GUICard::drawCardBack();
-        glColor3f(1, 0, 0);
+        glColor3f(0, 0, 0);
         deckString_->draw();
     }
 
@@ -332,7 +332,7 @@ void GUIImpl::drawPiles()
         glTranslatef(SCREENX - 10 - GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
         glColor3f(1, 1, 1);
         GUICard::drawCardBack();
-        glColor3f(1, 0, 0);
+        glColor3f(0, 0, 0);
         discardString_->draw();
     }
 }
