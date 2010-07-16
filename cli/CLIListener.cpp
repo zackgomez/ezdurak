@@ -20,14 +20,14 @@ void CLIListener::gameStart()
 {
     cout << "Game is starting.\n";
     cout << "Players are seated like:\n";
-    const vector<Player*> players = agent_->getPlayers();
+    const vector<PlayerPtr> players = agent_->getPlayers();
     for (int i = 0; i < players.size(); i++)
         cout << players[i]->getName() << " ";
     cout << '\n';
     cout << "Trump is " << agent_->getTrumpCard() << '\n';
 }
 
-void CLIListener::gameOver(const Player* biscuitPlayer)
+void CLIListener::gameOver(const ConstPlayerPtr biscuitPlayer)
 {
     if (biscuitPlayer)
         cout << "The biscuit is " << biscuitPlayer->getName() << '\n';
@@ -35,7 +35,7 @@ void CLIListener::gameOver(const Player* biscuitPlayer)
         cout << "The game is a draw.\n";
 }
 
-void CLIListener::newRound(const Player* attacker, const Player* defender)
+void CLIListener::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 {
     attacker_ = attacker;
     defender_ = defender;
@@ -48,7 +48,7 @@ void CLIListener::newRound(const Player* attacker, const Player* defender)
          << defender_->getNumCards() << " cards in hand\n";
 }
 
-void CLIListener::attackerPassed(const Player *attacker)
+void CLIListener::attackerPassed(const ConstPlayerPtr attacker)
 {
     cout << attacker_->getName() << " has passed.\n";
     attacker_ = agent_->getAttacker();
@@ -82,12 +82,12 @@ void CLIListener::piledOnCard(const Card &c)
     cout << c << " was piled on\n";
 }
 
-void CLIListener::playedOut(const Player *player)
+void CLIListener::playedOut(const ConstPlayerPtr player)
 {
     cout << player->getName() << " has gone out!\n";
 }
 
-void CLIListener::givenCards(const Player *player, int numCards)
+void CLIListener::givenCards(const ConstPlayerPtr player, int numCards)
 {
     cout << player->getName() << " has been given " << numCards << " cards\n";
 }

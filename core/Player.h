@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <set>
+#include <boost/shared_ptr.hpp>
 #include "Card.h"
 
 class GameAgent;
@@ -26,3 +27,5 @@ public:
     virtual std::string getName() const = 0;
 };
 
+typedef boost::shared_ptr<Player> PlayerPtr;
+typedef boost::shared_ptr<const Player> ConstPlayerPtr;

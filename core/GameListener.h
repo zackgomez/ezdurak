@@ -21,18 +21,18 @@ public:
      * Called when the game is over.
      * @param biscuit The losing "biscuit" player or NULL if it was a tie.
      */
-    virtual void gameOver(const Player* biscuit) = 0;
+    virtual void gameOver(ConstPlayerPtr biscuit) = 0;
 
-    virtual void newRound(const Player* attacker, const Player* defender) = 0;
-    virtual void attackerPassed(const Player* newAttacker) = 0;
+    virtual void newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender) = 0;
+    virtual void attackerPassed(ConstPlayerPtr newAttacker) = 0;
     virtual void endRound(bool successfulDefend) = 0;
 
     virtual void attackingCard(const Card &c) = 0;
     virtual void defendingCard(const Card &c) = 0;
     virtual void piledOnCard(const Card &c) = 0;
 
-    virtual void playedOut(const Player *player) = 0;
-    virtual void givenCards(const Player *player, int numCard) = 0;
+    virtual void playedOut(ConstPlayerPtr player) = 0;
+    virtual void givenCards(ConstPlayerPtr player, int numCard) = 0;
 
 protected:
     GameAgent *agent_;

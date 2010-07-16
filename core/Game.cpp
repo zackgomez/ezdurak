@@ -9,7 +9,7 @@ using namespace std;
 
 const int Game::HAND_SIZE = 6;
 
-Game::Game(const vector<Player*>& players) :
+Game::Game(const vector<PlayerPtr>& players) :
     players_(players)
 {
     assert(players_.size() >= 2 && players_.size() <= 6);
@@ -29,7 +29,7 @@ void Game::run()
     deal();
 
     // The game begins
-    vector<Player*>::iterator it;
+    vector<PlayerPtr>::iterator it;
     for (it = players_.begin(); it != players_.end(); it++)
         (*it)->gameStarting(this);
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
@@ -66,10 +66,10 @@ void Game::run()
         nextDefender(successfulDefend);
     }
 
-    const Player* biscuit = NULL;
+    ConstPlayerPtr biscuit;
     // If there is a player left, they're the biscuit
     if (players_.size() == 1)
-        biscuit = players_[0];
+        biscuit = ConstPlayerPtr(players_[0]);
     // Broadcast the game over with the loser or NULL
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->gameOver(biscuit);
@@ -183,7 +183,7 @@ bool Game::doRound()
 Card Game::getAttackingCard(bool pileOn)
 {
     // Used to tell when all the attackers have passed
-    const Player *initialAttacker = attacker_;
+    const PlayerPtr initialAttacker = attacker_;
 
     // while all the attackers haven't passed
     do
@@ -282,7 +282,7 @@ void Game::removeFinishedPlayers()
     {
         if (players_[i]->getNumCards() == 0)
         {
-            const Player *goingOut = players_[i];
+            const PlayerPtr goingOut = players_[i];
             // Remove that player using random access iterator
             // The next player is now accessed using the same index i
             players_.erase(players_.begin() + i);
@@ -364,17 +364,17 @@ int Game::getDiscardSize() const
     return 36 - aliveCards;
 }
 
-const Player * Game::getAttacker() const
+ConstPlayerPtr Game::getAttacker() const
 {
     return attacker_;
 }
 
-const Player * Game::getDefender() const
+ConstPlayerPtr Game::getDefender() const
 {
     return defender_;
 }
 
-const vector<Player*>& Game::getPlayers() const
+const vector<PlayerPtr> Game::getPlayers() const
 {
     return players_;
 }

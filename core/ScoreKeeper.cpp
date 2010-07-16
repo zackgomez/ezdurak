@@ -22,7 +22,7 @@ void ScoreKeeper::print()
 void ScoreKeeper::gameStart()
 { /* Empty */ }
 
-void ScoreKeeper::gameOver(const Player* biscuit)
+void ScoreKeeper::gameOver(const ConstPlayerPtr biscuit)
 {
     if (biscuit)
         scores_[biscuit->getName()]++;
@@ -30,10 +30,10 @@ void ScoreKeeper::gameOver(const Player* biscuit)
         ++numDraws_;
 }
 
-void ScoreKeeper::newRound(const Player *, const Player*)
+void ScoreKeeper::newRound(const ConstPlayerPtr, const ConstPlayerPtr)
 { /* Empty */ }
 
-void ScoreKeeper::attackerPassed(const Player *)
+void ScoreKeeper::attackerPassed(const ConstPlayerPtr)
 { /* Empty */ }
 
 void ScoreKeeper::endRound(bool)
@@ -48,8 +48,8 @@ void ScoreKeeper::defendingCard(const Card &)
 void ScoreKeeper::piledOnCard(const Card &)
 { /* Empty */ }
 
-void ScoreKeeper::playedOut(const Player *)
+void ScoreKeeper::playedOut(const ConstPlayerPtr)
 { /* Empty */ }
 
-void ScoreKeeper::givenCards(const Player *, int)
+void ScoreKeeper::givenCards(const ConstPlayerPtr, int)
 { /* Empty */ }

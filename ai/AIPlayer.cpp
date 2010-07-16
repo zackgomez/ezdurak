@@ -159,15 +159,15 @@ void AIPlayer::orderCards(std::vector<Card>& cards) const
     sort(cards.begin(), cards.end(), CardComp(trump));
 }
 
-bool AIPlayer::isPartner(const Player *p) const
+bool AIPlayer::isPartner(ConstPlayerPtr p) const
 {
-    const std::vector<Player*> players = agent_->getPlayers();
+    const std::vector<PlayerPtr> players = agent_->getPlayers();
 
     int thisIdx = -1;
     int pIdx = -1;
     for (int i = 0; i < players.size(); i++)
     {
-        if (players[i] == this)
+        if (players[i].get() == this)
             thisIdx = i;
         if (players[i] == p)
             pIdx = i;

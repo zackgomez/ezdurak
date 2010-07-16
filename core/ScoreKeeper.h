@@ -13,17 +13,17 @@ public:
 
     // Caught messages from GameListener interface
     void gameStart();
-    void gameOver(const Player* biscuit);
+    void gameOver(const ConstPlayerPtr biscuit);
 
     // Ignored messages
-    void newRound(const Player*, const Player*);
-    void attackerPassed(const Player*);
+    void newRound(const ConstPlayerPtr, const ConstPlayerPtr);
+    void attackerPassed(const ConstPlayerPtr);
     void endRound(bool);
     void attackingCard(const Card &);
     void defendingCard(const Card &);
     void piledOnCard(const Card &);
-    void playedOut(const Player *);
-    void givenCards(const Player *, int);
+    void playedOut(const ConstPlayerPtr);
+    void givenCards(const ConstPlayerPtr, int);
 
 private:
     std::map<std::string, int> scores_;

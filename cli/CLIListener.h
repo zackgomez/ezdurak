@@ -8,16 +8,16 @@ public:
 
     // Methods inherited from GameListener
     void gameStart();
-    void gameOver(const Player*);
-    void newRound(const Player*, const Player*);
+    void gameOver(ConstPlayerPtr);
+    void newRound(ConstPlayerPtr, ConstPlayerPtr);
     void endRound(bool);
-    void attackerPassed(const Player*);
+    void attackerPassed(ConstPlayerPtr);
     void attackingCard(const Card &c);
     void defendingCard(const Card &c);
     void piledOnCard(const Card &c);
-    void playedOut(const Player *player);
-    void givenCards(const Player *player, int numCards);
+    void playedOut(ConstPlayerPtr player);
+    void givenCards(ConstPlayerPtr player, int numCards);
     
 private:
-    const Player *attacker_, *defender_;
+    ConstPlayerPtr attacker_, defender_;
 };

@@ -21,5 +21,5 @@ protected:
     std::vector<Card> defendableCards(const Card& card, Card::cardsuit trump) const;
     void orderCards(std::vector<Card>& cards) const;
 
-    bool isPartner(const Player *p) const;
+    bool isPartner(ConstPlayerPtr p) const;
 };

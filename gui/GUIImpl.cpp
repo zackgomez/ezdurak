@@ -87,7 +87,7 @@ void GUIImpl::run()
     SDL_Quit();
 }
 
-void GUIImpl::setPlayers(const vector<Player*>& players)
+void GUIImpl::setPlayers(const vector<PlayerPtr>& players)
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -95,7 +95,7 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
     players_ = players;
     validPlayerDisplays_ = false;
 
-    vector<Player*>::iterator it;
+    vector<PlayerPtr>::iterator it;
     for (it = players_.begin(); it != players_.end(); it++)
     {
         if ((*it)->getName() == "guiplayer")
@@ -113,7 +113,7 @@ void GUIImpl::setPlayers(const vector<Player*>& players)
     pthread_mutex_unlock(&playersLock_);
 }
 
-void GUIImpl::setAttacker(const Player *player)
+void GUIImpl::setAttacker(ConstPlayerPtr player)
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -124,7 +124,7 @@ void GUIImpl::setAttacker(const Player *player)
     pthread_mutex_unlock(&playersLock_);
 }
 
-void GUIImpl::setDefender(const Player *player)
+void GUIImpl::setDefender(ConstPlayerPtr player)
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -182,7 +182,7 @@ void GUIImpl::setPileSizes(int deckSize, int discardSize)
     discardSize_ = discardSize;
 }
 
-void GUIImpl::setBiscuit(const Player *p)
+void GUIImpl::setBiscuit(ConstPlayerPtr p)
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -389,10 +389,10 @@ void GUIImpl::updatePlayers()
             delete playersDisplay_[i];
         playersDisplay_.resize(players_.size());
 
-        humanView_ = new GUIHumanView((GUIPlayer *) players_[0]);
+        humanView_ = new GUIHumanView((GUIPlayer *) players_[0].get());
         playersDisplay_[0] = humanView_;
         for (int i = 1; i < players_.size(); i++)
-            playersDisplay_[i] = new GUIPlayerView(players_[i]);
+            playersDisplay_[i] = new GUIPlayerView(players_[i].get());
         validPlayerDisplays_ = true;
     }
     if (!validStatus_)
@@ -462,14 +462,14 @@ void* game_thread_main(void *gameobj)
 void GUIImpl::startGame(int numPlayers)
 {
     assert(numPlayers >= 2 && numPlayers <= 6);
-    std::vector<Player*> players(numPlayers);
-    players[0] = new GUIPlayer("guiplayer", queue_);
+    std::vector<PlayerPtr> players(numPlayers);
+    players[0] = PlayerPtr(new GUIPlayer("guiplayer", queue_));
     for (int i = 1; i < players.size(); i++)
     {
         stringstream ss;
         ss << "AIPlayer" << i;
         std::string name = ss.str();
-        players[i] = new AIPlayer(name);
+        players[i] = PlayerPtr(new AIPlayer(name));
     }
     std::random_shuffle(players.begin(), players.end());
 

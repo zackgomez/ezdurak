@@ -7,8 +7,8 @@
 #include "core/Card.h"
 #include "GUIString.h"
 #include "SynchronizedQueue.h"
+#include "core/Player.h"
 
-class Player;
 class GUIPlayerView;
 class GUIHumanView;
 class GUIListener;
@@ -22,15 +22,15 @@ public:
 
     void run();
 
-    void setPlayers(const std::vector<Player*>& players);
-    void setAttacker(const Player* p);
-    void setDefender(const Player* p);
+    void setPlayers(const std::vector<PlayerPtr>& players);
+    void setAttacker(ConstPlayerPtr p);
+    void setDefender(ConstPlayerPtr p);
     void setTrumpCard(const Card &c);
     void clearPlayedCards();
     void addAttackingCard(const Card& c);
     void addDefendingCard(const Card& c);
     void setPileSizes(int deckSize, int discardSize);
-    void setBiscuit(const Player* p);
+    void setBiscuit(ConstPlayerPtr p);
 
     void wait(int ms);
 
@@ -43,14 +43,14 @@ private:
     int discardSize_;
     pthread_mutex_t playedCardsLock_;
 
-    std::vector<Player*> players_;
+    std::vector<PlayerPtr> players_;
     pthread_mutex_t playersLock_;
 
     bool validPlayerDisplays_;
     GUIHumanView *humanView_;
     std::vector<GUIPlayerView*> playersDisplay_;
     bool validStatus_;
-    const Player *attacker_, *defender_;
+    ConstPlayerPtr attacker_, defender_;
 
     bool validSizes_;
     GUIStringPtr deckString_;

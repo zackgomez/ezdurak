@@ -3,13 +3,12 @@
 #include <vector>
 #include <set>
 #include "Deck.h"
-
-class Player;
+#include "Player.h"
 
 class Game : public GameAgent
 {
 public:
-    Game(const std::vector<Player*>& players);
+    Game(const std::vector<PlayerPtr>& players);
     ~Game();
 
     void run();
@@ -24,22 +23,24 @@ public:
     int getTricksLeft() const;
     int getDeckSize() const;
     int getDiscardSize() const;
-    const Player * getAttacker() const; const Player * getDefender() const; const std::vector<Player*>& getPlayers() const;
+    ConstPlayerPtr getAttacker() const;
+    ConstPlayerPtr getDefender() const;
+    const std::vector<PlayerPtr> getPlayers() const;
     const std::vector<Card>& getPlayedCards() const;
 
 private:
     Deck deck_;
     Card trumpCard_;
-    std::vector<Player*> players_;
+    std::vector<PlayerPtr> players_;
 
-    Player *attacker_;
-    Player *defender_;
+    PlayerPtr attacker_;
+    PlayerPtr defender_;
     int attackerIdx_;
     int defenderIdx_;
     int tricksLeft_;
     std::vector<Card> playedCards_;
     std::set<int> playableRanks_;
-    std::vector<Player*> refillOrder_;
+    std::vector<PlayerPtr> refillOrder_;
 
     std::set<GameListener*>::iterator lit_;
     std::set<GameListener*> listeners_;

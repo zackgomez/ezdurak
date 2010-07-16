@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 #include "Card.h"
+#include "Player.h"
 
 class GameListener;
-class Player;
 
 /** Queryable interface that GameListeners are exposed to. */
 class GameAgent
@@ -36,15 +36,15 @@ public:
      */
     virtual int getTricksLeft() const = 0;
 
-    virtual const Player * getAttacker() const = 0;
-    virtual const Player * getDefender() const = 0;
+    virtual ConstPlayerPtr getAttacker() const = 0;
+    virtual ConstPlayerPtr getDefender() const = 0;
 
     /**
      * Returns the list of active players in seated order.  You can query
      * the players for the number of cards they have remaining in their hand
      * or their name.
      */
-    virtual const std::vector<Player*>& getPlayers() const = 0;
+    virtual const std::vector<PlayerPtr> getPlayers() const = 0;
 
     /**
      * Returns the played cards for the attack against the current defender.
