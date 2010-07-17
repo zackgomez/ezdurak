@@ -3,6 +3,12 @@
 
 TTF_Font * GUIString::font_ = NULL;
 
+GUIStringPtr GUIString::create(const std::string &str)
+{
+    return GUIStringPtr(new GUIString(str));
+}
+
+
 GUIString::GUIString(const std::string &str) :
     tex_(0),
     width_(0),

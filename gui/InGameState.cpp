@@ -243,8 +243,8 @@ void InGameState::drawPiles()
         deckss << deckSize_;
         discardss << discardSize_;
 
-        deckString_ = GUIStringPtr(new GUIString(deckss.str()));
-        discardString_ = GUIStringPtr(new GUIString(discardss.str()));
+        deckString_ = GUIString::create(deckss.str());
+        discardString_ = GUIString::create(discardss.str());
     }
         
     // Draw the deck and discard pile

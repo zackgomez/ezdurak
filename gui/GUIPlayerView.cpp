@@ -5,10 +5,9 @@
 
 GUIPlayerView::GUIPlayerView(const Player *player) :
     player_(player),
-    name_(0),
+    name_(GUIString::create(player->getName())),
     status_(NONE)
 {
-    name_ = GUIStringPtr(new GUIString(player->getName()));
 }
 
 GUIPlayerView::~GUIPlayerView()

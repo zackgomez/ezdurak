@@ -13,8 +13,8 @@ GameOverState::GameOverState(ConstPlayerPtr biscuit)
     else
         ss << "The game is a tie.";
 
-    biscuitStr_ = GUIStringPtr(new GUIString(ss.str()));
-    instrStr_ = GUIStringPtr(new GUIString("Press any key to start a new game, ESC to quit"));
+    biscuitStr_ = GUIString::create(ss.str());
+    instrStr_ = GUIString::create("Press any key to start a new game, ESC to quit");
 }
 
 GameOverState::~GameOverState()

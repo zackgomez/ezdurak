@@ -21,6 +21,6 @@ private:
     const GUIPlayer *player_;
     SynchronizedQueue<int> &queue_;
     void drawCards();
-    GUIString passString_;
-    GUIString giveUpString_;
+    GUIStringPtr passString_;
+    GUIStringPtr giveUpString_;
 };

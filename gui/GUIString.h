@@ -2,12 +2,16 @@
 #include <string>
 #include "gl.h"
 #include <SDL/SDL_ttf.h>
-#include <memory>
+#include <boost/shared_ptr.hpp>
+
+// Forward declaration of GUIStringPtr
+class GUIString;
+typedef boost::shared_ptr<GUIString> GUIStringPtr;
 
 class GUIString
 {
 public:
-    GUIString(const std::string &str);
+    static GUIStringPtr create(const std::string &str);
     ~GUIString();
 
     static TTF_Font *font_;
@@ -15,8 +19,8 @@ public:
     void draw();
 
 private:
+    GUIString(const std::string &str);
+
     GLuint tex_;
     int width_, height_;
 };
-
-typedef std::auto_ptr<GUIString> GUIStringPtr;
