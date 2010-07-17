@@ -1,12 +1,12 @@
 #include "GUIListener.h"
 #include <SDL/SDL.h>
 #include <vector>
-#include "GUIImpl.h"
+#include "GUIApp.h"
 #include "core/GameAgent.h"
 
 using std::vector;
 
-GUIListener::GUIListener(GameAgent *agent, GUIImpl *impl)
+GUIListener::GUIListener(GameAgent *agent, GUIApp *impl)
     : GameListener(),
     impl_(impl)
 {

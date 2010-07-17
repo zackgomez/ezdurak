@@ -2,7 +2,7 @@ include ../Makefile.inc
 
 CXXFLAGS = $(PRJCXXFLAGS) `sdl-config --cflags` -I..
 OBJLIBS  = ../libezdurakgui.a
-OBJS = GUIListener.o GUIImpl.o GUIString.o GUIPlayer.o GUICard.o \
+OBJS = GUIListener.o GUIApp.o GUIString.o GUIPlayer.o GUICard.o \
        GUIPlayerView.o GUIHumanView.o
 
 .PHONY: all

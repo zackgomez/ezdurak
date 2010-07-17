@@ -1,4 +1,4 @@
-#include "GUIImpl.h"
+#include "GUIApp.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
@@ -25,7 +25,7 @@ const int SCREENY = 600;
 #define M_PI 3.141592653589793238462643
 #endif
 
-GUIImpl::GUIImpl() :
+GUIApp::GUIApp() :
     deckString_(),
     discardString_(),
     biscuitStr_()
@@ -41,7 +41,7 @@ GUIImpl::GUIImpl() :
     humanView_ = NULL;
 }
 
-GUIImpl::~GUIImpl()
+GUIApp::~GUIApp()
 {
     stopGame();
     for (int i = 0; i < playersDisplay_.size(); i++)
@@ -51,7 +51,7 @@ GUIImpl::~GUIImpl()
     SDL_Quit();
 }
 
-void GUIImpl::run()
+void GUIApp::run()
 {
     initGL();
 
@@ -88,7 +88,7 @@ void GUIImpl::run()
     SDL_Quit();
 }
 
-void GUIImpl::setPlayers(const vector<PlayerPtr>& players)
+void GUIApp::setPlayers(const vector<PlayerPtr>& players)
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -110,7 +110,7 @@ void GUIImpl::setPlayers(const vector<PlayerPtr>& players)
     pthread_mutex_unlock(&playersLock_);
 }
 
-void GUIImpl::setAttacker(ConstPlayerPtr player)
+void GUIApp::setAttacker(ConstPlayerPtr player)
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -121,7 +121,7 @@ void GUIImpl::setAttacker(ConstPlayerPtr player)
     pthread_mutex_unlock(&playersLock_);
 }
 
-void GUIImpl::setDefender(ConstPlayerPtr player)
+void GUIApp::setDefender(ConstPlayerPtr player)
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -132,7 +132,7 @@ void GUIImpl::setDefender(ConstPlayerPtr player)
     pthread_mutex_unlock(&playersLock_);
 }
 
-void GUIImpl::setTrumpCard(const Card &c)
+void GUIApp::setTrumpCard(const Card &c)
 {
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
@@ -142,7 +142,7 @@ void GUIImpl::setTrumpCard(const Card &c)
     pthread_mutex_unlock(&playedCardsLock_);
 }
 
-void GUIImpl::clearPlayedCards()
+void GUIApp::clearPlayedCards()
 {
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
@@ -153,7 +153,7 @@ void GUIImpl::clearPlayedCards()
     pthread_mutex_unlock(&playedCardsLock_);
 }
 
-void GUIImpl::addAttackingCard(const Card& c)
+void GUIApp::addAttackingCard(const Card& c)
 {
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
@@ -163,7 +163,7 @@ void GUIImpl::addAttackingCard(const Card& c)
     pthread_mutex_unlock(&playedCardsLock_);
 }
 
-void GUIImpl::addDefendingCard(const Card& c)
+void GUIApp::addDefendingCard(const Card& c)
 {
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
@@ -173,13 +173,13 @@ void GUIImpl::addDefendingCard(const Card& c)
     pthread_mutex_unlock(&playedCardsLock_);
 }
 
-void GUIImpl::setPileSizes(int deckSize, int discardSize)
+void GUIApp::setPileSizes(int deckSize, int discardSize)
 {
     deckSize_ = deckSize;
     discardSize_ = discardSize;
 }
 
-void GUIImpl::setBiscuit(ConstPlayerPtr p)
+void GUIApp::setBiscuit(ConstPlayerPtr p)
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -195,12 +195,12 @@ void GUIImpl::setBiscuit(ConstPlayerPtr p)
     pthread_mutex_unlock(&playersLock_);
 }
 
-void GUIImpl::wait(int ms)
+void GUIApp::wait(int ms)
 {
     SDL_Delay(ms);
 }
 
-void GUIImpl::initGL()
+void GUIApp::initGL()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 
@@ -232,7 +232,7 @@ void GUIImpl::initGL()
     GUICard::CARDY *= 1.3;
 }
 
-void GUIImpl::processEvents()
+void GUIApp::processEvents()
 {
     SDL_Event e;
     while (SDL_PollEvent(&e))
@@ -259,7 +259,7 @@ void GUIImpl::processEvents()
     }
 }
 
-void GUIImpl::render()
+void GUIApp::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1,1,1);
@@ -278,7 +278,7 @@ void GUIImpl::render()
     SDL_GL_SwapBuffers();
 }
 
-void GUIImpl::drawPlayedCards()
+void GUIApp::drawPlayedCards()
 {
     glTranslatef(SCREENX/2, SCREENY/2, 0);
     glTranslatef(-1.*GUICard::CARDX - 0.4*GUICard::CARDX,
@@ -302,7 +302,7 @@ void GUIImpl::drawPlayedCards()
     }
 }
 
-void GUIImpl::drawPiles()
+void GUIApp::drawPiles()
 {
     if (!validSizes_)
     {
@@ -345,7 +345,7 @@ void GUIImpl::drawPiles()
     }
 }
 
-void GUIImpl::drawPlayers()
+void GUIApp::drawPlayers()
 {
     // Lock
     pthread_mutex_lock(&playersLock_);
@@ -382,7 +382,7 @@ void GUIImpl::drawPlayers()
     pthread_mutex_unlock(&playersLock_);
 }
 
-void GUIImpl::updatePlayers()
+void GUIApp::updatePlayers()
 {
     // Update the name textures, first delete the old ones
     if (!validPlayerDisplays_)
@@ -417,7 +417,7 @@ void GUIImpl::updatePlayers()
     }
 }
 
-GLuint GUIImpl::loadTexture(const string& filename)
+GLuint GUIApp::loadTexture(const string& filename)
 {
     SDL_Surface *tex;
     tex = IMG_Load(filename.c_str());
@@ -461,7 +461,7 @@ void* game_thread_main(void *gameobj)
     return NULL;
 }
 
-void GUIImpl::startGame(int numPlayers)
+void GUIApp::startGame(int numPlayers)
 {
     assert(numPlayers >= 2 && numPlayers <= 6);
     std::vector<PlayerPtr> players(numPlayers);
@@ -480,7 +480,7 @@ void GUIImpl::startGame(int numPlayers)
     pthread_create(&game_thread, NULL, game_thread_main, game);
 }
 
-void GUIImpl::stopGame()
+void GUIApp::stopGame()
 {
     pthread_cancel(game_thread);
     pthread_join(game_thread, NULL);

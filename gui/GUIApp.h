@@ -14,11 +14,11 @@ class GUIHumanView;
 class GUIListener;
 class Game;
 
-class GUIImpl
+class GUIApp
 {
 public:
-    GUIImpl();
-    ~GUIImpl();
+    GUIApp();
+    ~GUIApp();
 
     void run();
 

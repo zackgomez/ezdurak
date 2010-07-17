@@ -1,12 +1,10 @@
 #include <ctime>
-#include "gui/GUIImpl.h"
-#include "core/Game.h"
-#include "core/PlayerImpl.h"
-#include "ai/AIPlayer.h"
+#include <cstdlib>
+#include "gui/GUIApp.h"
 
 int main(int argc, char **argv)
 {
     srand(time(NULL));
-    GUIImpl g;
+    GUIApp g;
     g.run();
 }
