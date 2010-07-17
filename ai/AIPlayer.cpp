@@ -128,6 +128,9 @@ vector<Card> AIPlayer::defendableCards(const Card& attackingCard,
     return playable;
 }
 
+/*
+ * Helper class for orderCards.
+ */
 class CardComp
 {
 private:

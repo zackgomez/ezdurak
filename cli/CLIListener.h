@@ -1,5 +1,9 @@
 #include "core/GameListener.h"
 
+/**
+ * An implemenation of the GameListener interface that pritns relevantm messages
+ * to stdout when an event happens.
+ */
 class CLIListener :
     public GameListener
 {

@@ -1,6 +1,11 @@
 #pragma once
 #include "core/PlayerImpl.h"
 
+/**
+ * An implementation of the Player interface, via PlayerImpl that gets input
+ * when necessary from the command line.  Should be used in conjunction with
+ * CLIListener to give full information about the played game.
+ */
 class CLIPlayer : public PlayerImpl
 {
 public:
