@@ -13,7 +13,8 @@ GameOverState::GameOverState(ConstPlayerPtr biscuit)
     else
         ss << "The game is a tie.";
 
-    str_ = GUIStringPtr(new GUIString(ss.str()));
+    biscuitStr_ = GUIStringPtr(new GUIString(ss.str()));
+    instrStr_ = GUIStringPtr(new GUIString("Press any key to start a new game, ESC to quit"));
 }
 
 GameOverState::~GameOverState()
@@ -26,7 +27,10 @@ void GameOverState::render()
     glTranslatef(GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0);
 
     glColor3f(1,1,1);
-    str_->draw();
+    biscuitStr_->draw();
+
+    glTranslatef(0, GUIApp::SCREENY/5, 0);
+    instrStr_->draw();
 }
 
 void GameOverState::processEvent(SDL_Event &e)

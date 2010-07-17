@@ -15,6 +15,7 @@ public:
     GUIStatePtr nextState();
 
 private:
-    GUIStringPtr str_;
+    GUIStringPtr biscuitStr_;
+    GUIStringPtr instrStr_;
     GUIStatePtr next_;
 };
