@@ -53,7 +53,9 @@ void GUIApp::run()
 
         processEvents();
 
-        // TODO check for next state
+        GUIStatePtr next = state_->nextState();
+        if (next.get())
+            state_ = next;
 
         SDL_Delay(16);
     }

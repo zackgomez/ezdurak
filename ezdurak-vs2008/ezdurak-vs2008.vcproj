@@ -187,6 +187,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\gui\GameOverState.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\gui\GUIApp.cpp"
 				>
 			</File>
@@ -254,6 +258,10 @@
 			</File>
 			<File
 				RelativePath="..\core\GameListener.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gui\GameOverState.h"
 				>
 			</File>
 			<File

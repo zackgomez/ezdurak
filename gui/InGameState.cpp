@@ -9,6 +9,7 @@
 #include "GUICard.h"
 #include "GUIApp.h"
 #include "ai/AIPlayer.h"
+#include "GameOverState.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
@@ -88,7 +89,9 @@ void InGameState::render()
 
 GUIStatePtr InGameState::nextState()
 {
-    return GUIStatePtr();
+    if (biscuit_.get())
+        next_ = GUIStatePtr(new GameOverState(biscuit_));
+    return next_;
 }
 
 void InGameState::processEvent(SDL_Event &e)
@@ -99,7 +102,8 @@ void InGameState::processEvent(SDL_Event &e)
         assert(false && "Should not have recieved a QUIT event"); break;
     case SDL_KEYDOWN:
         if (e.key.keysym.sym == SDLK_ESCAPE)
-            done_ = true;
+            // TODO return a QuitState
+            break;
         break;
     case SDL_MOUSEBUTTONDOWN:
         if (e.button.button != 1)
@@ -129,6 +133,7 @@ void InGameState::gameOver(ConstPlayerPtr biscuit)
     pthread_mutex_lock(&playersLock_);
     attacker_ = PlayerPtr();
     defender_ = PlayerPtr();
+    biscuit_ = biscuit;
     validStatus_ = false;
     pthread_mutex_unlock(&playersLock_);
 }

@@ -50,8 +50,8 @@ private:
     void setPlayers(const std::vector<PlayerPtr>& players);
     void setTrumpCard(const Card &c);
 
-	// True if this state is done
-	bool done_;
+    // Contains the next state, if known, or null
+    GUIStatePtr next_;
 
 	// Card related members
 	std::vector<Card> attackingCards_;
@@ -64,6 +64,7 @@ private:
 	// Game Player members
     std::vector<PlayerPtr> players_;
     ConstPlayerPtr attacker_, defender_;
+    ConstPlayerPtr biscuit_;
     pthread_mutex_t playersLock_;
 
 	// Player display members
