@@ -35,9 +35,18 @@ libezdurakai.a: force_look
 	cd ai; $(MAKE) $(MFLAGS)
 
 clean:
-	$(ECHO) $(RM) -f $(EXE) $(OBJS) $(OBJLIBS)
-	$(RM) -f $(EXE) $(OBJS) $(OBJLIBS)
+	$(ECHO) $(RM) -rf $(EXE) $(OBJS) $(OBJLIBS) ezdurak-linux
+	$(RM) -rf $(EXE) $(OBJS) $(OBJLIBS) ezdurak-linux
 	-for d in $(DIRS); do (cd $$d; $(MAKE) clean ); done
+
+dist: ezdurak-gui
+	mkdir -p ezdurak-linux
+	mkdir -p ezdurak-linux/resources
+	cp resources/cards.png ezdurak-linux/resources
+	cp ezdurak-gui ezdurak-linux/ezdurak
+	mkdir dist
+	tar -czvf dist/ezdurak-linux.tar.gz ezdurak-linux
+
 
 .PHONY: force_look
 force_look:

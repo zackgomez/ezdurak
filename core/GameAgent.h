@@ -12,7 +12,13 @@ public:
     /** All intended base classes must have virtual destructors. */
     virtual ~GameAgent() {}
 
+    /**
+     * Add a listener to this game agent to recieve messages.
+     */
     virtual void addListener(GameListener* listener) = 0;
+    /**
+     * Remove a listener if they are currently listening, otherwise do nothing.
+     */
     virtual void removeListener(GameListener* listener) = 0;
 
     /**

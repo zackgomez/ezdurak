@@ -4,6 +4,12 @@
 #include <string>
 #include "Card.h"
 
+/**
+ * This class implements the noninteresting methods of Player.  It takes care
+ * of adding cards, returning the number of cards and returning the name.  It
+ * also has a hand_, name_ and agent_ member available for use by subclasses.
+ * The attack, defend and pileOn methods are still pure virtual.
+ */
 class PlayerImpl :
     public Player
 {
@@ -27,8 +33,11 @@ public:
     void print() const;
 
 protected:
+    /// The Player's hand
     std::vector<Card> hand_;
+    /// The Player's name
     std::string name_;
+    /// The GameAgent for the game, only valid after gameStarting.
     GameAgent *agent_;
 };
 

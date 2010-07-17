@@ -63,14 +63,3 @@ bool Deck::empty() const
 {
     return cards_.empty();
 }
-
-void Deck::print() const
-{
-    for (size_t i = 0; i < cards_.size(); i++)
-    {
-        if (i != 0 && i % 9 == 0)
-            std::cout << '\n';
-        std::cout << cards_[i] << ' ';
-    }
-    std::cout << '\n';
-}

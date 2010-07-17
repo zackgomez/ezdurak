@@ -5,15 +5,25 @@
 #include "Deck.h"
 #include "Player.h"
 
+/**
+ * This class encapsulated all the rules and data necessary for a Durak game.
+ * It registers listeners and contains players.  The run method will run a
+ * game to completion.
+ */
 class Game : public GameAgent
 {
 public:
+    // Constructors
     Game(const std::vector<PlayerPtr>& players);
     ~Game();
 
+    /**
+     * Run the Durak game.
+     */
     void run();
 
     // Constants
+    /// The number of cards in a starting hand
     const static int HAND_SIZE;
 
     // Functions inherited from GameAgent interface

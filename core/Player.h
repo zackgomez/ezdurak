@@ -18,12 +18,56 @@ public:
      */
     virtual void gameStarting(GameAgent *agent) = 0;
 
+    /**
+     * When a player is required to defend a card this method is called.  A
+     * defending card must follow suit of the attackingCard and be a higher
+     * rank or be trump.  If a defender cannot or does not wish to beat the
+     * card Card() should be returned.
+     * @param attackingCard The card the defender must beat.
+     * @param trump The trump suit.
+     * @return The defending card, or Card() if the defender passes.
+     */
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump) = 0;
+
+    /**
+     * When an attacking player has a chance to play a card this method is 
+     * called.  An attacking card must have a rank in the playableRanks set.
+     * If an attacker does not wish to play a card, Card() should be returned.
+     * @param playableRanks A set of the playable ranks.
+     * @return The attackers play or Card() if they pass.
+     */
     virtual Card attack(std::set<int> playableRanks) = 0;
+
+    /**
+     * After a defender has given up, attackers may continue to give him cards.
+     * This method is called when an attacker has a chance to pileOn cards to a
+     * defender after he has given up.  Card() should be returned if the
+     * attacker does not wish to play a card.
+     * @param playableRanks The possible ranks for a piledOn card.
+     * @return The piledOn card or Card() for a pass.
+     */
     virtual Card pileOn(std::set<int> playableRanks) = 0;
 
+    /**
+     * This method is invoked when a player recieves cards.  This can happen for
+     * one of two reasons.  The player may have unsuccessfully defended and 
+     * these were the played cards, or the player may have required cards to
+     * "fill up" at the end of the round.
+     * @param cards The cards to add to the players hand.
+     */
     virtual void addCards(const std::vector<Card>& cards) = 0;
+
+    /**
+     * This function must return the number of cards in the players hand.
+     * @return The number of cards in the players hand.
+     */
     virtual int getNumCards() const = 0;
+
+    /**
+     * This function should return a unique name for this player.  The unique-
+     * ness is only within the game, not globally.
+     * @return The players name.
+     */
     virtual std::string getName() const = 0;
 };
 

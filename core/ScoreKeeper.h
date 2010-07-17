@@ -2,6 +2,11 @@
 #include <map>
 #include "GameListener.h"
 
+/**
+ * A utility class that listeners for the gameStart and gameOver messages of
+ * the GameListener interface and records, over a number of games, the 
+ * cumulative win/loss for players participating in the games.
+ */
 class ScoreKeeper :
     public GameListener
 {
