@@ -2,52 +2,24 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
-#include <cassert>
-#include <cmath>
 #include <iostream>
-#include <sstream>
-#include <algorithm>
-#include "core/Player.h"
-#include "core/Game.h"
-#include "GUIString.h"
+#include "InGameState.h"
 #include "GUICard.h"
-#include "GUIPlayerView.h"
-#include "GUIHumanView.h"
-#include "GUIPlayer.h"
-#include "GUIListener.h"
-#include "ai/AIPlayer.h"
 
 using namespace std;
 
-const int SCREENX = 800;
-const int SCREENY = 600;
+const int GUIApp::SCREENX = 800;
+const int GUIApp::SCREENY = 600;
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
 #endif
 
-GUIApp::GUIApp() :
-    deckString_(),
-    discardString_(),
-    biscuitStr_()
+GUIApp::GUIApp()
 {
-    pthread_mutex_init(&playedCardsLock_, NULL);
-    pthread_mutex_init(&playersLock_, NULL);
-    validPlayerDisplays_ = false;
-    validSizes_ = false;
-    validStatus_ = true;
-    validBiscuit_ = true;
-    discardSize_ = 0;
-    deckSize_ = 0;
-    humanView_ = NULL;
 }
 
 GUIApp::~GUIApp()
 {
-    stopGame();
-    for (int i = 0; i < playersDisplay_.size(); i++)
-        delete playersDisplay_[i];
-    pthread_mutex_destroy(&playedCardsLock_);
-    pthread_mutex_destroy(&playersLock_);
     SDL_Quit();
 }
 
@@ -63,141 +35,31 @@ void GUIApp::run()
 #ifndef MAC_OSX
     GUIString::font_ = TTF_OpenFont("resources/FreeMonoBold.ttf", 16);
 #else
-	GUIString::font_ = TTF_OpenFont("../Resources/FreeMonoBold.ttf", 16);
+    GUIString::font_ = TTF_OpenFont("../Resources/FreeMonoBold.ttf", 16);
 #endif
     if (!GUIString::font_)
-	{
+    {
         cout << "Unable to open font: " << TTF_GetError() << '\n';
-		exit(3);
-	}
+        exit(3);
+    }
 
-    startGame(4);
+    state_ = std::auto_ptr<GUIState>(new InGameState(4));
 
     cont_ = true;
 
     while (cont_)
     {
-	render();
+        render();
 
-	processEvents();
+        processEvents();
 
-	SDL_Delay(10);
+        // TODO check for next state
+
+        SDL_Delay(16);
     }
 
     TTF_Quit();
     SDL_Quit();
-}
-
-void GUIApp::setPlayers(const vector<PlayerPtr>& players)
-{
-    // Lock
-    pthread_mutex_lock(&playersLock_);
-    // Update
-    players_ = players;
-    validPlayerDisplays_ = false;
-
-    vector<PlayerPtr>::iterator it;
-    for (it = players_.begin(); it != players_.end(); it++)
-    {
-        if ((*it)->getName() == "guiplayer")
-        {
-            std::rotate(players_.begin(), it, players_.end());
-            break;
-        }
-    }
-
-    // Unlock
-    pthread_mutex_unlock(&playersLock_);
-}
-
-void GUIApp::setAttacker(ConstPlayerPtr player)
-{
-    // Lock
-    pthread_mutex_lock(&playersLock_);
-    // Update
-    attacker_ = player;
-    validStatus_ = false;
-    // Unlock
-    pthread_mutex_unlock(&playersLock_);
-}
-
-void GUIApp::setDefender(ConstPlayerPtr player)
-{
-    // Lock
-    pthread_mutex_lock(&playersLock_);
-    // Update
-    defender_ = player;
-    validStatus_ = false;
-    // Unlock
-    pthread_mutex_unlock(&playersLock_);
-}
-
-void GUIApp::setTrumpCard(const Card &c)
-{
-    // Lock
-    pthread_mutex_lock(&playedCardsLock_);
-    // Update
-    trumpCard_ = c;
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
-}
-
-void GUIApp::clearPlayedCards()
-{
-    // Lock
-    pthread_mutex_lock(&playedCardsLock_);
-    // Update
-    attackingCards_.clear();
-    defendingCards_.clear();
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
-}
-
-void GUIApp::addAttackingCard(const Card& c)
-{
-    // Lock
-    pthread_mutex_lock(&playedCardsLock_);
-    // Update
-    attackingCards_.push_back(c);
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
-}
-
-void GUIApp::addDefendingCard(const Card& c)
-{
-    // Lock
-    pthread_mutex_lock(&playedCardsLock_);
-    // Update
-    defendingCards_.push_back(c);
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
-}
-
-void GUIApp::setPileSizes(int deckSize, int discardSize)
-{
-    deckSize_ = deckSize;
-    discardSize_ = discardSize;
-}
-
-void GUIApp::setBiscuit(ConstPlayerPtr p)
-{
-    // Lock
-    pthread_mutex_lock(&playersLock_);
-    // Update
-    stringstream ss;
-    if (p)
-        ss << p->getName() << " is the biscuit!";
-    else
-        ss << "The game is a tie.";
-    biscuit_ = ss.str();
-    validBiscuit_ = false;
-    // Unlock
-    pthread_mutex_unlock(&playersLock_);
-}
-
-void GUIApp::wait(int ms)
-{
-    SDL_Delay(ms);
 }
 
 void GUIApp::initGL()
@@ -237,184 +99,18 @@ void GUIApp::processEvents()
     SDL_Event e;
     while (SDL_PollEvent(&e))
     {
-        switch(e.type)
-        {
-        case SDL_QUIT:
-            cont_ = false; break;
-        case SDL_KEYDOWN:
-            if (e.key.keysym.sym == SDLK_ESCAPE)
-                cont_ = false;
-            break;
-        case SDL_MOUSEBUTTONDOWN:
-            if (e.button.button != 1)
-                break;
-            int x = e.button.x;
-            int y = e.button.y;
-            x -= SCREENX/2;
-            y -= SCREENY/2 + SCREENY/2 - GUICard::CARDY/2 - 5;
-            if (humanView_)
-                humanView_->mouseClick(x, y);
-            break;
-        }
+        if (e.type == SDL_QUIT)
+            cont_ = false;
+        else
+            state_->processEvent(e);
     }
 }
 
 void GUIApp::render()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1,1,1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    // Lock
-    pthread_mutex_lock(&playedCardsLock_);
-    drawPlayedCards();
-    drawPiles();
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
-
-    drawPlayers();
+    state_->render();
 
     SDL_GL_SwapBuffers();
-}
-
-void GUIApp::drawPlayedCards()
-{
-    glTranslatef(SCREENX/2, SCREENY/2, 0);
-    glTranslatef(-1.*GUICard::CARDX - 0.4*GUICard::CARDX,
-                 -.6*GUICard::CARDY, 0);
-    for (int i = 0; i < attackingCards_.size(); i++)
-    {
-        // Draw attacking Card
-        GUICard::draw(attackingCards_[i]);
-        // Move over for defending card
-        glTranslatef(GUICard::CARDX * 0.2, 0, 0);
-        // Draw defending card if it exists
-        if (defendingCards_.size() > i)
-            GUICard::draw(defendingCards_[i]);
-
-        // Move over for next set
-        if (i == 2)
-            glTranslatef(-2*(GUICard::CARDX * 1.2) - 3*GUICard::CARDX*0.2,
-                         1.2 * GUICard::CARDY, 0);
-        else
-            glTranslatef(GUICard::CARDX * 1.2, 0, 0);
-    }
-}
-
-void GUIApp::drawPiles()
-{
-    if (!validSizes_)
-    {
-        stringstream deckss, discardss;
-        deckss << deckSize_;
-        discardss << discardSize_;
-
-        deckString_ = GUIStringPtr(new GUIString(deckss.str()));
-        discardString_ = GUIStringPtr(new GUIString(discardss.str()));
-    }
-        
-    // Draw the deck and discard pile
-    glLoadIdentity();
-    glTranslatef(10 + GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
-    glColor3f(1, 1, 1);
-    // First draw the trump, rotated and moved
-    if (deckSize_ > 0)
-    {
-        glPushMatrix();
-        glTranslatef(GUICard::CARDY/2 - GUICard::CARDX/2, 0, 0);
-        glRotatef(90, 0, 0, 1);
-        GUICard::draw(trumpCard_);
-        glPopMatrix();
-    }
-    if (deckSize_ > 1)
-    {
-        GUICard::drawCardBack();
-        glColor3f(0, 0, 0);
-        deckString_->draw();
-    }
-
-    if (discardSize_ > 0)
-    {
-        glLoadIdentity();
-        glTranslatef(SCREENX - 10 - GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
-        glColor3f(1, 1, 1);
-        GUICard::drawCardBack();
-        glColor3f(0, 0, 0);
-        discardString_->draw();
-    }
-}
-
-void GUIApp::drawPlayers()
-{
-    // Lock
-    pthread_mutex_lock(&playersLock_);
-    if (biscuitStr_.get())
-    {
-        glLoadIdentity();
-        glTranslatef(SCREENX/2, SCREENY/2, 0);
-        glColor3f(1,1,1);
-        biscuitStr_->draw();
-    }
-    updatePlayers();
-    float angle = M_PI/2;
-    for (int i = 0; i < players_.size(); i++)
-    {
-        float x = cos(angle);
-        float y = sin(angle);
-        const float rx = SCREENX/2 - GUICard::CARDY/2 - 5;
-        const float ry = SCREENY/2 - GUICard::CARDY/2 - 5;
-
-        // Center
-        glLoadIdentity();
-        glTranslatef(SCREENX/2, SCREENY/2, 0);
-        // Move outwards
-        glTranslatef(x*rx, y*ry, 0);
-        // Rotate
-        glRotatef(angle*180/M_PI - 90, 0, 0, 1);
-
-        // Draw the player
-        playersDisplay_[i]->draw();
-
-        angle += 2*M_PI/ players_.size();
-    }
-    // Unlock
-    pthread_mutex_unlock(&playersLock_);
-}
-
-void GUIApp::updatePlayers()
-{
-    // Update the name textures, first delete the old ones
-    if (!validPlayerDisplays_)
-    {
-        for (int i = 0; i < playersDisplay_.size(); i++)
-            delete playersDisplay_[i];
-        playersDisplay_.resize(players_.size());
-
-        humanView_ = new GUIHumanView((GUIPlayer *) players_[0].get());
-        playersDisplay_[0] = humanView_;
-        for (int i = 1; i < players_.size(); i++)
-            playersDisplay_[i] = new GUIPlayerView(players_[i].get());
-        validPlayerDisplays_ = true;
-    }
-    if (!validStatus_)
-    {
-        for (int i = 0; i < players_.size(); i++)
-        {
-            if (players_[i] == attacker_)
-                playersDisplay_[i]->setStatus(GUIPlayerView::ATTACKER);
-            else if (players_[i] == defender_)
-                playersDisplay_[i]->setStatus(GUIPlayerView::DEFENDER);
-            else
-                playersDisplay_[i]->setStatus(GUIPlayerView::NONE);
-        }
-        validStatus_ = true;
-    }
-    if (!validBiscuit_)
-    {
-        biscuitStr_ = GUIStringPtr(new GUIString(biscuit_));
-        validBiscuit_ = true;
-    }
 }
 
 GLuint GUIApp::loadTexture(const string& filename)
@@ -444,46 +140,9 @@ GLuint GUIApp::loadTexture(const string& filename)
     glBindTexture(GL_TEXTURE_RECTANGLE, texture);
 
     glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 4, tex->w, tex->h, 0,
-                 texture_format, GL_UNSIGNED_BYTE, tex->pixels);
+        texture_format, GL_UNSIGNED_BYTE, tex->pixels);
 
     SDL_FreeSurface(tex);
 
     return texture;
-}
-
-void* game_thread_main(void *gameobj)
-{
-    srand(time(NULL));
-    Game *game = (Game*) gameobj;
-    game->run();
-
-    pthread_exit(NULL);
-    return NULL;
-}
-
-void GUIApp::startGame(int numPlayers)
-{
-    assert(numPlayers >= 2 && numPlayers <= 6);
-    std::vector<PlayerPtr> players(numPlayers);
-    players[0] = PlayerPtr(new GUIPlayer("guiplayer", queue_));
-    for (int i = 1; i < players.size(); i++)
-    {
-        stringstream ss;
-        ss << "AIPlayer" << i;
-        std::string name = ss.str();
-        players[i] = PlayerPtr(new AIPlayer(name));
-    }
-    std::random_shuffle(players.begin(), players.end());
-
-    game = new Game(players);
-    listener = new GUIListener(game, this);
-    pthread_create(&game_thread, NULL, game_thread_main, game);
-}
-
-void GUIApp::stopGame()
-{
-    pthread_cancel(game_thread);
-    pthread_join(game_thread, NULL);
-    delete game;
-    delete listener;
 }

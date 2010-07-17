@@ -22,8 +22,8 @@ public:
     void attackingCard(const Card &);
     void defendingCard(const Card &);
     void piledOnCard(const Card &);
-    void playedOut(const ConstPlayerPtr);
-    void givenCards(const ConstPlayerPtr, int);
+    void playedOut(ConstPlayerPtr);
+    void givenCards(ConstPlayerPtr, int);
 
 private:
     std::map<std::string, int> scores_;

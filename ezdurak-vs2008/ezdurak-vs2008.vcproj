@@ -59,6 +59,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDL.lib SDLmain.lib SDL_image.lib SDL_ttf.lib glew32.lib opengl32.lib glu32.lib pthreadVC2.lib"
+				OutputFile="$(OutDir)\ezdurak.exe"
 				AdditionalLibraryDirectories="&quot;E:\Libraries\glew-1.5.4\lib&quot;;E:\Libraries\pthread\lib;&quot;E:\Libraries\SDL_image-1.2.10\lib&quot;;&quot;E:\Libraries\SDL-1.2.14\lib&quot;;&quot;E:\Libraries\SDL_ttf-2.0.9\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -198,10 +199,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\gui\GUIListener.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\guimain.cpp"
 				>
 			</File>
@@ -215,6 +212,10 @@
 			</File>
 			<File
 				RelativePath="..\gui\GUIString.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\gui\InGameState.cpp"
 				>
 			</File>
 			<File
@@ -272,10 +273,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\gui\GUIListener.h"
-				>
-			</File>
-			<File
 				RelativePath="..\gui\GUIPlayer.h"
 				>
 			</File>
@@ -284,7 +281,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\gui\GUIState.h"
+				>
+			</File>
+			<File
 				RelativePath="..\gui\GUIString.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gui\InGameState.h"
 				>
 			</File>
 			<File

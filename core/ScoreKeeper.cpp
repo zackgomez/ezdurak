@@ -48,8 +48,8 @@ void ScoreKeeper::defendingCard(const Card &)
 void ScoreKeeper::piledOnCard(const Card &)
 { /* Empty */ }
 
-void ScoreKeeper::playedOut(const ConstPlayerPtr)
+void ScoreKeeper::playedOut(ConstPlayerPtr)
 { /* Empty */ }
 
-void ScoreKeeper::givenCards(const ConstPlayerPtr, int)
+void ScoreKeeper::givenCards(ConstPlayerPtr, int)
 { /* Empty */ }
