@@ -1,7 +1,7 @@
 #pragma once
-#include "GameAgent.h"
+#include "Player.h"
 
-class Player;
+class GameAgent;
 
 class GameListener
 {

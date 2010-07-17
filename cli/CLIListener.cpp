@@ -2,14 +2,16 @@
 #include <vector>
 #include <iostream>
 #include "core/Player.h"
+#include "core/GameAgent.h"
+#include <boost/weak_ptr.hpp>
 
 using std::vector;
 using std::cout;
 
 CLIListener::CLIListener(GameAgent *agent) :
-    GameListener()
+    GameListener(),
+    agent_(agent)
 {
-    agent_ = agent;
     agent_->addListener(this);
 }
 

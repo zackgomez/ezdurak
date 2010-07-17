@@ -1,6 +1,7 @@
 #include "core/GameListener.h"
 
-class CLIListener : public GameListener
+class CLIListener :
+    public GameListener
 {
 public:
     CLIListener(GameAgent *);
@@ -19,5 +20,6 @@ public:
     void givenCards(ConstPlayerPtr player, int numCards);
     
 private:
+    GameAgent *agent_;
     ConstPlayerPtr attacker_, defender_;
 };

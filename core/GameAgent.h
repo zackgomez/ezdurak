@@ -12,8 +12,8 @@ public:
     /** All intended base classes must have virtual destructors. */
     virtual ~GameAgent() {}
 
-    virtual void addListener(GameListener *listener) = 0;
-    virtual void removeListener(GameListener *listener) = 0;
+    virtual void addListener(GameListener* listener) = 0;
+    virtual void removeListener(GameListener* listener) = 0;
 
     /**
      * Returns the card the defines trump.

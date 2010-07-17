@@ -106,10 +106,6 @@ void GUIImpl::setPlayers(const vector<PlayerPtr>& players)
         }
     }
 
-    // TODO Fix this
-    // Make the cards bigger
-    GUICard::CARDX *= 1.3;
-    GUICard::CARDY *= 1.3;
     // Unlock
     pthread_mutex_unlock(&playersLock_);
 }
@@ -216,7 +212,7 @@ void GUIImpl::initGL()
 #ifndef MAC_OSX
     GUICard::cardtex = loadTexture("resources/cards.png");
 #else
-	GUICard::cardtex = loadTexture("cards.png");
+    GUICard::cardtex = loadTexture("cards.png");
 #endif
 
     glViewport(0, 0, SCREENX, SCREENY);
@@ -229,6 +225,11 @@ void GUIImpl::initGL()
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // TODO Fix this
+    // Make the cards bigger
+    GUICard::CARDX *= 1.3;
+    GUICard::CARDY *= 1.3;
 }
 
 void GUIImpl::processEvents()
@@ -482,6 +483,7 @@ void GUIImpl::startGame(int numPlayers)
 void GUIImpl::stopGame()
 {
     pthread_cancel(game_thread);
+    pthread_join(game_thread, NULL);
     delete game;
     delete listener;
 }

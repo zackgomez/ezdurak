@@ -2,6 +2,7 @@
 #include <SDL/SDL.h>
 #include <vector>
 #include "GUIImpl.h"
+#include "core/GameAgent.h"
 
 using std::vector;
 

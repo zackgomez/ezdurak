@@ -17,8 +17,8 @@ public:
     const static int HAND_SIZE;
 
     // Functions inherited from GameAgent interface
-    void addListener(GameListener *listener);
-    void removeListener(GameListener *listener);
+    void addListener(GameListener* listener);
+    void removeListener(GameListener* listener);
     Card getTrumpCard() const;
     int getTricksLeft() const;
     int getDeckSize() const;
