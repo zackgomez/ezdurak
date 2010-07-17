@@ -48,14 +48,7 @@ private:
 
 	// GameListener helper functions
     void setPlayers(const std::vector<PlayerPtr>& players);
-    void setAttacker(ConstPlayerPtr p);
-    void setDefender(ConstPlayerPtr p);
     void setTrumpCard(const Card &c);
-    void clearPlayedCards();
-    void addAttackingCard(const Card& c);
-    void addDefendingCard(const Card& c);
-    void setPileSizes(int deckSize, int discardSize);
-    void setBiscuit(ConstPlayerPtr p);
 
 	// True if this state is done
 	bool done_;

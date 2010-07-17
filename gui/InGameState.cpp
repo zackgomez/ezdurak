@@ -1,4 +1,4 @@
-#pragma warning(disable : 4018)
+#pragma warning(disable : 4018 4244)
 #include "InGameState.h"
 #include <sstream>
 #include <cmath>
@@ -118,26 +118,43 @@ void InGameState::gameStart()
 {
     const vector<PlayerPtr> players = agent_->getPlayers();
     setPlayers(players);
-    setTrumpCard(agent_->getTrumpCard());
+    // Set trump card
+    pthread_mutex_lock(&playedCardsLock_);
+    trumpCard_ = agent_->getTrumpCard();
+    pthread_mutex_unlock(&playedCardsLock_);
 }
 
 void InGameState::gameOver(ConstPlayerPtr biscuit)
 {
-    setAttacker(PlayerPtr());
-    setDefender(PlayerPtr());
+    pthread_mutex_lock(&playersLock_);
+    attacker_ = PlayerPtr();
+    defender_ = PlayerPtr();
+    validStatus_ = false;
+    pthread_mutex_unlock(&playersLock_);
 }
 
 void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 {
-    clearPlayedCards();
-    setPileSizes(agent_->getDeckSize(), agent_->getDiscardSize());
-    setAttacker(attacker);
-    setDefender(defender);
+    pthread_mutex_lock(&playedCardsLock_);
+    attackingCards_.clear();
+    defendingCards_.clear();
+    deckSize_ = agent_->getDeckSize();
+    discardSize_ = agent_->getDiscardSize();
+    pthread_mutex_unlock(&playedCardsLock_);
+
+    pthread_mutex_lock(&playersLock_);
+    attacker_ = attacker;
+    defender_ = defender;
+    validStatus_ = false;
+    pthread_mutex_unlock(&playersLock_);
 }
 
 void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
 {
-    setAttacker(newAttacker);
+    pthread_mutex_lock(&playersLock_);
+    attacker_ = newAttacker;
+    validStatus_ = false;
+    pthread_mutex_unlock(&playersLock_);
 }
 
 void InGameState::endRound(bool successfulDefend)
@@ -145,19 +162,35 @@ void InGameState::endRound(bool successfulDefend)
 
 void InGameState::attackingCard(const Card &c)
 {
-    addAttackingCard(c);
+    // Lock
+    pthread_mutex_lock(&playedCardsLock_);
+    // Update
+    attackingCards_.push_back(c);
+    // Unlock
+    pthread_mutex_unlock(&playedCardsLock_);
     wait(400);
 }
 
 void InGameState::defendingCard(const Card &c)
 {
-    addDefendingCard(c);
+    // Lock
+    pthread_mutex_lock(&playedCardsLock_);
+    // Update
+    defendingCards_.push_back(c);
+    // Unlock
+    pthread_mutex_unlock(&playedCardsLock_);
+
     wait(400);
 }
 
 void InGameState::piledOnCard(const Card &c)
 {
-    addAttackingCard(c);
+    // Lock
+    pthread_mutex_lock(&playedCardsLock_);
+    // Update
+    attackingCards_.push_back(c);
+    // Unlock
+    pthread_mutex_unlock(&playedCardsLock_);
     wait(400);
 }
 
@@ -323,28 +356,6 @@ void InGameState::setPlayers(const vector<PlayerPtr>& players)
     pthread_mutex_unlock(&playersLock_);
 }
 
-void InGameState::setAttacker(ConstPlayerPtr player)
-{
-    // Lock
-    pthread_mutex_lock(&playersLock_);
-    // Update
-    attacker_ = player;
-    validStatus_ = false;
-    // Unlock
-    pthread_mutex_unlock(&playersLock_);
-}
-
-void InGameState::setDefender(ConstPlayerPtr player)
-{
-    // Lock
-    pthread_mutex_lock(&playersLock_);
-    // Update
-    defender_ = player;
-    validStatus_ = false;
-    // Unlock
-    pthread_mutex_unlock(&playersLock_);
-}
-
 void InGameState::setTrumpCard(const Card &c)
 {
     // Lock
@@ -353,41 +364,4 @@ void InGameState::setTrumpCard(const Card &c)
     trumpCard_ = c;
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
-}
-
-void InGameState::clearPlayedCards()
-{
-    // Lock
-    pthread_mutex_lock(&playedCardsLock_);
-    // Update
-    attackingCards_.clear();
-    defendingCards_.clear();
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
-}
-
-void InGameState::addAttackingCard(const Card& c)
-{
-    // Lock
-    pthread_mutex_lock(&playedCardsLock_);
-    // Update
-    attackingCards_.push_back(c);
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
-}
-
-void InGameState::addDefendingCard(const Card& c)
-{
-    // Lock
-    pthread_mutex_lock(&playedCardsLock_);
-    // Update
-    defendingCards_.push_back(c);
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
-}
-
-void InGameState::setPileSizes(int deckSize, int discardSize)
-{
-    deckSize_ = deckSize;
-    discardSize_ = discardSize;
 }

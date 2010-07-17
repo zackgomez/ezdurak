@@ -6,7 +6,7 @@ class GameAgent;
 class GameListener
 {
 public:
-    GameListener() : agent_(NULL) { /* Empty */ }
+    GameListener() { /* Empty */ }
     /** All intended base classes must have virtual destructors. */
     virtual ~GameListener() { /* Empty */ }
 
@@ -33,7 +33,4 @@ public:
 
     virtual void playedOut(ConstPlayerPtr player) = 0;
     virtual void givenCards(ConstPlayerPtr player, int numCard) = 0;
-
-protected:
-    GameAgent *agent_;
 };
