@@ -7,4 +7,6 @@ int main(int argc, char **argv)
     srand(time(NULL));
     GUIApp g;
     g.run();
+
+	return 0;
 }

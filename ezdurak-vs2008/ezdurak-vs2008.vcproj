@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;E:\My Documents\Programming\ezdurak&quot;;E:\Libraries\pthread\include;&quot;E:\Libraries\glew-1.5.4\include&quot;;&quot;E:\Libraries\SDL_image-1.2.10\include&quot;;&quot;E:\Libraries\SDL-1.2.14\include&quot;;&quot;E:\Libraries\SDL_ttf-2.0.9\include&quot;"
+				AdditionalIncludeDirectories="E:\Libraries\boost_1_41_0;&quot;E:\My Documents\Programming\ezdurak&quot;;E:\Libraries\pthread\include;&quot;E:\Libraries\glew-1.5.4\include&quot;;&quot;E:\Libraries\SDL_image-1.2.10\include&quot;;&quot;E:\Libraries\SDL-1.2.14\include&quot;;&quot;E:\Libraries\SDL_ttf-2.0.9\include&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -113,7 +113,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;E:\My Documents\Programming\ezdurak&quot;;E:\Libraries\pthread\include;&quot;E:\Libraries\glew-1.5.4\include&quot;;&quot;E:\Libraries\SDL_image-1.2.10\include&quot;;&quot;E:\Libraries\SDL-1.2.14\include&quot;;&quot;E:\Libraries\SDL_ttf-2.0.9\include&quot;"
+				AdditionalIncludeDirectories="E:\Libraries\boost_1_41_0;&quot;E:\My Documents\Programming\ezdurak&quot;;E:\Libraries\pthread\include;&quot;E:\Libraries\glew-1.5.4\include&quot;;&quot;E:\Libraries\SDL_image-1.2.10\include&quot;;&quot;E:\Libraries\SDL-1.2.14\include&quot;;&quot;E:\Libraries\SDL_ttf-2.0.9\include&quot;"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -186,15 +186,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\gui\GUIApp.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\gui\GUICard.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\gui\GUIHumanView.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\gui\GUIImpl.cpp"
 				>
 			</File>
 			<File
@@ -218,7 +218,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\core\Player.cpp"
+				RelativePath="..\core\PlayerImpl.cpp"
 				>
 			</File>
 			<File
@@ -260,15 +260,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\gui\GUIApp.h"
+				>
+			</File>
+			<File
 				RelativePath="..\gui\GUICard.h"
 				>
 			</File>
 			<File
 				RelativePath="..\gui\GUIHumanView.h"
-				>
-			</File>
-			<File
-				RelativePath="..\gui\GUIImpl.h"
 				>
 			</File>
 			<File
@@ -289,6 +289,10 @@
 			</File>
 			<File
 				RelativePath="..\core\Player.h"
+				>
+			</File>
+			<File
+				RelativePath="..\core\PlayerImpl.h"
 				>
 			</File>
 			<File
