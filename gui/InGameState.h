@@ -14,16 +14,16 @@ class GUIPlayerView;
 class GUIHumanView;
 
 class InGameState :
-	public GUIState,
-	public GameListener
+    public GUIState,
+    public GameListener
 {
 public:
-	InGameState(int numPlayers);
-	virtual ~InGameState();
+    InGameState(int numPlayers);
+    virtual ~InGameState();
 
-	// Functions inherited from GUIState Interface
-	virtual void render();
-	virtual void processEvent(SDL_Event &e);
+    // Functions inherited from GUIState Interface
+    virtual void render();
+    virtual void processEvent(SDL_Event &e);
     virtual GUIStatePtr nextState();
 
     // Functions inherited from GameListener Interface
@@ -40,45 +40,47 @@ public:
     void wait(int ms);
 
 private:
-	// Rendering Helper functions
+    // Rendering Helper functions
     void drawPlayedCards();
     void drawPiles();
     void drawPlayers();
     void updatePlayers();
 
-	// GameListener helper functions
+    // GameListener helper functions
     void setPlayers(const std::vector<PlayerPtr>& players);
     void setTrumpCard(const Card &c);
 
     // Contains the next state, if known, or null
     GUIStatePtr next_;
 
-	// Card related members
-	std::vector<Card> attackingCards_;
-	std::vector<Card> defendingCards_;
+    // Card related members
+    std::vector<Card> attackingCards_;
+    std::vector<Card> defendingCards_;
     Card trumpCard_;
-	int deckSize_;
-	int discardSize_;
+    int deckSize_;
+    int discardSize_;
     pthread_mutex_t playedCardsLock_;
 
-	// Game Player members
+    // Game Player members
     std::vector<PlayerPtr> players_;
     ConstPlayerPtr attacker_, defender_;
     ConstPlayerPtr biscuit_;
+    bool gameOver_;
     pthread_mutex_t playersLock_;
 
-	// Player display members
+    // Player display members
     bool validPlayerDisplays_;
+    // TODO:2010-07-19:zack: Make this a smart ptr (probably auto_ptr)
     GUIHumanView *humanView_;
     std::vector<GUIPlayerView*> playersDisplay_;
     bool validStatus_;
 
-	// Pile display members
+    // Pile display members
     bool validSizes_;
     GUIStringPtr deckString_;
     GUIStringPtr discardString_;
 
-	// Game members
+    // Game members
     Game *game;
     GameAgent *agent_;
     pthread_t game_thread;

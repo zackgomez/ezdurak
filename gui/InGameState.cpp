@@ -29,12 +29,13 @@ void* game_thread_main(void *gameobj)
 
 
 InGameState::InGameState(int numPlayers) :
-validPlayerDisplays_(false),
-validSizes_(false),
-validStatus_(true),
-discardSize_(0),
-deckSize_(0),
-humanView_(NULL)
+    deckSize_(0),
+    discardSize_(0),
+    gameOver_(false),
+    validPlayerDisplays_(false),
+    humanView_(NULL),
+    validStatus_(true),
+    validSizes_(false)
 {
     pthread_mutex_init(&playedCardsLock_, NULL);
     pthread_mutex_init(&playersLock_, NULL);
@@ -71,7 +72,7 @@ InGameState::~InGameState()
 
 void InGameState::render()
 {
-	// Clear
+    // Clear
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1,1,1);
     glMatrixMode(GL_MODELVIEW);
@@ -89,7 +90,7 @@ void InGameState::render()
 
 GUIStatePtr InGameState::nextState()
 {
-    if (biscuit_.get())
+    if (gameOver_)
         next_ = GUIStatePtr(new GameOverState(biscuit_));
     return next_;
 }
@@ -134,6 +135,7 @@ void InGameState::gameOver(ConstPlayerPtr biscuit)
     attacker_ = PlayerPtr();
     defender_ = PlayerPtr();
     biscuit_ = biscuit;
+    gameOver_ = true;
     validStatus_ = false;
     pthread_mutex_unlock(&playersLock_);
 }
@@ -239,14 +241,14 @@ void InGameState::drawPiles()
 {
     if (!validSizes_)
     {
-		std::stringstream deckss, discardss;
+        std::stringstream deckss, discardss;
         deckss << deckSize_;
         discardss << discardSize_;
 
         deckString_ = GUIString::create(deckss.str());
         discardString_ = GUIString::create(discardss.str());
     }
-        
+
     // Draw the deck and discard pile
     glLoadIdentity();
     glTranslatef(10 + GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
@@ -293,7 +295,7 @@ void InGameState::drawPlayers()
 
         // Center
         glLoadIdentity();
-		glTranslatef(GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0);
+        glTranslatef(GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0);
         // Move outwards
         glTranslatef(x*rx, y*ry, 0);
         // Rotate
