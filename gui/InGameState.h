@@ -18,7 +18,9 @@ class InGameState :
     public GameListener
 {
 public:
-    InGameState(int numPlayers);
+    static GUIStatePtr create(int numPlayers);
+
+    /// Destructor
     virtual ~InGameState();
 
     // Functions inherited from GUIState Interface
@@ -41,6 +43,12 @@ public:
     void wait(int ms);
 
 private:
+    // Private constructors for create idiom
+    InGameState(int numPlayers);
+    InGameState(const InGameState&);
+    InGameState& operator=(const InGameState &);
+
+    
     // Rendering Helper functions
     void drawPlayedCards();
     void drawPiles();

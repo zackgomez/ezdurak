@@ -43,7 +43,7 @@ void GUIApp::run()
         exit(3);
     }
 
-    state_ = std::auto_ptr<GUIState>(new InGameState(4));
+    state_ = InGameState::create(4);
 
     cont_ = true;
 

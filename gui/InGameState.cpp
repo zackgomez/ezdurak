@@ -28,6 +28,12 @@ void* game_thread_main(void *gameobj)
     return NULL;
 }
 
+GUIStatePtr InGameState::create(int numPlayers)
+{
+    GUIStatePtr ret(new InGameState(numPlayers));
+    return ret;
+}
+
 
 InGameState::InGameState(int numPlayers) :
     deckSize_(0),
@@ -97,7 +103,7 @@ bool InGameState::needsTransition() const
 GUIStatePtr InGameState::nextState()
 {
     if (gameOver_)
-        next_ = GUIStatePtr(new GameOverState(biscuit_));
+        next_ = GameOverState::create(biscuit_);
     return next_;
 }
 
@@ -110,7 +116,7 @@ void InGameState::processEvent(SDL_Event &e)
     case SDL_KEYDOWN:
         // TODO:2010-07-21:zack: Add hotkeys for N (new game) and Q (quit)
         if (e.key.keysym.sym == SDLK_ESCAPE)
-            next_ = GUIStatePtr(new QuitState());
+            next_ = QuitState::create();
         break;
     case SDL_MOUSEBUTTONDOWN:
         if (e.button.button != 1)

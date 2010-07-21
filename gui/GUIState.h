@@ -5,10 +5,10 @@
 class GUIState;
 typedef std::auto_ptr<GUIState> GUIStatePtr;
 
+// TODO:2010-07-21:zack: Comment this class.
 class GUIState
 {
 public:
-	GUIState() {};
 	virtual ~GUIState() {};
 
 	virtual void render() = 0;
@@ -23,4 +23,7 @@ public:
          * quit.
          */
 	virtual GUIStatePtr nextState() = 0;
+
+protected:
+	GUIState() {};
 };
