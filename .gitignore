@@ -5,3 +5,6 @@ test
 *.swp
 *.a
 *.dll
+dist
+ezdurak-linux
+ezdurak-cli
