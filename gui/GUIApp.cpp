@@ -108,6 +108,8 @@ void GUIApp::processEvents()
     {
         if (e.type == SDL_QUIT)
             cont_ = false;
+        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_q)
+            cont_ = false;
         else
             state_->processEvent(e);
     }

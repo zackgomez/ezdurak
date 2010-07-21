@@ -114,9 +114,10 @@ void InGameState::processEvent(SDL_Event &e)
     case SDL_QUIT:
         assert(false && "Should not have recieved a QUIT event"); break;
     case SDL_KEYDOWN:
-        // TODO:2010-07-21:zack: Add hotkeys for N (new game) and Q (quit)
         if (e.key.keysym.sym == SDLK_ESCAPE)
             next_ = QuitState::create();
+        else if (e.key.keysym.sym == SDLK_n)
+            next_ = InGameState::create(4);
         break;
     case SDL_MOUSEBUTTONDOWN:
         if (e.button.button != 1)
