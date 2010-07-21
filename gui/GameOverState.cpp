@@ -2,6 +2,7 @@
 #include <sstream>
 #include "GUIApp.h"
 #include "InGameState.h"
+#include "QuitState.h"
 
 using std::stringstream;
 
@@ -35,8 +36,15 @@ void GameOverState::render()
 
 void GameOverState::processEvent(SDL_Event &e)
 {
-    if (e.type == SDL_KEYDOWN || e.type == SDL_MOUSEBUTTONDOWN)
+    if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+        next_ = GUIStatePtr(new QuitState());
+    else if (e.type == SDL_KEYDOWN || e.type == SDL_MOUSEBUTTONDOWN)
         next_ = GUIStatePtr(new InGameState(4));
+}
+
+bool GameOverState::needsTransition() const
+{
+    return next_.get() != NULL;
 }
 
 GUIStatePtr GameOverState::nextState()

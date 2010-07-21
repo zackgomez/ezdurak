@@ -10,6 +10,7 @@
 #include "GUIApp.h"
 #include "ai/AIPlayer.h"
 #include "GameOverState.h"
+#include "QuitState.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
@@ -88,6 +89,11 @@ void InGameState::render()
     drawPlayers();
 }
 
+bool InGameState::needsTransition() const
+{
+    return gameOver_ || next_.get() != NULL;
+}
+
 GUIStatePtr InGameState::nextState()
 {
     if (gameOver_)
@@ -102,9 +108,9 @@ void InGameState::processEvent(SDL_Event &e)
     case SDL_QUIT:
         assert(false && "Should not have recieved a QUIT event"); break;
     case SDL_KEYDOWN:
+        // TODO:2010-07-21:zack: Add hotkeys for N (new game) and Q (quit)
         if (e.key.keysym.sym == SDLK_ESCAPE)
-            // TODO return a QuitState
-            break;
+            next_ = GUIStatePtr(new QuitState());
         break;
     case SDL_MOUSEBUTTONDOWN:
         if (e.button.button != 1)

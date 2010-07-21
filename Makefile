@@ -44,7 +44,7 @@ dist: ezdurak-gui
 	mkdir -p ezdurak-linux/resources
 	cp resources/cards.png ezdurak-linux/resources
 	cp ezdurak-gui ezdurak-linux/ezdurak
-	mkdir dist
+	mkdir -p dist
 	tar -czvf dist/ezdurak-linux.tar.gz ezdurak-linux
 
 

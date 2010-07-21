@@ -12,6 +12,7 @@ public:
 
     void render();
     void processEvent(SDL_Event& e);
+    bool needsTransition() const;
     GUIStatePtr nextState();
 
 private:

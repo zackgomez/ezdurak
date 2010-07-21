@@ -53,9 +53,14 @@ void GUIApp::run()
 
         processEvents();
 
-        GUIStatePtr next = state_->nextState();
-        if (next.get())
-            state_ = next;
+        if (state_->needsTransition())
+        {
+            GUIStatePtr next = state_->nextState();
+            if (next.get())
+                state_ = next;
+            else
+                cont_ = false;
+        }
 
         SDL_Delay(16);
     }

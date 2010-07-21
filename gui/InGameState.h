@@ -24,6 +24,7 @@ public:
     // Functions inherited from GUIState Interface
     virtual void render();
     virtual void processEvent(SDL_Event &e);
+    virtual bool needsTransition() const;
     virtual GUIStatePtr nextState();
 
     // Functions inherited from GameListener Interface
