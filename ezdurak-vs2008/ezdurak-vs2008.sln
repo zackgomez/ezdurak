@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ezdurak-vs2008", "ezdurak-vs2008.vcproj", "{29DDB33F-83F0-40FF-8CE7-E992A4718077}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ezdurak", "ezdurak\ezdurak.vdproj", "{973EFC57-FAA9-40DF-9768-368A7118449B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,8 @@ Global
 		{29DDB33F-83F0-40FF-8CE7-E992A4718077}.Debug|Win32.Build.0 = Debug|Win32
 		{29DDB33F-83F0-40FF-8CE7-E992A4718077}.Release|Win32.ActiveCfg = Release|Win32
 		{29DDB33F-83F0-40FF-8CE7-E992A4718077}.Release|Win32.Build.0 = Release|Win32
+		{973EFC57-FAA9-40DF-9768-368A7118449B}.Debug|Win32.ActiveCfg = Debug
+		{973EFC57-FAA9-40DF-9768-368A7118449B}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -132,6 +132,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDL.lib SDLmain.lib SDL_image.lib SDL_ttf.lib glew32.lib opengl32.lib glu32.lib pthreadVC2.lib"
+				OutputFile="$(OutDir)\ezdurak.exe"
 				AdditionalLibraryDirectories="&quot;E:\Libraries\glew-1.5.4\lib&quot;;E:\Libraries\pthread\lib;&quot;E:\Libraries\SDL_image-1.2.10\lib&quot;;&quot;E:\Libraries\SDL-1.2.14\lib&quot;;&quot;E:\Libraries\SDL_ttf-2.0.9\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -328,6 +329,54 @@
 			>
 			<File
 				RelativePath="..\resources\cards.png"
+				>
+			</File>
+			<File
+				RelativePath="..\jpeg.dll"
+				>
+			</File>
+			<File
+				RelativePath="..\libfreetype-6.dll"
+				>
+			</File>
+			<File
+				RelativePath="..\libpng12-0.dll"
+				>
+			</File>
+			<File
+				RelativePath="..\libtiff-3.dll"
+				>
+			</File>
+			<File
+				RelativePath="..\pthreadVC2.dll"
+				>
+			</File>
+			<File
+				RelativePath="..\SDL.dll"
+				>
+			</File>
+			<File
+				RelativePath="..\SDL_image.dll"
+				>
+			</File>
+			<File
+				RelativePath="..\SDL_ttf.dll"
+				>
+			</File>
+			<File
+				RelativePath="..\resources\shield.png"
+				>
+			</File>
+			<File
+				RelativePath="..\resources\shieldx.png"
+				>
+			</File>
+			<File
+				RelativePath="..\resources\sword.png"
+				>
+			</File>
+			<File
+				RelativePath="..\zlib1.dll"
 				>
 			</File>
 		</Filter>
