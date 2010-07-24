@@ -29,9 +29,9 @@ protected:
     bool dirty_;
 
 
-
     virtual void drawName();
     virtual void drawCards();
+    virtual void drawAnimations();
     virtual void update();
 };
 
