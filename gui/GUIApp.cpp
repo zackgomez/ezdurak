@@ -5,6 +5,7 @@
 #include <iostream>
 #include "InGameState.h"
 #include "GUICard.h"
+#include "GUIPlayerView.h"
 
 using namespace std;
 
@@ -80,8 +81,12 @@ void GUIApp::initGL()
     glEnable(GL_TEXTURE_RECTANGLE);
 #ifndef MAC_OSX
     GUICard::cardtex = loadTexture("resources/cards.png");
+    GUIPlayerView::attackEmblem = loadTexture("resources/sword.png");
+    GUIPlayerView::defendEmblem = loadTexture("resources/shield.png");
 #else
     GUICard::cardtex = loadTexture("cards.png");
+    GUIPlayerView::attackEmblem = loadTexture("sword.png");
+    GUIPlayerView::defendEmblem = loadTexture("shield.png");
 #endif
 
     glViewport(0, 0, SCREENX, SCREENY);

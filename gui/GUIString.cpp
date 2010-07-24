@@ -65,3 +65,13 @@ void GUIString::draw()
         glVertex3f(width_/2, -height_/2, 0);
     glEnd();
 }
+
+int GUIString::getHeight() const
+{
+    return height_;
+}
+
+int GUIString::getWidth() const
+{
+    return width_;
+}

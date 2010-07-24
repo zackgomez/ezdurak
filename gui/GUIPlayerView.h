@@ -11,6 +11,8 @@ class GUIPlayerView
 {
 public:
     enum Status {NONE, ATTACKER, DEFENDER};
+    static GLuint attackEmblem, defendEmblem;
+
     GUIPlayerView(const Player *player);
     virtual ~GUIPlayerView();
 
@@ -33,5 +35,7 @@ protected:
     virtual void drawCards();
     virtual void drawAnimations();
     virtual void update();
+
+    void drawEmblem(GLuint tex);
 };
 

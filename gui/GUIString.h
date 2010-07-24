@@ -17,6 +17,8 @@ public:
     static TTF_Font *font_;
 
     void draw();
+    int getHeight() const;
+    int getWidth() const;
 
 private:
     GUIString(const std::string &str);
