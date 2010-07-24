@@ -55,6 +55,7 @@ private:
     void drawPiles();
     void drawPlayers();
     void updatePlayers();
+    void dirtyPlayers();
 
     // GameListener helper functions
     void setPlayers(const std::vector<PlayerPtr>& players);

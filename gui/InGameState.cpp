@@ -187,6 +187,7 @@ void InGameState::attackingCard(const Card &c)
     pthread_mutex_lock(&playedCardsLock_);
     // Update
     attackingCards_.push_back(GUICard::create(c));
+    dirtyPlayers();
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
     wait(400);
@@ -198,6 +199,7 @@ void InGameState::defendingCard(const Card &c)
     pthread_mutex_lock(&playedCardsLock_);
     // Update
     defendingCards_.push_back(GUICard::create(c));
+    dirtyPlayers();
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
 
@@ -210,6 +212,7 @@ void InGameState::piledOnCard(const Card &c)
     pthread_mutex_lock(&playedCardsLock_);
     // Update
     attackingCards_.push_back(GUICard::create(c));
+    dirtyPlayers();
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
     wait(400);
@@ -219,7 +222,9 @@ void InGameState::playedOut(ConstPlayerPtr player)
 { /* Empty */ }
 
 void InGameState::givenCards(ConstPlayerPtr player, int numCards)
-{ /* Empty */ }
+{
+    dirtyPlayers();
+}
 
 void InGameState::wait(int ms)
 {
@@ -352,6 +357,12 @@ void InGameState::updatePlayers()
         }
         validStatus_ = true;
     }
+}
+
+void InGameState::dirtyPlayers()
+{
+    for (int i = 0; i < playersDisplay_.size(); i++)
+        playersDisplay_[i]->dirty();
 }
 
 
