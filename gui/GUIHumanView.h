@@ -14,13 +14,13 @@ public:
 
     void mouseClick(int x, int y);
 
-    virtual void draw();
-
-
 private:
+    // Inherited from GUIPlayerView
+    virtual void drawCards();
+    virtual void update();
+
     const GUIPlayer *player_;
     SynchronizedQueue<int> &queue_;
-    void drawCards();
     GUIStringPtr passString_;
     GUIStringPtr giveUpString_;
 };

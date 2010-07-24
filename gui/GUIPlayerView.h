@@ -23,8 +23,8 @@ protected:
     Status status_;
     bool dirty_;
 
-    void drawName();
-    void drawCards();
-    void update();
+    virtual void drawName();
+    virtual void drawCards();
+    virtual void update();
 };
 
