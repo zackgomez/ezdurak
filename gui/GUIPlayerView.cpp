@@ -49,15 +49,14 @@ void GUIPlayerView::drawName()
 void GUIPlayerView::drawCards()
 {
     assert(player_->getNumCards() == cards_.size());
-    int numCards = player_->getNumCards();
 
     glPushMatrix();
-    glTranslatef(-GUICard::CARDX*(0.2*(numCards-1)/2), 0, 0);
-    // Draw each card back
-    for (int j = 0; j < numCards; j++)
+    glTranslatef(-GUICard::CARDX*(0.2*(cards_.size()-1)/2), 0, 0);
+    // Draw each card
+    for (int j = 0; j < cards_.size(); j++)
     {
         glColor3f(1,1,1);
-        GUICard::drawCardBack();
+        cards_[j]->draw();
         glTranslatef(0.2*GUICard::CARDX, 0, 0);
     }
     glPopMatrix();
