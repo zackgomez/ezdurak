@@ -32,6 +32,11 @@ void GUIPlayerView::setStatus(Status status)
     status_ = status;
 }
 
+void GUIPlayerView::addAnimation(AnimationPtr a)
+{
+    animations_.push(a);
+}
+
 void GUIPlayerView::drawName()
 {
     glPushMatrix();
