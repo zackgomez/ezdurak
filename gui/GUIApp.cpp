@@ -97,8 +97,8 @@ void GUIApp::initGL()
 
     // TODO Fix this
     // Make the cards bigger
-    GUICard::CARDX *= 1.3;
-    GUICard::CARDY *= 1.3;
+    GUICard::CARDX *= 1.2;
+    GUICard::CARDY *= 1.2;
 }
 
 void GUIApp::processEvents()
