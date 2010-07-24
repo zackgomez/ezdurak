@@ -54,7 +54,6 @@ void GUIHumanView::draw()
 
 void GUIHumanView::drawCards()
 {
-
     glPushMatrix();
     int numCards = player_->getNumCards();
     glTranslatef(-GUICard::CARDX*(0.2*(numCards-1)/2), 0, 0);
@@ -65,7 +64,8 @@ void GUIHumanView::drawCards()
         for (int j = 0; j < numCards; j++)
         {
             glColor3f(1,1,1);
-            GUICard::draw(cards[j]);
+            // TODO fix this!!!!
+            GUICard::create(cards[j])->draw();
             glTranslatef(0.2*GUICard::CARDX, 0, 0);
         }
     }

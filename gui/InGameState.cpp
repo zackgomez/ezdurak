@@ -36,6 +36,7 @@ GUIStatePtr InGameState::create(int numPlayers)
 
 
 InGameState::InGameState(int numPlayers) :
+    trumpCard_(GUICard::create(Card())),
     deckSize_(0),
     discardSize_(0),
     gameOver_(false),
@@ -138,7 +139,7 @@ void InGameState::gameStart()
     setPlayers(players);
     // Set trump card
     pthread_mutex_lock(&playedCardsLock_);
-    trumpCard_ = agent_->getTrumpCard();
+    trumpCard_ = GUICard::create(agent_->getTrumpCard());
     pthread_mutex_unlock(&playedCardsLock_);
 }
 
@@ -185,7 +186,7 @@ void InGameState::attackingCard(const Card &c)
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
     // Update
-    attackingCards_.push_back(c);
+    attackingCards_.push_back(GUICard::create(c));
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
     wait(400);
@@ -196,7 +197,7 @@ void InGameState::defendingCard(const Card &c)
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
     // Update
-    defendingCards_.push_back(c);
+    defendingCards_.push_back(GUICard::create(c));
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
 
@@ -208,7 +209,7 @@ void InGameState::piledOnCard(const Card &c)
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
     // Update
-    attackingCards_.push_back(c);
+    attackingCards_.push_back(GUICard::create(c));
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
     wait(400);
@@ -234,12 +235,12 @@ void InGameState::drawPlayedCards()
     for (int i = 0; i < attackingCards_.size(); i++)
     {
         // Draw attacking Card
-        GUICard::draw(attackingCards_[i]);
+        attackingCards_[i]->draw();
         // Move over for defending card
         glTranslatef(GUICard::CARDX * 0.2, 0, 0);
         // Draw defending card if it exists
         if (defendingCards_.size() > i)
-            GUICard::draw(defendingCards_[i]);
+            defendingCards_[i]->draw();
 
         // Move over for next set
         if (i == 2)
@@ -272,7 +273,7 @@ void InGameState::drawPiles()
         glPushMatrix();
         glTranslatef(GUICard::CARDY/2 - GUICard::CARDX/2, 0, 0);
         glRotatef(90, 0, 0, 1);
-        GUICard::draw(trumpCard_);
+        trumpCard_->draw();
         glPopMatrix();
     }
     if (deckSize_ > 1)
@@ -381,7 +382,7 @@ void InGameState::setTrumpCard(const Card &c)
     // Lock
     pthread_mutex_lock(&playedCardsLock_);
     // Update
-    trumpCard_ = c;
+    trumpCard_ = GUICard::create(c);
     // Unlock
     pthread_mutex_unlock(&playedCardsLock_);
 }

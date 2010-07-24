@@ -1,7 +1,11 @@
 #pragma once
 #include "gl.h"
+#include <boost/shared_ptr.hpp>
 
 class Card;
+
+class GUICard;
+typedef boost::shared_ptr<GUICard> GUICardPtr;
 
 /**
  * Static class that has methods and variables useful for rendering cards
@@ -18,15 +22,30 @@ public:
     static int CARDY;
 
     /**
-     * Draws the specified card at the current location (centered).  The
-     * drawn card will be of size CARDX x CARDY.
+     * Creates a new GUICard for the passed card.  If the passed card is a
+     * Card() then the back of a card is drawn when GUICard::draw is called.
      */
-    static void draw(const Card& card);
+    static GUICardPtr create(const Card &c);
 
     /**
-     * Draws a card back at the current location (centered).  The drawn card
-     * back will be of size CARDX x CARDY.
+     * Draws a card back at the current location (centered).
      */
     static void drawCardBack();
-};
 
+    /**
+     * Draws the card at the current location (centered).  The
+     * drawn card will be of size CARDX x CARDY.
+     */
+    void draw();
+
+private:
+    // Private constructors for create idiom
+    GUICard(const Card& c);
+    GUICard();
+    GUICard(const GUICard&);
+    void operator=(const GUICard&);
+
+    // Data members
+    /// The X,Y coordinates of the card in the cardtex
+    int row, col;
+};

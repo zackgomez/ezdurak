@@ -4,6 +4,7 @@
 #include <vector>
 #include <pthread.h>
 #include "GUIString.h"
+#include "GUICard.h"
 #include "core/Card.h"
 #include "core/Player.h"
 #include "SynchronizedQueue.h"
@@ -63,9 +64,9 @@ private:
     GUIStatePtr next_;
 
     // Card related members
-    std::vector<Card> attackingCards_;
-    std::vector<Card> defendingCards_;
-    Card trumpCard_;
+    std::vector<GUICardPtr> attackingCards_;
+    std::vector<GUICardPtr> defendingCards_;
+    GUICardPtr trumpCard_;
     int deckSize_;
     int discardSize_;
     pthread_mutex_t playedCardsLock_;
