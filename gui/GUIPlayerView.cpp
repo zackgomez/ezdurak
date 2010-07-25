@@ -65,8 +65,6 @@ void GUIPlayerView::drawName()
 
 void GUIPlayerView::drawCards()
 {
-    assert(player_->getNumCards() == cards_.size());
-
     glPushMatrix();
     glTranslatef(-GUICard::CARDX*(0.2*(cards_.size()-1)/2), 0, 0);
     // Draw each card
@@ -94,15 +92,14 @@ void GUIPlayerView::update()
     // If the nothing has changed, no need to update
     if (!dirty_)
         return;
+    // No longer dirty
+    dirty_ = false;
 
     // Get rid of old cards
     cards_ = std::vector<GUICardPtr>(player_->getNumCards());
 
     for (int i = 0; i < cards_.size(); i++)
         cards_[i] = GUICard::create(Card());
-
-    // No longer dirty
-    dirty_ = false;
 }
 
 void GUIPlayerView::drawEmblem(GLuint tex)
