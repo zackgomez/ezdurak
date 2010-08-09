@@ -30,7 +30,7 @@ void GUIHumanView::mouseClick(int x, int y)
     if ((x < rx && x > -rx) && (y < ry && y > -ry))
     {
         // Figure out which card they clicked
-        int idx = std::min((int)(x+rx / (0.2 * GUICard::CARDX)), numCards-1);
+        int idx = std::min((int)((x+rx) / (0.2 * GUICard::CARDX)), numCards-1);
         std::cout << "Main cards hit - Index: " << idx << '\n';
         queue_.enqueue(idx);
         return;
