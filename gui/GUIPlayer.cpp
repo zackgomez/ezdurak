@@ -63,8 +63,13 @@ Card GUIPlayer::attack(std::set<int> playableRanks)
     {
         cnum = queue_.dequeue();
         // Did they pass? Can they pass?
-        if (cnum == -1 && !playableRanks.empty())
-            return Card();
+        if (cnum == -1)
+        {
+            if (!playableRanks.empty())
+                return Card();
+            // If they can't pass, get another card
+            continue;
+        }
 
         // Get the card
         attempt = hand_[cnum];
