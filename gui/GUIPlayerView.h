@@ -2,7 +2,7 @@
 #include <vector>
 #include <queue>
 #include "GUIString.h"
-#include "GUICard.h"
+#include "CardHolder.h"
 
 class Player;
 
@@ -17,6 +17,11 @@ public:
 
     virtual void draw();
     virtual void setStatus(Status status);
+
+    // Functions inherited from CardHolder Interface
+    virtual void addCard(Card c);
+    virtual void addCards(const std::vector<Card>& cs);
+    virtual void removeCard(Card c);
 
 protected:
     const Player *player_;

@@ -12,6 +12,7 @@ GUIPlayerView::GUIPlayerView(const Player *player) :
     name_(GUIString::create(player->getName())),
     status_(NONE)
 {
+    numCards_ = player_->getNumCards();
 }
 
 GUIPlayerView::~GUIPlayerView()
@@ -27,6 +28,22 @@ void GUIPlayerView::draw()
 void GUIPlayerView::setStatus(Status status)
 {
     status_ = status;
+}
+
+void GUIPlayerView::addCard(Card c)
+{
+    ++numCards_;
+}
+
+void GUIPlayerView::addCards(const std::vector<Card>& cs)
+{
+    numCards_ += cs.size();
+}
+
+void GUIPlayerView::removeCard(Card c)
+{
+    assert(numCards_ > 0);
+    --numCards_;
 }
 
 void GUIPlayerView::drawName()
@@ -53,9 +70,6 @@ void GUIPlayerView::drawName()
 
 void GUIPlayerView::drawCards()
 {
-    // TODO remove
-    numCards_ = player_->getNumCards();
-
     glPushMatrix();
     glTranslatef(-GUICard::CARDX*(0.2*(numCards_-1)/2), 0, 0);
     glColor3f(1,1,1);

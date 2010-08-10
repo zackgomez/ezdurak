@@ -174,8 +174,10 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
 {
     pthread_mutex_lock(&guiLock_);
+    
     attacker_ = newAttacker;
     validStatus_ = false;
+
     pthread_mutex_unlock(&guiLock_);
 }
 
@@ -192,6 +194,15 @@ void InGameState::attackingCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     // Update
     attackingCards_.push_back(c);
+    // Give Card
+    for (int i = 0; i < playersDisplay_.size(); i++)
+    {
+        if (players_[i] == attacker_)
+        {
+            playersDisplay_[i]->removeCard(c);
+            break;
+        }
+    }
     // Unlock
     pthread_mutex_unlock(&guiLock_);
     wait(400);
@@ -203,6 +214,15 @@ void InGameState::defendingCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     // Update
     defendingCards_.push_back(c);
+    // Give Card
+    for (int i = 0; i < playersDisplay_.size(); i++)
+    {
+        if (players_[i] == defender_)
+        {
+            playersDisplay_[i]->removeCard(c);
+            break;
+        }
+    }
     // Unlock
     pthread_mutex_unlock(&guiLock_);
 
@@ -215,6 +235,15 @@ void InGameState::piledOnCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     // Update
     attackingCards_.push_back(c);
+    // Give Card
+    for (int i = 0; i < playersDisplay_.size(); i++)
+    {
+        if (players_[i] == attacker_)
+        {
+            playersDisplay_[i]->removeCard(c);
+            break;
+        }
+    }
     // Unlock
     pthread_mutex_unlock(&guiLock_);
     wait(400);
@@ -223,25 +252,40 @@ void InGameState::piledOnCard(const Card &c)
 void InGameState::playedOut(ConstPlayerPtr player)
 {
     pthread_mutex_lock(&guiLock_);
-    /* Empty */
+
     pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::givenCards(ConstPlayerPtr player, int numCards)
 {
     pthread_mutex_lock(&guiLock_);
-    // Freeze
-    // Animation
-    // Need update
+
+    for (int i = 0; i < playersDisplay_.size(); i++)
+    {
+        if (players_[i] == player)
+        {
+            for (int j = 0; j < numCards; j++)
+                playersDisplay_[i]->addCard(Card());
+            break;
+        }
+    }
+
     pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& cards)
 {
     pthread_mutex_lock(&guiLock_);
-    // Freeze
-    // Animation
-    // Need update
+
+    for (int i = 0; i < playersDisplay_.size(); i++)
+    {
+        if (players_[i] == player)
+        {
+            playersDisplay_[i]->addCards(cards);
+            break;
+        }
+    }
+
     pthread_mutex_unlock(&guiLock_);
 }
 
