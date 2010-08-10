@@ -95,4 +95,5 @@ private:
     pthread_t game_thread;
     SynchronizedQueue<int> queue_;
     pthread_mutex_t guiLock_;
+    pthread_cond_t  displaysCV_;
 };

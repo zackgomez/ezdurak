@@ -45,6 +45,7 @@ InGameState::InGameState(int numPlayers) :
     validSizes_(false)
 {
     pthread_mutex_init(&guiLock_, NULL);
+    pthread_cond_init (&displaysCV_, NULL);
 
     assert(numPlayers >= 2 && numPlayers <= 6);
     std::vector<PlayerPtr> players(numPlayers);
@@ -73,6 +74,7 @@ InGameState::~InGameState()
     for (int i = 0; i < playersDisplay_.size(); i++)
         delete playersDisplay_[i];
     pthread_mutex_destroy(&guiLock_);
+    pthread_cond_destroy (&displaysCV_);
 }
 
 void InGameState::render()
@@ -134,10 +136,15 @@ void InGameState::gameStart()
 {
     pthread_mutex_lock(&guiLock_);
 
+    // First set the trumpCard in case we need it later
+    trumpCard_ = agent_->getTrumpCard();
+
+    // Now set the local players
     const vector<PlayerPtr> players = agent_->getPlayers();
     setPlayers(players);
 
-    trumpCard_ = agent_->getTrumpCard();
+    // Now we wait for the displays to be created in another thread
+    pthread_cond_wait(&displaysCV_, &guiLock_);
 
     pthread_mutex_unlock(&guiLock_);
 }
@@ -145,6 +152,7 @@ void InGameState::gameStart()
 void InGameState::gameOver(ConstPlayerPtr biscuit)
 {
     pthread_mutex_lock(&guiLock_);
+    assert(players_.size() == playersDisplay_.size());
 
     attacker_ = PlayerPtr();
     defender_ = PlayerPtr();
@@ -158,6 +166,7 @@ void InGameState::gameOver(ConstPlayerPtr biscuit)
 void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 {
     pthread_mutex_lock(&guiLock_);
+    assert(players_.size() == playersDisplay_.size());
     
     attackingCards_.clear();
     defendingCards_.clear();
@@ -174,6 +183,7 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
 {
     pthread_mutex_lock(&guiLock_);
+    assert(players_.size() == playersDisplay_.size());
     
     attacker_ = newAttacker;
     validStatus_ = false;
@@ -184,14 +194,18 @@ void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
 void InGameState::endRound(bool successfulDefend)
 {
     pthread_mutex_lock(&guiLock_);
-    wait(400);
+    assert(players_.size() == playersDisplay_.size());
+
     pthread_mutex_unlock(&guiLock_);
+
+    wait(400);
 }
 
 void InGameState::attackingCard(const Card &c)
 {
     // Lock
     pthread_mutex_lock(&guiLock_);
+    assert(players_.size() == playersDisplay_.size());
     // Update
     attackingCards_.push_back(c);
     // Give Card
@@ -212,6 +226,7 @@ void InGameState::defendingCard(const Card &c)
 {
     // Lock
     pthread_mutex_lock(&guiLock_);
+    assert(players_.size() == playersDisplay_.size());
     // Update
     defendingCards_.push_back(c);
     // Give Card
@@ -233,6 +248,7 @@ void InGameState::piledOnCard(const Card &c)
 {
     // Lock
     pthread_mutex_lock(&guiLock_);
+    assert(players_.size() == playersDisplay_.size());
     // Update
     attackingCards_.push_back(c);
     // Give Card
@@ -252,6 +268,7 @@ void InGameState::piledOnCard(const Card &c)
 void InGameState::playedOut(ConstPlayerPtr player)
 {
     pthread_mutex_lock(&guiLock_);
+    assert(players_.size() == playersDisplay_.size());
 
     pthread_mutex_unlock(&guiLock_);
 }
@@ -259,6 +276,7 @@ void InGameState::playedOut(ConstPlayerPtr player)
 void InGameState::givenCards(ConstPlayerPtr player, int numCards)
 {
     pthread_mutex_lock(&guiLock_);
+    assert(players_.size() == playersDisplay_.size());
 
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
@@ -276,6 +294,7 @@ void InGameState::givenCards(ConstPlayerPtr player, int numCards)
 void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& cards)
 {
     pthread_mutex_lock(&guiLock_);
+    assert(players_.size() == playersDisplay_.size());
 
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
@@ -404,6 +423,8 @@ void InGameState::updatePlayers()
         for (int i = 1; i < players_.size(); i++)
             playersDisplay_[i] = new GUIPlayerView(players_[i].get());
         validPlayerDisplays_ = true;
+        // We have created the players, signal to the other thread
+        pthread_cond_signal(&displaysCV_);
     }
     if (!validStatus_)
     {
