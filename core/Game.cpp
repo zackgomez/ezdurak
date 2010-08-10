@@ -251,10 +251,7 @@ void Game::pileOn()
     defender_->addCards(playedCards_);
     // Broadcast the event
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-        // TODO:2010-07-01:zack: Use a different message for this specifying the
-        // cards given, or modify the current message to take a list of cards if
-        // known.
-        (*lit_)->givenCards(defender_, playedCards_.size());
+        (*lit_)->givenCards(defender_, playedCards_);
 }
 
 void Game::refill()

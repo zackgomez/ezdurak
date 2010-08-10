@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
     ScoreKeeper sk;
 
-    for (int games = 0; games < 100; games++)
+    for (int games = 0; games < 1; games++)
     {
         std::vector<PlayerPtr> players(4);
         //players[0] = PlayerPtr(new CLIPlayer("Zack"));
@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 
         Game game(players);
 
-        //CLIListener listener(&game);
+        CLIListener listener(&game);
 	game.addListener(&sk);
 
         game.run();

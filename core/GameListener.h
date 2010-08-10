@@ -67,11 +67,17 @@ public:
     virtual void playedOut(ConstPlayerPtr player) = 0;
 
     /**
-     * Called whenever a player is given cards.  There are two times this
-     * occurs, when a defender loses and takes the pile, or when at the end of
-     * a round when players fill up on cards.
+     * Called whenever a player is given cards from the deck.  This is called
+     * when players are 'filling up'.
      * @param player The player recieving the cards.
      * @param numCards The number of cards recieved.
      */
     virtual void givenCards(ConstPlayerPtr player, int numCards) = 0;
+
+    /**
+     * Called when a defender loses and is given the played cards.
+     * @param player The defender, for convienence.
+     * @param cards The cards taken.
+     */
+    virtual void givenCards(ConstPlayerPtr player, const std::vector<Card>& cards) = 0;
 };

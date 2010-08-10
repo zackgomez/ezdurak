@@ -93,3 +93,11 @@ void CLIListener::givenCards(const ConstPlayerPtr player, int numCards)
 {
     cout << player->getName() << " has been given " << numCards << " cards\n";
 }
+
+void CLIListener::givenCards(const ConstPlayerPtr player, const std::vector<Card>& cards)
+{
+    cout << player->getName() << " has been given the following cards:\n";
+    for (int i = 0; i < cards.size(); i++)
+        cout << cards[i] << ' ';
+    cout << '\n';
+}

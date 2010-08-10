@@ -41,6 +41,7 @@ public:
     void piledOnCard(const Card &c);
     void playedOut(ConstPlayerPtr player);
     void givenCards(ConstPlayerPtr player, int numCard);
+    void givenCards(ConstPlayerPtr player, const std::vector<Card>& cards);
     void wait(int ms);
 
 private:

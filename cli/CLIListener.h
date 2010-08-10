@@ -22,6 +22,7 @@ public:
     void piledOnCard(const Card &c);
     void playedOut(ConstPlayerPtr player);
     void givenCards(ConstPlayerPtr player, int numCards);
+    void givenCards(ConstPlayerPtr player, const std::vector<Card>& cards);
     
 private:
     GameAgent *agent_;

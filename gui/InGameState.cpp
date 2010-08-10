@@ -232,6 +232,14 @@ void InGameState::givenCards(ConstPlayerPtr player, int numCards)
     dirtyPlayers();
 }
 
+void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& cards)
+{
+    // Freeze
+    // Animation
+    // Need update
+    dirtyPlayers();
+}
+
 void InGameState::wait(int ms)
 {
     SDL_Delay(ms);

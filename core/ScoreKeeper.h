@@ -29,6 +29,7 @@ public:
     void piledOnCard(const Card &);
     void playedOut(ConstPlayerPtr);
     void givenCards(ConstPlayerPtr, int);
+    void givenCards(ConstPlayerPtr, const std::vector<Card>&);
 
 private:
     std::map<std::string, int> scores_;

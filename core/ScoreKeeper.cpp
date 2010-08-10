@@ -53,3 +53,6 @@ void ScoreKeeper::playedOut(ConstPlayerPtr)
 
 void ScoreKeeper::givenCards(ConstPlayerPtr, int)
 { /* Empty */ }
+
+void ScoreKeeper::givenCards(ConstPlayerPtr, const std::vector<Card>&)
+{ /* Empty */ }
