@@ -8,9 +8,9 @@ GLuint GUIPlayerView::defendEmblem = 0;
 
 GUIPlayerView::GUIPlayerView(const Player *player) :
     player_(player),
+    numCards_(0),
     name_(GUIString::create(player->getName())),
-    status_(NONE),
-    dirty_(true)
+    status_(NONE)
 {
 }
 
@@ -20,14 +20,8 @@ GUIPlayerView::~GUIPlayerView()
 
 void GUIPlayerView::draw()
 {
-    update();
     drawCards();
     drawName();
-}
-
-void GUIPlayerView::dirty()
-{
-    dirty_ = true;
 }
 
 void GUIPlayerView::setStatus(Status status)
@@ -59,31 +53,19 @@ void GUIPlayerView::drawName()
 
 void GUIPlayerView::drawCards()
 {
+    // TODO remove
+    numCards_ = player_->getNumCards();
+
     glPushMatrix();
-    glTranslatef(-GUICard::CARDX*(0.2*(cards_.size()-1)/2), 0, 0);
+    glTranslatef(-GUICard::CARDX*(0.2*(numCards_-1)/2), 0, 0);
+    glColor3f(1,1,1);
     // Draw each card
-    for (int j = 0; j < cards_.size(); j++)
+    for (int j = 0; j < numCards_; j++)
     {
-        glColor3f(1,1,1);
-        cards_[j]->draw();
+        GUICard::drawCardBack();
         glTranslatef(0.2*GUICard::CARDX, 0, 0);
     }
     glPopMatrix();
-}
-
-void GUIPlayerView::update()
-{
-    // If the nothing has changed, no need to update
-    if (!dirty_)
-        return;
-    // No longer dirty
-    dirty_ = false;
-
-    // Get rid of old cards
-    cards_ = std::vector<GUICardPtr>(player_->getNumCards());
-
-    for (int i = 0; i < cards_.size(); i++)
-        cards_[i] = GUICard::create(Card());
 }
 
 void GUIPlayerView::drawEmblem(GLuint tex)

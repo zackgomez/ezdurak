@@ -56,7 +56,6 @@ private:
     void drawPiles();
     void drawPlayers();
     void updatePlayers();
-    void dirtyPlayers();
 
     // GameListener helper functions
     void setPlayers(const std::vector<PlayerPtr>& players);
@@ -66,9 +65,9 @@ private:
     GUIStatePtr next_;
 
     // Card related members
-    std::vector<GUICardPtr> attackingCards_;
-    std::vector<GUICardPtr> defendingCards_;
-    GUICardPtr trumpCard_;
+    std::vector<Card> attackingCards_;
+    std::vector<Card> defendingCards_;
+    Card trumpCard_;
     int deckSize_;
     int discardSize_;
 

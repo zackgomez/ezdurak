@@ -48,18 +48,21 @@ void GUIHumanView::mouseClick(int x, int y)
 
 void GUIHumanView::drawCards()
 {
+    // TODO Remove this line
+    cards_ = player_->getHand();
+
     // Nothing to draw if there are no cards
     if (cards_.size() == 0)
         return;
 
     glPushMatrix();
-    int numCards = player_->getNumCards();
+    int numCards = cards_.size();
     glTranslatef(-GUICard::CARDX*(0.2*(numCards-1)/2), 0, 0);
     // Draw each card back
     for (int j = 0; j < numCards; j++)
     {
         glColor3f(1,1,1);
-        cards_[j]->draw();
+        GUICard::draw(cards_[j]);
         glTranslatef(0.2*GUICard::CARDX, 0, 0);
     }
 
@@ -76,18 +79,4 @@ void GUIHumanView::drawCards()
     }
 
     glPopMatrix();
-}
-
-void GUIHumanView::update()
-{
-    if (!dirty_)
-        return;
-
-    cards_ = std::vector<GUICardPtr>(player_->getNumCards());
-    std::vector<Card> c = player_->getHand();
-
-    for (int i = 0; i < cards_.size(); i++)
-        cards_[i] = GUICard::create(c[i]);
-
-    dirty_ = false;
 }

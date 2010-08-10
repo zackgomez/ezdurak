@@ -36,7 +36,6 @@ GUIStatePtr InGameState::create(int numPlayers)
 
 
 InGameState::InGameState(int numPlayers) :
-    trumpCard_(GUICard::create(Card())),
     deckSize_(0),
     discardSize_(0),
     gameOver_(false),
@@ -138,7 +137,7 @@ void InGameState::gameStart()
     const vector<PlayerPtr> players = agent_->getPlayers();
     setPlayers(players);
 
-    trumpCard_ = GUICard::create(agent_->getTrumpCard());
+    trumpCard_ = agent_->getTrumpCard();
 
     pthread_mutex_unlock(&guiLock_);
 }
@@ -192,8 +191,7 @@ void InGameState::attackingCard(const Card &c)
     // Lock
     pthread_mutex_lock(&guiLock_);
     // Update
-    attackingCards_.push_back(GUICard::create(c));
-    dirtyPlayers();
+    attackingCards_.push_back(c);
     // Unlock
     pthread_mutex_unlock(&guiLock_);
     wait(400);
@@ -204,8 +202,7 @@ void InGameState::defendingCard(const Card &c)
     // Lock
     pthread_mutex_lock(&guiLock_);
     // Update
-    defendingCards_.push_back(GUICard::create(c));
-    dirtyPlayers();
+    defendingCards_.push_back(c);
     // Unlock
     pthread_mutex_unlock(&guiLock_);
 
@@ -217,8 +214,7 @@ void InGameState::piledOnCard(const Card &c)
     // Lock
     pthread_mutex_lock(&guiLock_);
     // Update
-    attackingCards_.push_back(GUICard::create(c));
-    dirtyPlayers();
+    attackingCards_.push_back(c);
     // Unlock
     pthread_mutex_unlock(&guiLock_);
     wait(400);
@@ -237,7 +233,6 @@ void InGameState::givenCards(ConstPlayerPtr player, int numCards)
     // Freeze
     // Animation
     // Need update
-    dirtyPlayers();
     pthread_mutex_unlock(&guiLock_);
 }
 
@@ -247,7 +242,6 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
     // Freeze
     // Animation
     // Need update
-    dirtyPlayers();
     pthread_mutex_unlock(&guiLock_);
 }
 
@@ -265,12 +259,12 @@ void InGameState::drawPlayedCards()
     for (int i = 0; i < attackingCards_.size(); i++)
     {
         // Draw attacking Card
-        attackingCards_[i]->draw();
+        GUICard::draw(attackingCards_[i]);
         // Move over for defending card
         glTranslatef(GUICard::CARDX * 0.2, 0, 0);
         // Draw defending card if it exists
         if (defendingCards_.size() > i)
-            defendingCards_[i]->draw();
+            GUICard::draw(defendingCards_[i]);
 
         // Move over for next set
         if (i == 2)
@@ -303,7 +297,7 @@ void InGameState::drawPiles()
         glPushMatrix();
         glTranslatef(GUICard::CARDY/2 - GUICard::CARDX/2, 0, 0);
         glRotatef(90, 0, 0, 1);
-        trumpCard_->draw();
+        GUICard::draw(trumpCard_);
         glPopMatrix();
     }
     if (deckSize_ > 1)
@@ -381,13 +375,6 @@ void InGameState::updatePlayers()
         validStatus_ = true;
     }
 }
-
-void InGameState::dirtyPlayers()
-{
-    for (int i = 0; i < playersDisplay_.size(); i++)
-        playersDisplay_[i]->dirty();
-}
-
 
 void InGameState::setPlayers(const vector<PlayerPtr>& players)
 {

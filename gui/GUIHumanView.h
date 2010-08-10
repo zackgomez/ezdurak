@@ -17,10 +17,12 @@ public:
 private:
     // Inherited from GUIPlayerView
     virtual void drawCards();
-    virtual void update();
 
     const GUIPlayer *player_;
+    std::vector<Card> cards_;
+
     SynchronizedQueue<int> &queue_;
+
     GUIStringPtr passString_;
     GUIStringPtr giveUpString_;
 };

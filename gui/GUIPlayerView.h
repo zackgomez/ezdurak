@@ -16,21 +16,17 @@ public:
     virtual ~GUIPlayerView();
 
     virtual void draw();
-    virtual void dirty();
     virtual void setStatus(Status status);
 
 protected:
     const Player *player_;
 
-    std::vector<GUICardPtr> cards_;
+    int numCards_;
     GUIStringPtr name_;
     Status status_;
-    bool dirty_;
-
 
     virtual void drawName();
     virtual void drawCards();
-    virtual void update();
 
     void drawEmblem(GLuint tex);
 };
