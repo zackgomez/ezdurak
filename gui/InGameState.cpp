@@ -46,8 +46,7 @@ InGameState::InGameState(int numPlayers) :
     validStatus_(true),
     validSizes_(false)
 {
-    pthread_mutex_init(&playedCardsLock_, NULL);
-    pthread_mutex_init(&playersLock_, NULL);
+    pthread_mutex_init(&guiLock_, NULL);
 
     assert(numPlayers >= 2 && numPlayers <= 6);
     std::vector<PlayerPtr> players(numPlayers);
@@ -75,8 +74,7 @@ InGameState::~InGameState()
 
     for (int i = 0; i < playersDisplay_.size(); i++)
         delete playersDisplay_[i];
-    pthread_mutex_destroy(&playedCardsLock_);
-    pthread_mutex_destroy(&playersLock_);
+    pthread_mutex_destroy(&guiLock_);
 }
 
 void InGameState::render()
@@ -88,13 +86,13 @@ void InGameState::render()
     glLoadIdentity();
 
     // Lock
-    pthread_mutex_lock(&playedCardsLock_);
+    pthread_mutex_lock(&guiLock_);
     drawPlayedCards();
     drawPiles();
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
-
     drawPlayers();
+    // Unlock
+    pthread_mutex_unlock(&guiLock_);
+
 }
 
 bool InGameState::needsTransition() const
@@ -136,47 +134,51 @@ void InGameState::processEvent(SDL_Event &e)
 
 void InGameState::gameStart()
 {
+    pthread_mutex_lock(&guiLock_);
+
     const vector<PlayerPtr> players = agent_->getPlayers();
     setPlayers(players);
-    // Set trump card
-    pthread_mutex_lock(&playedCardsLock_);
+
     trumpCard_ = GUICard::create(agent_->getTrumpCard());
-    pthread_mutex_unlock(&playedCardsLock_);
+
+    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::gameOver(ConstPlayerPtr biscuit)
 {
-    pthread_mutex_lock(&playersLock_);
+    pthread_mutex_lock(&guiLock_);
+
     attacker_ = PlayerPtr();
     defender_ = PlayerPtr();
     biscuit_ = biscuit;
     gameOver_ = true;
     validStatus_ = false;
-    pthread_mutex_unlock(&playersLock_);
+
+    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 {
-    pthread_mutex_lock(&playedCardsLock_);
+    pthread_mutex_lock(&guiLock_);
+    
     attackingCards_.clear();
     defendingCards_.clear();
     deckSize_ = agent_->getDeckSize();
     discardSize_ = agent_->getDiscardSize();
-    pthread_mutex_unlock(&playedCardsLock_);
 
-    pthread_mutex_lock(&playersLock_);
     attacker_ = attacker;
     defender_ = defender;
     validStatus_ = false;
-    pthread_mutex_unlock(&playersLock_);
+
+    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
 {
-    pthread_mutex_lock(&playersLock_);
+    pthread_mutex_lock(&guiLock_);
     attacker_ = newAttacker;
     validStatus_ = false;
-    pthread_mutex_unlock(&playersLock_);
+    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::endRound(bool successfulDefend)
@@ -187,24 +189,24 @@ void InGameState::endRound(bool successfulDefend)
 void InGameState::attackingCard(const Card &c)
 {
     // Lock
-    pthread_mutex_lock(&playedCardsLock_);
+    pthread_mutex_lock(&guiLock_);
     // Update
     attackingCards_.push_back(GUICard::create(c));
     dirtyPlayers();
     // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
+    pthread_mutex_unlock(&guiLock_);
     wait(400);
 }
 
 void InGameState::defendingCard(const Card &c)
 {
     // Lock
-    pthread_mutex_lock(&playedCardsLock_);
+    pthread_mutex_lock(&guiLock_);
     // Update
     defendingCards_.push_back(GUICard::create(c));
     dirtyPlayers();
     // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
+    pthread_mutex_unlock(&guiLock_);
 
     wait(400);
 }
@@ -212,12 +214,12 @@ void InGameState::defendingCard(const Card &c)
 void InGameState::piledOnCard(const Card &c)
 {
     // Lock
-    pthread_mutex_lock(&playedCardsLock_);
+    pthread_mutex_lock(&guiLock_);
     // Update
     attackingCards_.push_back(GUICard::create(c));
     dirtyPlayers();
     // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
+    pthread_mutex_unlock(&guiLock_);
     wait(400);
 }
 
@@ -315,8 +317,6 @@ void InGameState::drawPiles()
 
 void InGameState::drawPlayers()
 {
-    // Lock
-    pthread_mutex_lock(&playersLock_);
     updatePlayers();
     float angle = M_PI/2;
     for (int i = 0; i < players_.size(); i++)
@@ -340,7 +340,7 @@ void InGameState::drawPlayers()
         angle += 2*M_PI/ players_.size();
     }
     // Unlock
-    pthread_mutex_unlock(&playersLock_);
+    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::updatePlayers()
@@ -382,8 +382,6 @@ void InGameState::dirtyPlayers()
 
 void InGameState::setPlayers(const vector<PlayerPtr>& players)
 {
-    // Lock
-    pthread_mutex_lock(&playersLock_);
     // Update
     players_ = players;
     validPlayerDisplays_ = false;
@@ -397,17 +395,4 @@ void InGameState::setPlayers(const vector<PlayerPtr>& players)
             break;
         }
     }
-
-    // Unlock
-    pthread_mutex_unlock(&playersLock_);
-}
-
-void InGameState::setTrumpCard(const Card &c)
-{
-    // Lock
-    pthread_mutex_lock(&playedCardsLock_);
-    // Update
-    trumpCard_ = GUICard::create(c);
-    // Unlock
-    pthread_mutex_unlock(&playedCardsLock_);
 }

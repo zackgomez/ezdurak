@@ -71,14 +71,12 @@ private:
     GUICardPtr trumpCard_;
     int deckSize_;
     int discardSize_;
-    pthread_mutex_t playedCardsLock_;
 
     // Game Player members
     std::vector<PlayerPtr> players_;
     ConstPlayerPtr attacker_, defender_;
     ConstPlayerPtr biscuit_;
     bool gameOver_;
-    pthread_mutex_t playersLock_;
 
     // Player display members
     bool validPlayerDisplays_;
@@ -97,4 +95,5 @@ private:
     GameAgent *agent_;
     pthread_t game_thread;
     SynchronizedQueue<int> queue_;
+    pthread_mutex_t guiLock_;
 };
