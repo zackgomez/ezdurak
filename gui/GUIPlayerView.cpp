@@ -22,7 +22,6 @@ void GUIPlayerView::draw()
 {
     update();
     drawCards();
-    drawAnimations();
     drawName();
 }
 
@@ -34,11 +33,6 @@ void GUIPlayerView::dirty()
 void GUIPlayerView::setStatus(Status status)
 {
     status_ = status;
-}
-
-void GUIPlayerView::addAnimation(AnimationPtr a)
-{
-    animations_.push(a);
 }
 
 void GUIPlayerView::drawName()
@@ -75,16 +69,6 @@ void GUIPlayerView::drawCards()
         glTranslatef(0.2*GUICard::CARDX, 0, 0);
     }
     glPopMatrix();
-}
-
-void GUIPlayerView::drawAnimations()
-{
-    if (animations_.empty())
-        return;
-
-    animations_.front()->draw();
-    while (!animations_.empty() && animations_.front()->isDone())
-        animations_.pop();
 }
 
 void GUIPlayerView::update()

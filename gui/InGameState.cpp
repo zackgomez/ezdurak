@@ -11,7 +11,6 @@
 #include "ai/AIPlayer.h"
 #include "GameOverState.h"
 #include "QuitState.h"
-#include "Animation.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
