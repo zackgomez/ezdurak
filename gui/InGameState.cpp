@@ -183,7 +183,9 @@ void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
 
 void InGameState::endRound(bool successfulDefend)
 {
+    pthread_mutex_lock(&guiLock_);
     wait(400);
+    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::attackingCard(const Card &c)
@@ -224,22 +226,30 @@ void InGameState::piledOnCard(const Card &c)
 }
 
 void InGameState::playedOut(ConstPlayerPtr player)
-{ /* Empty */ }
+{
+    pthread_mutex_lock(&guiLock_);
+    /* Empty */
+    pthread_mutex_unlock(&guiLock_);
+}
 
 void InGameState::givenCards(ConstPlayerPtr player, int numCards)
 {
+    pthread_mutex_lock(&guiLock_);
     // Freeze
     // Animation
     // Need update
     dirtyPlayers();
+    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& cards)
 {
+    pthread_mutex_lock(&guiLock_);
     // Freeze
     // Animation
     // Need update
     dirtyPlayers();
+    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::wait(int ms)
