@@ -1,5 +1,6 @@
 #pragma once
 #include "core/Card.h"
+#include <vector>
 
 class CardHolder
 {

@@ -11,6 +11,7 @@ public:
 
     const std::vector<Card>& getHand() const;
     SynchronizedQueue<int>& getQueue() const;
+    const Card getTrumpCard() const;
 
     virtual void gameStarting(GameAgent *agent);
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump);

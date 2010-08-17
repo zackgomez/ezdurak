@@ -20,6 +20,13 @@ SynchronizedQueue<int>& GUIPlayer::getQueue() const
     return queue_;
 }
 
+const Card GUIPlayer::getTrumpCard() const
+{
+    if (!agent_)
+        return Card();
+    return agent_->getTrumpCard();
+}
+
 void GUIPlayer::gameStarting(GameAgent *agent)
 {
     PlayerImpl::gameStarting(agent);
@@ -92,31 +99,6 @@ void GUIPlayer::addCards(const std::vector<Card>& cards)
     if (agent_)
         sortHand();
 }
-
-class CardComp
-{
-private:
-    Card::cardsuit trump;
-public:
-    CardComp(Card::cardsuit trumpsuit) :
-        trump(trumpsuit)
-    {}
-
-    bool operator()(const Card &a, const Card &b)
-    {
-        Card::cardsuit aSuit = a.getSuit();
-        Card::cardsuit bSuit = b.getSuit();
-
-        // Case 1: one trump, one not trump
-        if ((aSuit == trump && bSuit != trump) || 
-            (bSuit == trump && aSuit != trump))
-        {
-            return a.getSuit() != trump;
-        }
-        // Case 2: both trump or both not trump
-        return a.getNum() < b.getNum();
-    }
-};
 
 void GUIPlayer::sortHand()
 {

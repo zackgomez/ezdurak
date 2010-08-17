@@ -128,34 +128,6 @@ vector<Card> AIPlayer::defendableCards(const Card& attackingCard,
     return playable;
 }
 
-/*
- * Helper class for orderCards.
- */
-class CardComp
-{
-private:
-    Card::cardsuit trump;
-public:
-    CardComp(Card::cardsuit trumpsuit) :
-        trump(trumpsuit)
-    {}
-
-    bool operator()(const Card &a, const Card &b)
-    {
-        Card::cardsuit aSuit = a.getSuit();
-        Card::cardsuit bSuit = b.getSuit();
-
-        // Case 1: one trump, one not trump
-        if ((aSuit == trump && bSuit != trump) || 
-            (bSuit == trump && aSuit != trump))
-        {
-            return a.getSuit() != trump;
-        }
-        // Case 2: both trump or both not trump
-        return a.getNum() < b.getNum();
-    }
-};
-
 void AIPlayer::orderCards(std::vector<Card>& cards) const
 {
     Card::cardsuit trump = agent_->getTrumpCard().getSuit();

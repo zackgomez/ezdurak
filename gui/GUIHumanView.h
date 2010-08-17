@@ -2,6 +2,7 @@
 #include "GUIPlayerView.h"
 #include "GUIString.h"
 #include "SynchronizedQueue.h"
+#include "HumanCardHolder.h"
 
 class GUIPlayer;
 
@@ -14,12 +15,14 @@ public:
 
     void mouseClick(int x, int y);
 
+    virtual CardHolder * getCardHolder();
+
 private:
     // Inherited from GUIPlayerView
     virtual void drawCards();
 
+    HumanCardHolder cards_;
     const GUIPlayer *player_;
-    std::vector<Card> cards_;
 
     SynchronizedQueue<int> &queue_;
 
