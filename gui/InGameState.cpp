@@ -89,6 +89,7 @@ void InGameState::render()
     pthread_mutex_lock(&guiLock_);
     drawPlayedCards();
     drawPiles();
+    drawAnimations();
     drawPlayers();
     // Unlock
     pthread_mutex_unlock(&guiLock_);
@@ -206,8 +207,9 @@ void InGameState::attackingCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     // Update
-    playedCards_.getAttackingHolder()->addCard(c);
-    // Give Card
+    animations_.push_back(Animation::create(c, playedCards_.getAttackingHolder(),
+                                            10, GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0, 0));
+    // Remove Card
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
         if (players_[i] == attacker_)
@@ -218,7 +220,6 @@ void InGameState::attackingCard(const Card &c)
     }
     // Unlock
     pthread_mutex_unlock(&guiLock_);
-    wait(400);
 }
 
 void InGameState::defendingCard(const Card &c)
@@ -227,8 +228,9 @@ void InGameState::defendingCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     // Update
-    playedCards_.getDefendingHolder()->addCard(c);
-    // Give Card
+    animations_.push_back(Animation::create(c, playedCards_.getDefendingHolder(),
+                                            10, GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0, 0));
+    // Remove Card
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
         if (players_[i] == defender_)
@@ -239,8 +241,6 @@ void InGameState::defendingCard(const Card &c)
     }
     // Unlock
     pthread_mutex_unlock(&guiLock_);
-
-    wait(400);
 }
 
 void InGameState::piledOnCard(const Card &c)
@@ -249,8 +249,9 @@ void InGameState::piledOnCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     // Update
-    playedCards_.getAttackingHolder()->addCard(c);
-    // Give Card
+    animations_.push_back(Animation::create(c, playedCards_.getAttackingHolder(),
+                                            10, GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0, 0));
+    // Remove Card
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
         if (players_[i] == attacker_)
@@ -261,7 +262,6 @@ void InGameState::piledOnCard(const Card &c)
     }
     // Unlock
     pthread_mutex_unlock(&guiLock_);
-    wait(400);
 }
 
 void InGameState::playedOut(ConstPlayerPtr player)
@@ -367,29 +367,40 @@ void InGameState::drawPiles()
 void InGameState::drawPlayers()
 {
     updatePlayers();
-    float angle = M_PI/2;
     for (int i = 0; i < players_.size(); i++)
     {
-        float x = cos(angle);
-        float y = sin(angle);
-        const float rx = GUIApp::SCREENX/2 - GUICard::CARDY/2 - 5;
-        const float ry = GUIApp::SCREENY/2 - GUICard::CARDY/2 - 5;
+        float testx, testy, testangle;
+        getPlayerPosition(i, testx, testy, testangle);
 
-        // Center
         glLoadIdentity();
-        glTranslatef(GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0);
-        // Move outwards
-        glTranslatef(x*rx, y*ry, 0);
-        // Rotate
-        glRotatef(angle*180/M_PI - 90, 0, 0, 1);
+        glTranslatef(testx, testy, 0);
+        glRotatef(testangle, 0, 0, 1);
 
         // Draw the player
         playersDisplay_[i]->draw();
-
-        angle += 2*M_PI/ players_.size();
     }
-    // Unlock
-    pthread_mutex_unlock(&guiLock_);
+}
+
+void InGameState::drawAnimations()
+{
+    if (!animations_.empty())
+        animations_.front()->render();
+
+    while (!animations_.empty() && animations_.front()->isDone())
+        animations_.pop_front();
+}
+
+void InGameState::getPlayerPosition(int i, float& xout, float& yout, float& angleout)
+{
+    float angle = M_PI/2 + 2*M_PI*i/players_.size();
+    float x = cos(angle);
+    float y = sin(angle);
+    const float rx = GUIApp::SCREENX/2 - GUICard::CARDY/2 - 5;
+    const float ry = GUIApp::SCREENY/2 - GUICard::CARDY/2 - 5;
+
+    xout = x*rx + GUIApp::SCREENX/2;
+    yout = y*ry + GUIApp::SCREENY/2;
+    angleout = angle * 180 / M_PI - 90;
 }
 
 void InGameState::updatePlayers()

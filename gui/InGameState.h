@@ -2,6 +2,7 @@
 #include "GUIState.h"
 #include "core/GameListener.h"
 #include <vector>
+#include <list>
 #include <pthread.h>
 #include "GUIString.h"
 #include "GUICard.h"
@@ -9,6 +10,7 @@
 #include "core/Player.h"
 #include "SynchronizedQueue.h"
 #include "PlayedCardsView.h"
+#include "Animation.h"
 
 class Game;
 class GUIListener;
@@ -51,21 +53,24 @@ private:
     InGameState(const InGameState&);
     InGameState& operator=(const InGameState &);
 
-    
     // Rendering Helper functions
     void drawPlayedCards();
     void drawPiles();
     void drawPlayers();
+    void drawAnimations();
     void updatePlayers();
+    void getPlayerPosition(int i, float &x, float &y, float &a);
 
     // GameListener helper functions
     void setPlayers(const std::vector<PlayerPtr>& players);
     void setTrumpCard(const Card &c);
 
+    // --- Data members ---
     // Contains the next state, if known, or null
     GUIStatePtr next_;
 
     // Card related members
+    std::list<AnimationPtr> animations_;
     PlayedCardsView playedCards_;
     Card trumpCard_;
     int deckSize_;
