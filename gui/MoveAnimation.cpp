@@ -31,11 +31,13 @@ bool MoveAnimation::isDone() const
 
 void MoveAnimation::render()
 {
+    // Remove from the source on the first frame
     if (!removed_)
     {
         source_->removeCard(card_);
         removed_ = true;
     }
+
     // Position
     float x = x0_ + (x1_ - x0_) * ((float) elapsed_ / duration_);
     float y = y0_ + (y1_ - y0_) * ((float) elapsed_ / duration_);
@@ -46,7 +48,10 @@ void MoveAnimation::render()
     glTranslatef(x, y, 0);
 
     glColor3f(1,1,1);
-    GUICard::draw(card_);
+    if (card_)
+        GUICard::draw(card_);
+    else
+        GUICard::drawCardBack();
     glPopMatrix();
 
     elapsed_++;

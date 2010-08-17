@@ -293,8 +293,12 @@ void InGameState::givenCards(ConstPlayerPtr player, int numCards)
     {
         if (players_[i] == player)
         {
+            float x, y, angle;
+            getPlayerPosition(i, x, y, angle);
+
             for (int j = 0; j < numCards; j++)
-                playersDisplay_[i]->getCardHolder()->addCard(Card());
+                animations_.push_back(MoveAnimation::create(Card(), NULL, playersDisplay_[i]->getCardHolder(),
+                                                            25, GUIApp::SCREENX/2, GUIApp::SCREENY/2, x, y));
             break;
         }
     }
