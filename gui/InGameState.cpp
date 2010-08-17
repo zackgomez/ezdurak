@@ -168,8 +168,7 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     
-    attackingCards_.clear();
-    defendingCards_.clear();
+    playedCards_.clear();
     deckSize_ = agent_->getDeckSize();
     discardSize_ = agent_->getDiscardSize();
 
@@ -207,7 +206,7 @@ void InGameState::attackingCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     // Update
-    attackingCards_.push_back(c);
+    playedCards_.getAttackingHolder()->addCard(c);
     // Give Card
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
@@ -228,7 +227,7 @@ void InGameState::defendingCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     // Update
-    defendingCards_.push_back(c);
+    playedCards_.getDefendingHolder()->addCard(c);
     // Give Card
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
@@ -250,7 +249,7 @@ void InGameState::piledOnCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     // Update
-    attackingCards_.push_back(c);
+    playedCards_.getAttackingHolder()->addCard(c);
     // Give Card
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
@@ -319,23 +318,7 @@ void InGameState::drawPlayedCards()
     glTranslatef(GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0);
     glTranslatef(-1.*GUICard::CARDX - 0.4*GUICard::CARDX,
                  -.6*GUICard::CARDY, 0);
-    for (int i = 0; i < attackingCards_.size(); i++)
-    {
-        // Draw attacking Card
-        GUICard::draw(attackingCards_[i]);
-        // Move over for defending card
-        glTranslatef(GUICard::CARDX * 0.2, 0, 0);
-        // Draw defending card if it exists
-        if (defendingCards_.size() > i)
-            GUICard::draw(defendingCards_[i]);
-
-        // Move over for next set
-        if (i == 2)
-            glTranslatef(-2*(GUICard::CARDX * 1.2) - 3*GUICard::CARDX*0.2,
-                         1.2 * GUICard::CARDY, 0);
-        else
-            glTranslatef(GUICard::CARDX * 1.2, 0, 0);
-    }
+    playedCards_.render();
 }
 
 void InGameState::drawPiles()

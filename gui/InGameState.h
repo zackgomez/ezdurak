@@ -8,6 +8,7 @@
 #include "core/Card.h"
 #include "core/Player.h"
 #include "SynchronizedQueue.h"
+#include "PlayedCardsView.h"
 
 class Game;
 class GUIListener;
@@ -65,8 +66,7 @@ private:
     GUIStatePtr next_;
 
     // Card related members
-    std::vector<Card> attackingCards_;
-    std::vector<Card> defendingCards_;
+    PlayedCardsView playedCards_;
     Card trumpCard_;
     int deckSize_;
     int discardSize_;

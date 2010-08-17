@@ -1,6 +1,8 @@
 #pragma once
 #include "CardHolder.h"
 #include <vector>
+#include <cassert>
+#include <algorithm>
 
 class CardHolderImpl :
     public CardHolder
