@@ -11,6 +11,7 @@
 #include "ai/AIPlayer.h"
 #include "GameOverState.h"
 #include "QuitState.h"
+#include "MoveAnimation.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
@@ -67,6 +68,7 @@ InGameState::InGameState(int numPlayers) :
 
 InGameState::~InGameState()
 {
+    animations_.clear();
     pthread_cancel(game_thread);
     pthread_join(game_thread, NULL);
     delete game;
@@ -121,6 +123,9 @@ void InGameState::processEvent(SDL_Event &e)
             next_ = InGameState::create(4);
         break;
     case SDL_MOUSEBUTTONDOWN:
+        // If Animations in progress, do nothing
+        if (!animations_.empty())
+            break;
         if (e.button.button != 1)
             break;
         int x = e.button.x;
@@ -169,7 +174,9 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     
+    // TODO change to an animation/action that goes on the stack
     playedCards_.clear();
+
     deckSize_ = agent_->getDeckSize();
     discardSize_ = agent_->getDiscardSize();
 
@@ -189,6 +196,8 @@ void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
     validStatus_ = false;
 
     pthread_mutex_unlock(&guiLock_);
+    
+    wait(400);
 }
 
 void InGameState::endRound(bool successfulDefend)
@@ -206,15 +215,17 @@ void InGameState::attackingCard(const Card &c)
     // Lock
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
-    // Update
-    animations_.push_back(Animation::create(c, playedCards_.getAttackingHolder(),
-                                            10, GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0, 0));
-    // Remove Card
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
         if (players_[i] == attacker_)
         {
+            // Remove Card
             playersDisplay_[i]->getCardHolder()->removeCard(c);
+            // Add Animation
+            float x, y, angle;
+            getPlayerPosition(i, x, y, angle);
+            animations_.push_back(MoveAnimation::create(c, playedCards_.getAttackingHolder(),
+                                                        40, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
             break;
         }
     }
@@ -227,15 +238,17 @@ void InGameState::defendingCard(const Card &c)
     // Lock
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
-    // Update
-    animations_.push_back(Animation::create(c, playedCards_.getDefendingHolder(),
-                                            10, GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0, 0));
     // Remove Card
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
         if (players_[i] == defender_)
         {
             playersDisplay_[i]->getCardHolder()->removeCard(c);
+            // Add Animation
+            float x, y, angle;
+            getPlayerPosition(i, x, y, angle);
+            animations_.push_back(MoveAnimation::create(c, playedCards_.getDefendingHolder(),
+                                                    40, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
             break;
         }
     }
@@ -248,15 +261,17 @@ void InGameState::piledOnCard(const Card &c)
     // Lock
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
-    // Update
-    animations_.push_back(Animation::create(c, playedCards_.getAttackingHolder(),
-                                            10, GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0, 0));
     // Remove Card
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
         if (players_[i] == attacker_)
         {
             playersDisplay_[i]->getCardHolder()->removeCard(c);
+            // Add Animation
+            float x, y, angle;
+            getPlayerPosition(i, x, y, angle);
+            animations_.push_back(MoveAnimation::create(c, playedCards_.getAttackingHolder(),
+                                                    40, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
             break;
         }
     }
@@ -405,6 +420,9 @@ void InGameState::getPlayerPosition(int i, float& xout, float& yout, float& angl
 
 void InGameState::updatePlayers()
 {
+    // If animations are in progress, do nothing
+    if (!animations_.empty())
+        return;
     // Update the name textures, first delete the old ones
     if (!validPlayerDisplays_)
     {

@@ -1,9 +1,9 @@
-#include "Animation.h"
+#include "MoveAnimation.h"
 #include "CardHolder.h"
 #include "gl.h"
 #include "GUICard.h"
 
-Animation::Animation(Card c, CardHolder *t, int d, int x0, int y0, int x1, int y1) :
+MoveAnimation::MoveAnimation(Card c, CardHolder *t, int d, int x0, int y0, int x1, int y1) :
     card_(c),
     target_(t),
     elapsed_(0),
@@ -12,17 +12,17 @@ Animation::Animation(Card c, CardHolder *t, int d, int x0, int y0, int x1, int y
     x1_(x1), y1_(y1)
 { /* Empty */ }
 
-Animation::~Animation()
+MoveAnimation::~MoveAnimation()
 {
     target_->addCard(card_);
 }
 
-bool Animation::isDone() const
+bool MoveAnimation::isDone() const
 {
     return elapsed_ >= duration_;
 }
 
-void Animation::render()
+void MoveAnimation::render()
 {
     // Position
     float x = x0_ + (x1_ - x0_) * ((float) elapsed_ / duration_);
@@ -40,8 +40,8 @@ void Animation::render()
     elapsed_++;
 }
 
-AnimationPtr Animation::create(Card c, CardHolder *t, int d, int x0, int y0, int x1, int y1)
+AnimationPtr MoveAnimation::create(Card c, CardHolder *t, int d, int x0, int y0, int x1, int y1)
 {
-    AnimationPtr ret(new Animation(c, t, d, x0, y0, x1, y1));
+    AnimationPtr ret(new MoveAnimation(c, t, d, x0, y0, x1, y1));
     return ret;
 }

@@ -10,23 +10,10 @@ typedef boost::shared_ptr<Animation> AnimationPtr;
 class Animation
 {
 public:
-    static AnimationPtr create(Card c, CardHolder *target, int duration,
-                        int x0, int y0, int x1, int y1);
-    ~Animation();
+    // Virtual Destructor for intended base classes
+    virtual ~Animation() { /* Empty */ }
 
-    bool isDone() const;
-    void render();
-
-private:
-    // Private constructor for create idiom
-    Animation(Card c, CardHolder *target, int duration, int x0, int y0,
-              int x1, int y1);
-
-    Card card_;
-    CardHolder *target_;
-    int elapsed_;
-    int duration_;
-
-    int x0_, y0_;
-    int x1_, y1_;
+    virtual bool isDone() const = 0;
+    virtual void render() = 0;
 };
+
