@@ -19,6 +19,7 @@ public:
     virtual void addCard(Card c);
     virtual void addCards(const std::vector<Card>& cs);
     virtual void removeCard(Card c);
+    virtual void clear();
 
 private:
     const GUIPlayer *player_;

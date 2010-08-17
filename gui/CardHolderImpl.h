@@ -37,6 +37,10 @@ public:
         assert( it != cards_.end() );
         cards_.erase(it);
     }
+    virtual void clear()
+    {
+        cards_.clear();
+    }
 
 private:
     std::vector<Card> cards_;

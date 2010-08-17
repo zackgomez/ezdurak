@@ -2,7 +2,6 @@
 #include "core/Card.h"
 #include <boost/shared_ptr.hpp>
 
-class CardHolder;
 class Animation;
 
 typedef boost::shared_ptr<Animation> AnimationPtr;

@@ -57,3 +57,8 @@ void HumanCardHolder::removeCard(Card c)
     assert( it != cards_.end() );
     cards_.erase(it);
 }
+
+void HumanCardHolder::clear()
+{
+    assert(false && "This function has no meaning for HumanCardHolder");
+}

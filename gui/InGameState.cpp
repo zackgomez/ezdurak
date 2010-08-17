@@ -12,6 +12,7 @@
 #include "GameOverState.h"
 #include "QuitState.h"
 #include "MoveAnimation.h"
+#include "ClearAnimation.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
@@ -174,8 +175,8 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     
-    // TODO change to an animation/action that goes on the stack
-    playedCards_.clear();
+    animations_.push_back(ClearAnimation::create(playedCards_.getAttackingHolder()));
+    animations_.push_back(ClearAnimation::create(playedCards_.getDefendingHolder()));
 
     deckSize_ = agent_->getDeckSize();
     discardSize_ = agent_->getDiscardSize();
@@ -219,12 +220,10 @@ void InGameState::attackingCard(const Card &c)
     {
         if (players_[i] == attacker_)
         {
-            // Remove Card
-            playersDisplay_[i]->getCardHolder()->removeCard(c);
             // Add Animation
             float x, y, angle;
             getPlayerPosition(i, x, y, angle);
-            animations_.push_back(MoveAnimation::create(c, playedCards_.getAttackingHolder(),
+            animations_.push_back(MoveAnimation::create(c, playersDisplay_[i]->getCardHolder(), playedCards_.getAttackingHolder(),
                                                         40, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
             break;
         }
@@ -243,11 +242,10 @@ void InGameState::defendingCard(const Card &c)
     {
         if (players_[i] == defender_)
         {
-            playersDisplay_[i]->getCardHolder()->removeCard(c);
             // Add Animation
             float x, y, angle;
             getPlayerPosition(i, x, y, angle);
-            animations_.push_back(MoveAnimation::create(c, playedCards_.getDefendingHolder(),
+            animations_.push_back(MoveAnimation::create(c, playersDisplay_[i]->getCardHolder(), playedCards_.getDefendingHolder(),
                                                     40, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
             break;
         }
@@ -266,11 +264,10 @@ void InGameState::piledOnCard(const Card &c)
     {
         if (players_[i] == attacker_)
         {
-            playersDisplay_[i]->getCardHolder()->removeCard(c);
             // Add Animation
             float x, y, angle;
             getPlayerPosition(i, x, y, angle);
-            animations_.push_back(MoveAnimation::create(c, playedCards_.getAttackingHolder(),
+            animations_.push_back(MoveAnimation::create(c, playersDisplay_[i]->getCardHolder(), playedCards_.getAttackingHolder(),
                                                     40, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
             break;
         }
@@ -423,7 +420,7 @@ void InGameState::updatePlayers()
     // If animations are in progress, do nothing
     if (!animations_.empty())
         return;
-    // Update the name textures, first delete the old ones
+    // Do we need to create the player displays?
     if (!validPlayerDisplays_)
     {
         for (int i = 0; i < playersDisplay_.size(); i++)
