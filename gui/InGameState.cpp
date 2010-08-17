@@ -213,7 +213,7 @@ void InGameState::attackingCard(const Card &c)
     {
         if (players_[i] == attacker_)
         {
-            playersDisplay_[i]->removeCard(c);
+            playersDisplay_[i]->getCardHolder()->removeCard(c);
             break;
         }
     }
@@ -234,7 +234,7 @@ void InGameState::defendingCard(const Card &c)
     {
         if (players_[i] == defender_)
         {
-            playersDisplay_[i]->removeCard(c);
+            playersDisplay_[i]->getCardHolder()->removeCard(c);
             break;
         }
     }
@@ -256,7 +256,7 @@ void InGameState::piledOnCard(const Card &c)
     {
         if (players_[i] == attacker_)
         {
-            playersDisplay_[i]->removeCard(c);
+            playersDisplay_[i]->getCardHolder()->removeCard(c);
             break;
         }
     }
@@ -283,7 +283,7 @@ void InGameState::givenCards(ConstPlayerPtr player, int numCards)
         if (players_[i] == player)
         {
             for (int j = 0; j < numCards; j++)
-                playersDisplay_[i]->addCard(Card());
+                playersDisplay_[i]->getCardHolder()->addCard(Card());
             break;
         }
     }
@@ -300,7 +300,7 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
     {
         if (players_[i] == player)
         {
-            playersDisplay_[i]->addCards(cards);
+            playersDisplay_[i]->getCardHolder()->addCards(cards);
             break;
         }
     }
