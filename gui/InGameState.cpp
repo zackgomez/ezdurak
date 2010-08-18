@@ -14,6 +14,7 @@
 #include "MoveAnimation.h"
 #include "ClearAnimation.h"
 #include "StatusChangeAnimation.h"
+#include "DelayAnimation.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
@@ -184,6 +185,7 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
                                                         playerDisplayMap_[attacker], GUIPlayerView::ATTACKER));
     animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[defender_], GUIPlayerView::NONE,
                                                         playerDisplayMap_[defender], GUIPlayerView::DEFENDER));
+    animations_.push_back(DelayAnimation::create(20));
     attacker_ = attacker;
     defender_ = defender;
 
@@ -197,6 +199,7 @@ void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
     
     animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_], GUIPlayerView::NONE,
                                                         playerDisplayMap_[newAttacker], GUIPlayerView::ATTACKER));
+    animations_.push_back(DelayAnimation::create(20));
     attacker_ = newAttacker;
 
     pthread_mutex_unlock(&guiLock_);
@@ -387,12 +390,12 @@ void InGameState::getPlayerPosition(int i, float& xout, float& yout, float& angl
 
 void InGameState::updatePlayers()
 {
-    // If animations are in progress, do nothing
-    if (!animations_.empty())
-        return;
     // Do we need to create the player displays?
     if (!validPlayerDisplays_)
     {
+        // If animations are in progress, do nothing
+        assert(animations_.empty());
+        // Remove old displays
         for (int i = 0; i < playersDisplay_.size(); i++)
             delete playersDisplay_[i];
         playersDisplay_.resize(players_.size());
