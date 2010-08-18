@@ -13,6 +13,7 @@
 #include "QuitState.h"
 #include "MoveAnimation.h"
 #include "ClearAnimation.h"
+#include "StatusChangeAnimation.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
@@ -43,7 +44,6 @@ InGameState::InGameState(int numPlayers) :
     gameOver_(false),
     validPlayerDisplays_(false),
     humanView_(NULL),
-    validStatus_(true),
     validSizes_(false)
 {
     pthread_mutex_init(&guiLock_, NULL);
@@ -180,9 +180,12 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     deckSize_ = agent_->getDeckSize();
     discardSize_ = agent_->getDiscardSize();
 
+    animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_], GUIPlayerView::NONE,
+                                                        playerDisplayMap_[attacker], GUIPlayerView::ATTACKER));
+    animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[defender_], GUIPlayerView::NONE,
+                                                        playerDisplayMap_[defender], GUIPlayerView::DEFENDER));
     attacker_ = attacker;
     defender_ = defender;
-    validStatus_ = false;
 
     pthread_mutex_unlock(&guiLock_);
 }
@@ -192,12 +195,11 @@ void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     
+    animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_], GUIPlayerView::NONE,
+                                                        playerDisplayMap_[newAttacker], GUIPlayerView::ATTACKER));
     attacker_ = newAttacker;
-    validStatus_ = false;
 
     pthread_mutex_unlock(&guiLock_);
-    
-    wait(400);
 }
 
 void InGameState::endRound(bool successfulDefend)
@@ -206,8 +208,6 @@ void InGameState::endRound(bool successfulDefend)
     assert(players_.size() == playersDisplay_.size());
 
     pthread_mutex_unlock(&guiLock_);
-
-    wait(400);
 }
 
 void InGameState::attackingCard(const Card &c)
@@ -408,19 +408,6 @@ void InGameState::updatePlayers()
         // We have created the players, signal to the other thread
         validPlayerDisplays_ = true;
         pthread_cond_signal(&displaysCV_);
-    }
-    if (!validStatus_)
-    {
-        for (int i = 0; i < players_.size(); i++)
-        {
-            if (players_[i] == attacker_)
-                playersDisplay_[i]->setStatus(GUIPlayerView::ATTACKER);
-            else if (players_[i] == defender_)
-                playersDisplay_[i]->setStatus(GUIPlayerView::DEFENDER);
-            else
-                playersDisplay_[i]->setStatus(GUIPlayerView::NONE);
-        }
-        validStatus_ = true;
     }
 }
 

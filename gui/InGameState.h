@@ -89,7 +89,6 @@ private:
     std::vector<GUIPlayerView*> playersDisplay_;
     std::map<ConstPlayerPtr, GUIPlayerView*> playerDisplayMap_;
     std::map<ConstPlayerPtr, int> playerPositionMap_;
-    bool validStatus_;
 
     // Pile display members
     bool validSizes_;

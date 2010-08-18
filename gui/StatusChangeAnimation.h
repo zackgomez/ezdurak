@@ -14,7 +14,7 @@ public:
     static AnimationPtr create(GUIPlayerView *p1, GUIPlayerView::Status s1)
     {
         AnimationPtr ret(new StatusChangeAnimation(p1, s1,
-                                                   NULL, GUIPlayerView::none));
+                                                   NULL, GUIPlayerView::NONE));
         return ret;
     }
 
@@ -40,11 +40,11 @@ private:
         s1_(s1), s2_(s2),
         done_(false)
     {
-        done_ = !p1_ && !_p2;
+        done_ = !p1_ && !p2_;
     }
 
     GUIPlayerView *p1_, *p2_;
-    GUIPlayerView::Status s1, s2;
+    GUIPlayerView::Status s1_, s2_;
     bool done_;
 };
 
