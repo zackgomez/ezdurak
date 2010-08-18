@@ -22,6 +22,8 @@ void PlayedCardsView::clear()
 
 void PlayedCardsView::render()
 {
+    glTranslatef(-1.*GUICard::CARDX - 0.4*GUICard::CARDX,
+                 -.6*GUICard::CARDY, 0);
     for (int i = 0; i < attackingCards_.getNumCards(); i++)
     {
         // Draw attacking Card
@@ -39,4 +41,28 @@ void PlayedCardsView::render()
         else
             glTranslatef(GUICard::CARDX * 1.2, 0, 0);
     }
+}
+
+void PlayedCardsView::getNextCardLocation(bool attacking, float &x, float &y)
+{
+    x = 400 - 1.*GUICard::CARDX- 0.4*GUICard::CARDX;
+    y = 300 - .6*GUICard::CARDY;
+    int idx;
+    if (attacking)
+        idx = nextAttackingIdx_++;
+    else
+        idx = nextDefendingIdx_++;
+
+    if (idx > 2)
+        y += 1.2 * GUICard::CARDY;
+
+    x += (idx % 3) * 1.4 * GUICard::CARDX;
+    if (!attacking)
+        x += 0.2 * GUICard::CARDX;
+}
+
+void PlayedCardsView::clearNextLocation()
+{
+    nextAttackingIdx_ = 0;
+    nextDefendingIdx_ = 0;
 }

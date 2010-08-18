@@ -103,7 +103,7 @@ void InGameState::render()
 
 bool InGameState::needsTransition() const
 {
-    return gameOver_;
+    return next_.get() || gameOver_;
 }
 
 GUIStatePtr InGameState::nextState()
@@ -179,6 +179,7 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     
     animations_.push_back(ClearAnimation::create(playedCards_.getAttackingHolder()));
     animations_.push_back(ClearAnimation::create(playedCards_.getDefendingHolder()));
+    playedCards_.clearNextLocation();
 
     deckSize_ = agent_->getDeckSize();
     discardSize_ = agent_->getDiscardSize();
@@ -221,10 +222,11 @@ void InGameState::attackingCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
-    float x, y, angle;
-    getPlayerPosition(playerPositionMap_[attacker_], x, y, angle);
+    float x0, y0, angle, x1, y1;
+    getPlayerPosition(playerPositionMap_[attacker_], x0, y0, angle);
+    playedCards_.getNextCardLocation(true, x1, y1);
     animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[attacker_]->getCardHolder(), playedCards_.getAttackingHolder(),
-                                                25, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
+                                                25, x0, y0, x1, y1));
     // Unlock
     pthread_mutex_unlock(&guiLock_);
 }
@@ -235,10 +237,11 @@ void InGameState::defendingCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
-    float x, y, angle;
-    getPlayerPosition(playerPositionMap_[defender_], x, y, angle);
+    float x0, y0, angle, x1, y1;
+    getPlayerPosition(playerPositionMap_[defender_], x0, y0, angle);
+    playedCards_.getNextCardLocation(false, x1, y1);
     animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[defender_]->getCardHolder(), playedCards_.getDefendingHolder(),
-                                                25, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
+                                                25, x0, y0, x1, y1));
     // Unlock
     pthread_mutex_unlock(&guiLock_);
 }
@@ -249,10 +252,11 @@ void InGameState::piledOnCard(const Card &c)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
-    float x, y, angle;
-    getPlayerPosition(playerPositionMap_[attacker_], x, y, angle);
+    float x0, y0, angle, x1, y1;
+    getPlayerPosition(playerPositionMap_[attacker_], x0, y0, angle);
+    playedCards_.getNextCardLocation(true, x1, y1);
     animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[attacker_]->getCardHolder(), playedCards_.getAttackingHolder(),
-                                                25, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
+                                                25, x0, y0, x1, y1));
     // Unlock
     pthread_mutex_unlock(&guiLock_);
 }
@@ -298,8 +302,6 @@ void InGameState::wait(int ms)
 void InGameState::drawPlayedCards()
 {
     glTranslatef(GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0);
-    glTranslatef(-1.*GUICard::CARDX - 0.4*GUICard::CARDX,
-                 -.6*GUICard::CARDY, 0);
     playedCards_.render();
 }
 

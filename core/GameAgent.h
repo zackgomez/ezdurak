@@ -42,7 +42,14 @@ public:
      */
     virtual int getTricksLeft() const = 0;
 
+    /** 
+     * Returns the current attacker.
+     */
     virtual ConstPlayerPtr getAttacker() const = 0;
+
+    /** 
+     * Returns the current attacker.
+     */
     virtual ConstPlayerPtr getDefender() const = 0;
 
     /**

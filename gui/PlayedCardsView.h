@@ -8,12 +8,18 @@ public:
 
     CardHolder* getAttackingHolder();
     CardHolder* getDefendingHolder();
-    void clear();
 
+    void clear();
     void render();
+
+    void getNextCardLocation(bool attacking, float &x, float &y);
+    void clearNextLocation();
     
 private:
     CardHolderImpl attackingCards_;
     CardHolderImpl defendingCards_;
+
+    int nextAttackingIdx_;
+    int nextDefendingIdx_;
 };
 
