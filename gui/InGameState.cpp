@@ -280,6 +280,9 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
+    // TODO add an animation here
+    playerDisplayMap_[player]->getCardHolder()->addCards(cards);
+
     for (int i = 0; i < playersDisplay_.size(); i++)
     {
         if (players_[i] == player)
