@@ -15,6 +15,7 @@
 #include "ClearAnimation.h"
 #include "StatusChangeAnimation.h"
 #include "DelayAnimation.h"
+#include "SetAnimation.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
@@ -102,7 +103,7 @@ void InGameState::render()
 
 bool InGameState::needsTransition() const
 {
-    return gameOver_ || next_.get() != NULL;
+    return gameOver_;
 }
 
 GUIStatePtr InGameState::nextState()
@@ -165,7 +166,8 @@ void InGameState::gameOver(ConstPlayerPtr biscuit)
     attacker_ = PlayerPtr();
     defender_ = PlayerPtr();
     biscuit_ = biscuit;
-    gameOver_ = true;
+    animations_.push_back(DelayAnimation::create(30));
+    animations_.push_back(SetAnimation::create(gameOver_));
 
     pthread_mutex_unlock(&guiLock_);
 }
