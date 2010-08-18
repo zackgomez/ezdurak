@@ -3,9 +3,9 @@
 #include "core/GameListener.h"
 #include <vector>
 #include <list>
+#include <map>
 #include <pthread.h>
 #include "GUIString.h"
-#include "GUICard.h"
 #include "core/Card.h"
 #include "core/Player.h"
 #include "SynchronizedQueue.h"
@@ -87,6 +87,8 @@ private:
     // TODO:2010-07-19:zack: Make this a smart ptr (probably auto_ptr)
     GUIHumanView *humanView_;
     std::vector<GUIPlayerView*> playersDisplay_;
+    std::map<ConstPlayerPtr, GUIPlayerView*> playerDisplayMap_;
+    std::map<ConstPlayerPtr, int> playerPositionMap_;
     bool validStatus_;
 
     // Pile display members

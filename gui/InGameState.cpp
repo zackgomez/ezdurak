@@ -165,7 +165,6 @@ void InGameState::gameOver(ConstPlayerPtr biscuit)
     defender_ = PlayerPtr();
     biscuit_ = biscuit;
     gameOver_ = true;
-    validStatus_ = false;
 
     pthread_mutex_unlock(&guiLock_);
 }
@@ -216,18 +215,11 @@ void InGameState::attackingCard(const Card &c)
     // Lock
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
-    for (int i = 0; i < playersDisplay_.size(); i++)
-    {
-        if (players_[i] == attacker_)
-        {
-            // Add Animation
-            float x, y, angle;
-            getPlayerPosition(i, x, y, angle);
-            animations_.push_back(MoveAnimation::create(c, playersDisplay_[i]->getCardHolder(), playedCards_.getAttackingHolder(),
-                                                        40, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
-            break;
-        }
-    }
+
+    float x, y, angle;
+    getPlayerPosition(playerPositionMap_[attacker_], x, y, angle);
+    animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[attacker_]->getCardHolder(), playedCards_.getAttackingHolder(),
+                                                25, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
     // Unlock
     pthread_mutex_unlock(&guiLock_);
 }
@@ -237,19 +229,11 @@ void InGameState::defendingCard(const Card &c)
     // Lock
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
-    // Remove Card
-    for (int i = 0; i < playersDisplay_.size(); i++)
-    {
-        if (players_[i] == defender_)
-        {
-            // Add Animation
-            float x, y, angle;
-            getPlayerPosition(i, x, y, angle);
-            animations_.push_back(MoveAnimation::create(c, playersDisplay_[i]->getCardHolder(), playedCards_.getDefendingHolder(),
-                                                    40, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
-            break;
-        }
-    }
+
+    float x, y, angle;
+    getPlayerPosition(playerPositionMap_[defender_], x, y, angle);
+    animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[defender_]->getCardHolder(), playedCards_.getDefendingHolder(),
+                                                25, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
     // Unlock
     pthread_mutex_unlock(&guiLock_);
 }
@@ -259,19 +243,11 @@ void InGameState::piledOnCard(const Card &c)
     // Lock
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
-    // Remove Card
-    for (int i = 0; i < playersDisplay_.size(); i++)
-    {
-        if (players_[i] == attacker_)
-        {
-            // Add Animation
-            float x, y, angle;
-            getPlayerPosition(i, x, y, angle);
-            animations_.push_back(MoveAnimation::create(c, playersDisplay_[i]->getCardHolder(), playedCards_.getAttackingHolder(),
-                                                    40, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
-            break;
-        }
-    }
+
+    float x, y, angle;
+    getPlayerPosition(playerPositionMap_[attacker_], x, y, angle);
+    animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[attacker_]->getCardHolder(), playedCards_.getAttackingHolder(),
+                                                25, x, y, GUIApp::SCREENX/2, GUIApp::SCREENY/2));
     // Unlock
     pthread_mutex_unlock(&guiLock_);
 }
@@ -289,20 +265,10 @@ void InGameState::givenCards(ConstPlayerPtr player, int numCards)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
-    for (int i = 0; i < playersDisplay_.size(); i++)
-    {
-        if (players_[i] == player)
-        {
-            float x, y, angle;
-            getPlayerPosition(i, x, y, angle);
-
-            for (int j = 0; j < numCards; j++)
-                animations_.push_back(MoveAnimation::create(Card(), NULL, playersDisplay_[i]->getCardHolder(),
-                                                            25, GUIApp::SCREENX/2, GUIApp::SCREENY/2, x, y));
-            break;
-        }
-    }
-
+    float x, y, angle;
+    getPlayerPosition(playerPositionMap_[player], x, y, angle);
+    animations_.push_back(MoveAnimation::create(Card(), NULL, playerDisplayMap_[player]->getCardHolder(),
+                                                25, GUIApp::SCREENX/2, GUIApp::SCREENY/2, x, y));
     pthread_mutex_unlock(&guiLock_);
 }
 
@@ -435,8 +401,12 @@ void InGameState::updatePlayers()
         playersDisplay_[0] = humanView_;
         for (int i = 1; i < players_.size(); i++)
             playersDisplay_[i] = new GUIPlayerView(players_[i].get());
-        validPlayerDisplays_ = true;
+
+        // Create the map
+        for (int i = 0; i < players_.size(); i++)
+            playerDisplayMap_[players_[i]] = playersDisplay_[i];
         // We have created the players, signal to the other thread
+        validPlayerDisplays_ = true;
         pthread_cond_signal(&displaysCV_);
     }
     if (!validStatus_)
@@ -469,4 +439,7 @@ void InGameState::setPlayers(const vector<PlayerPtr>& players)
             break;
         }
     }
+
+    for (int i = 0; i < players_.size(); i++)
+        playerPositionMap_[players_[i]] = i;
 }
