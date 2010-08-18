@@ -182,8 +182,8 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     discardSize_ = agent_->getDiscardSize();
 
     animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_], GUIPlayerView::NONE,
-                                                        playerDisplayMap_[attacker], GUIPlayerView::ATTACKER));
-    animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[defender_], GUIPlayerView::NONE,
+                                                        playerDisplayMap_[defender_], GUIPlayerView::NONE));
+    animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker], GUIPlayerView::ATTACKER,
                                                         playerDisplayMap_[defender], GUIPlayerView::DEFENDER));
     animations_.push_back(DelayAnimation::create(20));
     attacker_ = attacker;
@@ -270,8 +270,9 @@ void InGameState::givenCards(ConstPlayerPtr player, int numCards)
 
     float x, y, angle;
     getPlayerPosition(playerPositionMap_[player], x, y, angle);
-    animations_.push_back(MoveAnimation::create(Card(), NULL, playerDisplayMap_[player]->getCardHolder(),
-                                                25, GUIApp::SCREENX/2, GUIApp::SCREENY/2, x, y));
+    for (int i = 0; i < numCards; i++)
+        animations_.push_back(MoveAnimation::create(Card(), NULL, playerDisplayMap_[player]->getCardHolder(),
+                                                    25, GUIApp::SCREENX/2, GUIApp::SCREENY/2, x, y));
     pthread_mutex_unlock(&guiLock_);
 }
 
