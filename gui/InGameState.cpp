@@ -177,8 +177,6 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
     
-    animations_.push_back(ClearAnimation::create(playedCards_.getAttackingHolder()));
-    animations_.push_back(ClearAnimation::create(playedCards_.getDefendingHolder()));
     playedCards_.clearNextLocation();
 
     deckSize_ = agent_->getDeckSize();
@@ -212,6 +210,18 @@ void InGameState::endRound(bool successfulDefend)
 {
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
+
+    if (successfulDefend)
+    {
+        // On successful defend, clear the play table
+        animations_.push_back(DelayAnimation::create(30));
+        animations_.push_back(ClearAnimation::create(playedCards_.getAttackingHolder()));
+        animations_.push_back(ClearAnimation::create(playedCards_.getDefendingHolder()));
+    }
+    else
+    {
+        // TODO an animation for the defender losing
+    }
 
     pthread_mutex_unlock(&guiLock_);
 }
@@ -287,9 +297,17 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
-    // TODO add an animation here
-    playerDisplayMap_[player]->getCardHolder()->addCards(cards);
+    // TODO a better animation, with the cards "crunching"
+    animations_.push_back(DelayAnimation::create(30));
+    animations_.push_back(ClearAnimation::create(playedCards_.getAttackingHolder()));
+    animations_.push_back(ClearAnimation::create(playedCards_.getDefendingHolder()));
 
+    float x, y, angle;
+    getPlayerPosition(playerPositionMap_[player], x, y, angle);
+    for (int i = 0; i < cards.size(); i++)
+        animations_.push_back(MoveAnimation::create(cards[i], NULL, playerDisplayMap_[player]->getCardHolder(),
+                                                    25, GUIApp::SCREENX/2, GUIApp::SCREENY/2, x, y));
+	
     pthread_mutex_unlock(&guiLock_);
 }
 
