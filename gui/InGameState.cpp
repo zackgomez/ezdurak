@@ -44,7 +44,7 @@ InGameState::InGameState(int numPlayers) :
     deckSize_(0),
     discardSize_(0),
     gameOver_(false),
-    validPlayerDisplays_(false),
+    validPlayerDisplays_(true),
     humanView_(NULL),
     validSizes_(false)
 {
