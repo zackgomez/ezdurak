@@ -11,11 +11,6 @@
 #include "ai/AIPlayer.h"
 #include "GameOverState.h"
 #include "QuitState.h"
-#include "MoveAnimation.h"
-#include "ClearAnimation.h"
-#include "StatusChangeAnimation.h"
-#include "DelayAnimation.h"
-#include "SetAnimation.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
