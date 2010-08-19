@@ -220,7 +220,8 @@ void InGameState::endRound(bool successfulDefend)
     }
     else
     {
-        // TODO an animation for the defender losing
+        animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[defender_],
+                                                            GUIPlayerView::DEFENDERLOST));
     }
 
     pthread_mutex_unlock(&guiLock_);

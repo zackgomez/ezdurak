@@ -83,10 +83,12 @@ void GUIApp::initGL()
     GUICard::cardtex = loadTexture("resources/cards.png");
     GUIPlayerView::attackEmblem = loadTexture("resources/sword.png");
     GUIPlayerView::defendEmblem = loadTexture("resources/shield.png");
+    GUIPlayerView::defendLostEmblem = loadTexture("resources/shieldx.png");
 #else
     GUICard::cardtex = loadTexture("cards.png");
     GUIPlayerView::attackEmblem = loadTexture("sword.png");
     GUIPlayerView::defendEmblem = loadTexture("shield.png");
+    GUIPlayerView::defendLostEmblem = loadTexture("resources/shieldx.png");
 #endif
 
     glViewport(0, 0, SCREENX, SCREENY);

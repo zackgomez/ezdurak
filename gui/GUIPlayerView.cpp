@@ -5,6 +5,8 @@
 
 GLuint GUIPlayerView::attackEmblem = 0;
 GLuint GUIPlayerView::defendEmblem = 0;
+GLuint GUIPlayerView::defendLostEmblem = 0;
+const int GUIPlayerView::EMBLEM_SIZE = 35;
 
 GUIPlayerView::GUIPlayerView(const Player *player) :
     player_(player),
@@ -42,18 +44,20 @@ void GUIPlayerView::drawName()
     glTranslatef(0, -(GUICard::CARDY/2 + 15), 0);
     if (status_ == ATTACKER)
         glColor3f(1,0,0);
-    else if (status_ == DEFENDER)
+    else if (status_ == DEFENDER || status_ == DEFENDERLOST)
         glColor3f(0,0,1);
     else
         glColor3i(0,0,0);
     name_->draw();
 
     glColor3f(1,1,1);
-    glTranslatef(name_->getWidth()/2 + 35./2 + 3, -5, 0);
+    glTranslatef(name_->getWidth()/2 + EMBLEM_SIZE/2. + 3, -5, 0);
     if (status_ == ATTACKER)
         drawEmblem(attackEmblem);
     else if (status_ == DEFENDER)
         drawEmblem(defendEmblem);
+    else if (status_ == DEFENDERLOST)
+        drawEmblem(defendLostEmblem);
 
     glPopMatrix();
 }
@@ -77,18 +81,18 @@ void GUIPlayerView::drawEmblem(GLuint tex)
 {
     glPushMatrix();
     glBindTexture(GL_TEXTURE_RECTANGLE, tex);
-    glScalef(35, 35, 0);
+    glScalef(EMBLEM_SIZE, EMBLEM_SIZE, 0);
     glBegin(GL_QUADS);
         glTexCoord2f(0, 0);
         glVertex3f(-0.5, -0.5, 0);
 
-        glTexCoord2f(0, 35);
+        glTexCoord2f(0, EMBLEM_SIZE);
         glVertex3f(-0.5, 0.5, 0);
 
-        glTexCoord2f(35, 35);
+        glTexCoord2f(EMBLEM_SIZE, EMBLEM_SIZE);
         glVertex3f(0.5, 0.5, 0);
 
-        glTexCoord2f(35, 0);
+        glTexCoord2f(EMBLEM_SIZE, 0);
         glVertex3f(0.5, -0.5, 0);
     glEnd();
     glPopMatrix();

@@ -9,8 +9,9 @@ class Player;
 class GUIPlayerView
 {
 public:
-    enum Status {NONE, ATTACKER, DEFENDER};
-    static GLuint attackEmblem, defendEmblem;
+    enum Status {NONE, ATTACKER, DEFENDER, DEFENDERLOST};
+    static GLuint attackEmblem, defendEmblem, defendLostEmblem;
+    static const int EMBLEM_SIZE;
 
     GUIPlayerView(const Player *player);
     virtual ~GUIPlayerView();
