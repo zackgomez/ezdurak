@@ -47,6 +47,8 @@ dist: ezdurak-gui
 	mkdir -p dist
 	tar -czvf dist/ezdurak-linux.tar.gz ezdurak-linux
 
+deploy: dist force_look
+	cd www; $(MAKE) deploy
 
 .PHONY: force_look
 force_look:
