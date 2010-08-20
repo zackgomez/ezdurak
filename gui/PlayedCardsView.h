@@ -18,6 +18,7 @@ public:
 
     AnimationPtr getAnimation(const Card &c, CardHolder *target,
                               int dur, float x1, float y1);
+    AnimationPtr getAnimation(CardHolder *target, int dur, float x1, float y1);
     
 private:
     // Helper functions

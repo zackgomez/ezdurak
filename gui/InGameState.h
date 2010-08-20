@@ -10,6 +10,7 @@
 #include "core/Player.h"
 #include "SynchronizedQueue.h"
 #include "PlayedCardsView.h"
+#include "PileCardHolder.h"
 #include "Animation.h"
 
 class Game;
@@ -73,8 +74,6 @@ private:
     std::list<AnimationPtr> animations_;
     PlayedCardsView playedCards_;
     Card trumpCard_;
-    int deckSize_;
-    int discardSize_;
 
     // Game Player members
     std::vector<PlayerPtr> players_;
@@ -91,9 +90,8 @@ private:
     std::map<ConstPlayerPtr, int> playerPositionMap_;
 
     // Pile display members
-    bool validSizes_;
-    GUIStringPtr deckString_;
-    GUIStringPtr discardString_;
+    PileCardHolder deck_;
+    PileCardHolder discard_;
 
     // Game members
     Game *game;

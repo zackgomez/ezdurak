@@ -139,7 +139,7 @@ private:
 };
 
 // -----------------------------------------------------------------------------
-// Parallen Animation - Runs one or more animations in parallel
+// Parallel Animation - Runs one or more animations in parallel
 // -----------------------------------------------------------------------------
 class ParallelAnimation :
     public Animation

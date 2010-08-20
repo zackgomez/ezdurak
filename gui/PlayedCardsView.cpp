@@ -86,9 +86,26 @@ AnimationPtr PlayedCardsView::getAnimation(const Card &c, CardHolder *target,
 
     getCardLocation(attacking, idx, x0, y0);
 
-    AnimationPtr ret(MoveAnimation::create(c, source, target, dur,
-                                           x0, y0, x1, y1));
-    return ret;
+    return MoveAnimation::create(c, source, target, dur, x0, y0, x1, y1);
+                                 
+}
+
+AnimationPtr PlayedCardsView::getAnimation(CardHolder *target, int dur,
+                                           float x1, float x2)
+{
+    std::list<AnimationPtr> anims;
+
+    // Add the attacking cards
+    const std::vector<Card> &cards = attackingCards_.getCards();
+    for (int i = 0; i  < cards.size(); i++)
+        anims.push_back(getAnimation(cards[i], target, dur, x1, x2));
+    // And the defending cards
+    const std::vector<Card> &dcards = defendingCards_.getCards();
+    for (int i = 0; i  < dcards.size(); i++)
+        anims.push_back(getAnimation(dcards[i], target, dur, x1, x2));
+
+    // Create and return the parallel animation
+    return ParallelAnimation::create(anims);
 }
 
 void PlayedCardsView::getCardLocation(bool attacking, int index, float &x, float &y)

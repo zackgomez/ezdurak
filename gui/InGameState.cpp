@@ -16,6 +16,11 @@
 #define M_PI 3.141592653589793238462643
 #endif
 
+const static float DECK_X = 15 + GUICard::CARDX/2.;
+const static float DECK_Y = 15 + GUICard::CARDY/2.;
+const static float DISCARD_X = GUIApp::SCREENX - 15 - GUICard::CARDX/2.;
+const static float DISCARD_Y = 15 + GUICard::CARDY/2.;
+
 using namespace std;
 
 void* game_thread_main(void *gameobj)
@@ -35,12 +40,9 @@ GUIStatePtr InGameState::create(int numPlayers)
 }
 
 InGameState::InGameState(int numPlayers) :
-    deckSize_(0),
-    discardSize_(0),
     gameOver_(false),
     validPlayerDisplays_(true),
-    humanView_(NULL),
-    validSizes_(false)
+    humanView_(NULL)
 {
     pthread_mutex_init(&guiLock_, NULL);
     pthread_cond_init (&displaysCV_, NULL);
@@ -142,6 +144,10 @@ void InGameState::gameStart()
     // First set the trumpCard in case we need it later
     trumpCard_ = agent_->getTrumpCard();
 
+    // Set the deck and discard size
+    deck_ = PileCardHolder(agent_->getDeckSize());
+    discard_ = PileCardHolder(agent_->getDiscardSize());
+
     // Now set the local players
     const vector<PlayerPtr> players = agent_->getPlayers();
     setPlayers(players);
@@ -172,9 +178,6 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     assert(players_.size() == playersDisplay_.size());
     
     playedCards_.clearNextLocation();
-
-    deckSize_ = agent_->getDeckSize();
-    discardSize_ = agent_->getDiscardSize();
 
     animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_], GUIPlayerView::NONE,
                                                         playerDisplayMap_[defender_], GUIPlayerView::NONE));
@@ -207,12 +210,15 @@ void InGameState::endRound(bool successfulDefend)
 
     if (successfulDefend)
     {
-        // On successful defend, clear the play table
-        // TODO an animation that "crunches" the cards to the discard pile and then
-        // gives the discard pile some cards
-        animations_.push_back(DelayAnimation::create(30));
-        animations_.push_back(ClearAnimation::create(playedCards_.getAttackingHolder()));
-        animations_.push_back(ClearAnimation::create(playedCards_.getDefendingHolder()));
+        // We need to wait until all the animations up to this point are complete
+        pthread_cond_t cond;
+        pthread_cond_init(&cond, NULL);
+        animations_.push_back(SynchronizationAnimation::create(&cond));
+        pthread_cond_wait(&cond, &guiLock_);
+        pthread_cond_destroy(&cond);
+
+        // Now add an animation crunching all of the cards to the discard pile
+        animations_.push_back(playedCards_.getAnimation(&discard_, 25, DISCARD_X, DISCARD_Y));
     }
     else
     {
@@ -286,8 +292,8 @@ void InGameState::givenCards(ConstPlayerPtr player, int numCards)
     float x, y, angle;
     getPlayerPosition(playerPositionMap_[player], x, y, angle);
     for (int i = 0; i < numCards; i++)
-        animations_.push_back(MoveAnimation::create(Card(), NULL, playerDisplayMap_[player]->getCardHolder(),
-                                                    25, GUIApp::SCREENX/2, GUIApp::SCREENY/2, x, y));
+        animations_.push_back(MoveAnimation::create(Card(), &deck_, playerDisplayMap_[player]->getCardHolder(),
+                                                    25, DECK_X, DECK_Y, x, y));
     pthread_mutex_unlock(&guiLock_);
 }
 
@@ -301,8 +307,8 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
     pthread_cond_init(&cond, NULL);
     animations_.push_back(SynchronizationAnimation::create(&cond));
     pthread_cond_wait(&cond, &guiLock_);
+    pthread_cond_destroy(&cond);
 
-    // TODO a better animation, with the cards "crunching"
     float x, y, angle;
     getPlayerPosition(playerPositionMap_[player], x, y, angle);
     std::list<AnimationPtr> anims;
@@ -327,22 +333,12 @@ void InGameState::drawPlayedCards() {
 
 void InGameState::drawPiles()
 {
-    if (!validSizes_)
-    {
-        std::stringstream deckss, discardss;
-        deckss << deckSize_;
-        discardss << discardSize_;
-
-        deckString_ = GUIString::create(deckss.str());
-        discardString_ = GUIString::create(discardss.str());
-    }
-
     // Draw the deck and discard pile
     glLoadIdentity();
-    glTranslatef(10 + GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
+    glTranslatef(DECK_X, DECK_Y, 0);
     glColor3f(1, 1, 1);
     // First draw the trump, rotated and moved
-    if (deckSize_ > 0)
+    if (deck_.getNumCards() > 0)
     {
         glPushMatrix();
         glTranslatef(GUICard::CARDY/2 - GUICard::CARDX/2, 0, 0);
@@ -350,21 +346,21 @@ void InGameState::drawPiles()
         GUICard::draw(trumpCard_);
         glPopMatrix();
     }
-    if (deckSize_ > 1)
+    if (deck_.getNumCards() > 1)
     {
         GUICard::drawCardBack();
         glColor3f(0, 0, 0);
-        deckString_->draw();
+        //deckString_->draw();
     }
 
-    if (discardSize_ > 0)
+    if (discard_.getNumCards() > 0)
     {
         glLoadIdentity();
-        glTranslatef(GUIApp::SCREENX - 10 - GUICard::CARDX/2, 10 + GUICard::CARDY/2, 0);
+        glTranslatef(DISCARD_X, DISCARD_Y, 0);
         glColor3f(1, 1, 1);
         GUICard::drawCardBack();
         glColor3f(0, 0, 0);
-        discardString_->draw();
+        //discardString_->draw();
     }
 }
 
