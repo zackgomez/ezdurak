@@ -33,6 +33,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_152FA0177D5443679C2F901134B80A63"
+        "OwnerKey" = "8:_6B85FE19D24F4414A8F84F878465510D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2FC1BB36505E473FB8114E41DAB3248C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -51,14 +57,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4B39765138404C0A9471900756493949"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_424BB741B63B4619AF05FEB7F4CD9991"
+        "OwnerKey" = "8:_152FA0177D5443679C2F901134B80A63"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_68FDF583C56D45BBAB5AA8067079F8AF"
-        "OwnerKey" = "8:_F2AABD43F679485AB85E753192D75F3C"
+        "MsmKey" = "8:_4B39765138404C0A9471900756493949"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -125,12 +131,6 @@
         {
         "MsmKey" = "8:_D99D7CF874964D548588BA064366BAEB"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F2AABD43F679485AB85E753192D75F3C"
-        "OwnerKey" = "8:_6B85FE19D24F4414A8F84F878465510D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -207,6 +207,24 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.9.0.x86"
+                    {
+                    "Name" = "8:Visual C++ Runtime Libraries (x86)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.9.0.x86"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -677,7 +695,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ezdurak"
         "ProductCode" = "8:{DF02E869-C16B-4B4C-B1F1-D19923AFC5BA}"
-        "PackageCode" = "8:{7AEE9C84-61FD-4CD7-9361-7984771656F8}"
+        "PackageCode" = "8:{ADC3861A-9E99-4E72-946F-9BDBA13E9C52}"
         "UpgradeCode" = "8:{8075C0CB-2531-4D45-BED9-D8A7E15CDA3E}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -1220,11 +1238,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_68FDF583C56D45BBAB5AA8067079F8AF"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_152FA0177D5443679C2F901134B80A63"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_crt_x86.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86.msm"
                 "Properties"
                 {
                 }
@@ -1234,11 +1252,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_F2AABD43F679485AB85E753192D75F3C"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_424BB741B63B4619AF05FEB7F4CD9991"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86.msm"
+            "SourcePath" = "8:microsoft_vc90_crt_x86.msm"
                 "Properties"
                 {
                 }
