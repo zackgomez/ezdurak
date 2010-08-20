@@ -20,6 +20,7 @@ public:
     virtual void addCards(const std::vector<Card>& cs);
     virtual void removeCard(Card c);
     virtual void clear();
+    virtual bool contains(const Card &c) const;
 
 private:
     const GUIPlayer *player_;

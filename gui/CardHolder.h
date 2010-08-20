@@ -11,5 +11,6 @@ public:
     virtual void addCards(const std::vector<Card>& cs) = 0;
     virtual void removeCard(Card c) = 0;
     virtual void clear() = 0;
+    virtual bool contains(const Card &c) const = 0;
 };
 

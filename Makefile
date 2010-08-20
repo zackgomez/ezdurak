@@ -1,6 +1,6 @@
 include Makefile.inc
 
-DIRS	= gui core cli ai
+DIRS	= gui core cli ai www
 EXE	= ezdurak-gui ezdurak-cli
 OBJS	= guimain.o climain.o
 OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a libezdurakai.a

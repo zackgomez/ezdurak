@@ -42,6 +42,11 @@ public:
         cards_.clear();
     }
 
+    virtual bool contains(const Card &c) const
+    {
+        return std::find(cards_.begin(), cards_.end(), c) != cards_.end();
+    }
+
 private:
     std::vector<Card> cards_;
 };

@@ -8,3 +8,7 @@ site:
 
 deploy: site
 	scp -r index.html files dkvirtual@software.dkgomez.com:~/software.dkgomez.com/ezdurak
+
+clean:
+	echo "clean up www"
+	rm -rf files

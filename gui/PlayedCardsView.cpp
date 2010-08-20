@@ -45,24 +45,61 @@ void PlayedCardsView::render()
 
 void PlayedCardsView::getNextCardLocation(bool attacking, float &x, float &y)
 {
-    x = 400 - 1.*GUICard::CARDX- 0.4*GUICard::CARDX;
-    y = 300 - .6*GUICard::CARDY;
     int idx;
     if (attacking)
         idx = nextAttackingIdx_++;
     else
         idx = nextDefendingIdx_++;
 
-    if (idx > 2)
-        y += 1.2 * GUICard::CARDY;
-
-    x += (idx % 3) * 1.4 * GUICard::CARDX;
-    if (!attacking)
-        x += 0.2 * GUICard::CARDX;
+    getCardLocation(attacking, idx, x, y);
 }
 
 void PlayedCardsView::clearNextLocation()
 {
     nextAttackingIdx_ = 0;
     nextDefendingIdx_ = 0;
+}
+
+AnimationPtr PlayedCardsView::getAnimation(const Card &c, CardHolder *target,
+                                           int dur, float x1, float y1)
+{
+    CardHolderImpl *source = NULL;
+    float x0, y0;
+    bool attacking;
+    if (attackingCards_.contains(c))
+    {
+        source = &attackingCards_;
+        attacking = true;
+    }
+    else if (defendingCards_.contains(c))
+    {
+        source = &defendingCards_;
+        attacking = false;
+    }
+    else
+        assert(false && "Card not found");
+
+    std::vector<Card>::iterator it = std::find(source->getCards().begin(),
+                                               source->getCards().end(), c);
+    assert(it != source->getCards().end());
+    int idx = it - source->getCards().begin();
+
+    getCardLocation(attacking, idx, x0, y0);
+
+    AnimationPtr ret(MoveAnimation::create(c, source, target, dur,
+                                           x0, y0, x1, y1));
+    return ret;
+}
+
+void PlayedCardsView::getCardLocation(bool attacking, int index, float &x, float &y)
+{
+    x = 400 - 1.*GUICard::CARDX- 0.4*GUICard::CARDX;
+    y = 300 - .6*GUICard::CARDY;
+
+    if (index > 2)
+        y += 1.2 * GUICard::CARDY;
+
+    x += (index % 3) * 1.4 * GUICard::CARDX;
+    if (!attacking)
+        x += 0.2 * GUICard::CARDX;
 }

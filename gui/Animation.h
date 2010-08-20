@@ -1,6 +1,8 @@
 #pragma once
 #include "core/Card.h"
 #include <boost/shared_ptr.hpp>
+#include <list>
+#include <pthread.h>
 #include "GUICard.h"
 #include "GUIPlayerView.h"
 
@@ -281,3 +283,38 @@ private:
     int x0_, y0_;
     int x1_, y1_;
 };
+
+// -----------------------------------------------------------------------------
+// Synchronization Animation - Signals a condition variable
+// -----------------------------------------------------------------------------
+class SynchronizationAnimation :
+    public Animation
+{
+public:
+    static AnimationPtr create(pthread_cond_t *cond)
+    {
+        AnimationPtr ret(new SynchronizationAnimation(cond));
+        return ret;
+    }
+
+    bool isDone() const
+    {
+        return signalled_;
+    }
+    void render()
+    {
+        pthread_cond_signal(cond_);
+        signalled_ = true;
+    }
+
+private:
+    // Private constructor for create idiom
+    SynchronizationAnimation(pthread_cond_t *c) :
+        cond_(c),
+        signalled_(false)
+    { /* Empty */ }
+
+    pthread_cond_t *cond_;
+    bool signalled_;
+};
+

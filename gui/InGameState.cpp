@@ -34,7 +34,6 @@ GUIStatePtr InGameState::create(int numPlayers)
     return ret;
 }
 
-
 InGameState::InGameState(int numPlayers) :
     deckSize_(0),
     discardSize_(0),
@@ -209,6 +208,8 @@ void InGameState::endRound(bool successfulDefend)
     if (successfulDefend)
     {
         // On successful defend, clear the play table
+        // TODO an animation that "crunches" the cards to the discard pile and then
+        // gives the discard pile some cards
         animations_.push_back(DelayAnimation::create(30));
         animations_.push_back(ClearAnimation::create(playedCards_.getAttackingHolder()));
         animations_.push_back(ClearAnimation::create(playedCards_.getDefendingHolder()));
@@ -272,6 +273,8 @@ void InGameState::playedOut(ConstPlayerPtr player)
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
+    // TODO some kind of animation here (v2.0)
+
     pthread_mutex_unlock(&guiLock_);
 }
 
@@ -293,16 +296,20 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
     pthread_mutex_lock(&guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
-    // TODO a better animation, with the cards "crunching"
-    animations_.push_back(DelayAnimation::create(30));
-    animations_.push_back(ClearAnimation::create(playedCards_.getAttackingHolder()));
-    animations_.push_back(ClearAnimation::create(playedCards_.getDefendingHolder()));
+    // We need to wait until all the animations up to this point are complete
+    pthread_cond_t cond;
+    pthread_cond_init(&cond, NULL);
+    animations_.push_back(SynchronizationAnimation::create(&cond));
+    pthread_cond_wait(&cond, &guiLock_);
 
+    // TODO a better animation, with the cards "crunching"
     float x, y, angle;
     getPlayerPosition(playerPositionMap_[player], x, y, angle);
+    std::list<AnimationPtr> anims;
     for (int i = 0; i < cards.size(); i++)
-        animations_.push_back(MoveAnimation::create(cards[i], NULL, playerDisplayMap_[player]->getCardHolder(),
-                                                    25, GUIApp::SCREENX/2, GUIApp::SCREENY/2, x, y));
+        anims.push_back(playedCards_.getAnimation(cards[i], playerDisplayMap_[player]->getCardHolder(),
+                                                  25, x, y));
+    animations_.push_back(ParallelAnimation::create(anims));
 	
     pthread_mutex_unlock(&guiLock_);
 }
@@ -313,8 +320,7 @@ void InGameState::wait(int ms)
 }
 
 
-void InGameState::drawPlayedCards()
-{
+void InGameState::drawPlayedCards() {
     glTranslatef(GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0);
     playedCards_.render();
 }

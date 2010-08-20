@@ -62,3 +62,8 @@ void HumanCardHolder::clear()
 {
     assert(false && "This function has no meaning for HumanCardHolder");
 }
+
+bool HumanCardHolder::contains(const Card &c) const
+{
+    return std::find(cards_.begin(), cards_.end(), c) != cards_.end();
+}
