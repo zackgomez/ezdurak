@@ -22,14 +22,6 @@
 		144AD37211EEDF600080D7F0 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35211EEDF600080D7F0 /* Makefile */; };
 		144AD37311EEDF600080D7F0 /* PlayerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35411EEDF600080D7F0 /* PlayerImpl.cpp */; };
 		144AD37411EEDF600080D7F0 /* ScoreKeeper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35611EEDF600080D7F0 /* ScoreKeeper.cpp */; };
-		144AD37511EEDF600080D7F0 /* GUICard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35911EEDF600080D7F0 /* GUICard.cpp */; };
-		144AD37611EEDF600080D7F0 /* GUIHumanView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35B11EEDF600080D7F0 /* GUIHumanView.cpp */; };
-		144AD37711EEDF600080D7F0 /* GUIImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35D11EEDF600080D7F0 /* GUIImpl.cpp */; };
-		144AD37811EEDF600080D7F0 /* GUIListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD35F11EEDF600080D7F0 /* GUIListener.cpp */; };
-		144AD37911EEDF600080D7F0 /* GUIPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD36111EEDF600080D7F0 /* GUIPlayer.cpp */; };
-		144AD37A11EEDF600080D7F0 /* GUIPlayerView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD36311EEDF600080D7F0 /* GUIPlayerView.cpp */; };
-		144AD37B11EEDF600080D7F0 /* GUIString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD36511EEDF600080D7F0 /* GUIString.cpp */; };
-		144AD37C11EEDF600080D7F0 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 144AD36711EEDF600080D7F0 /* Makefile */; };
 		144AD3B211EEE2590080D7F0 /* SDL_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 144AD3B111EEE2590080D7F0 /* SDL_image.framework */; };
 		144AD3BC11EEE2DC0080D7F0 /* guimain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD3BB11EEE2DC0080D7F0 /* guimain.cpp */; };
 		144AD3CD11EEE30D0080D7F0 /* SDL_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 144AD3CC11EEE30D0080D7F0 /* SDL_ttf.framework */; };
@@ -37,6 +29,19 @@
 		144AD3E511EEE3860080D7F0 /* FreeMonoBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 144AD3E311EEE3860080D7F0 /* FreeMonoBold.ttf */; };
 		14845CDF11F0319100CBFACE /* SDL_image.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 144AD3B111EEE2590080D7F0 /* SDL_image.framework */; };
 		14845CE011F0319100CBFACE /* SDL_ttf.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 144AD3CC11EEE30D0080D7F0 /* SDL_ttf.framework */; };
+		14C2D7C7121E387700F6BE31 /* GUIApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7AD121E387700F6BE31 /* GUIApp.cpp */; };
+		14C2D7C8121E387700F6BE31 /* GUICard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7AF121E387700F6BE31 /* GUICard.cpp */; };
+		14C2D7C9121E387700F6BE31 /* GUIHumanView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7B1121E387700F6BE31 /* GUIHumanView.cpp */; };
+		14C2D7CA121E387700F6BE31 /* GUIPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7B3121E387700F6BE31 /* GUIPlayer.cpp */; };
+		14C2D7CB121E387700F6BE31 /* GUIPlayerView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7B5121E387700F6BE31 /* GUIPlayerView.cpp */; };
+		14C2D7CC121E387700F6BE31 /* GUIString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7B8121E387700F6BE31 /* GUIString.cpp */; };
+		14C2D7CD121E387700F6BE31 /* GameOverState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7BA121E387700F6BE31 /* GameOverState.cpp */; };
+		14C2D7CE121E387700F6BE31 /* HumanCardHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7BC121E387700F6BE31 /* HumanCardHolder.cpp */; };
+		14C2D7CF121E387700F6BE31 /* InGameState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7BE121E387700F6BE31 /* InGameState.cpp */; };
+		14C2D7D1121E387700F6BE31 /* PlayedCardsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7C2121E387700F6BE31 /* PlayedCardsView.cpp */; };
+		14C2D7D5121E388C00F6BE31 /* shield.png in Resources */ = {isa = PBXBuildFile; fileRef = 14C2D7D2121E388C00F6BE31 /* shield.png */; };
+		14C2D7D6121E388C00F6BE31 /* shieldx.png in Resources */ = {isa = PBXBuildFile; fileRef = 14C2D7D3121E388C00F6BE31 /* shieldx.png */; };
+		14C2D7D7121E388C00F6BE31 /* sword.png in Resources */ = {isa = PBXBuildFile; fileRef = 14C2D7D4121E388C00F6BE31 /* sword.png */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -87,28 +92,42 @@
 		144AD35511EEDF600080D7F0 /* PlayerImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerImpl.h; sourceTree = "<group>"; };
 		144AD35611EEDF600080D7F0 /* ScoreKeeper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreKeeper.cpp; sourceTree = "<group>"; };
 		144AD35711EEDF600080D7F0 /* ScoreKeeper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreKeeper.h; sourceTree = "<group>"; };
-		144AD35911EEDF600080D7F0 /* GUICard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUICard.cpp; sourceTree = "<group>"; };
-		144AD35A11EEDF600080D7F0 /* GUICard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUICard.h; sourceTree = "<group>"; };
-		144AD35B11EEDF600080D7F0 /* GUIHumanView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIHumanView.cpp; sourceTree = "<group>"; };
-		144AD35C11EEDF600080D7F0 /* GUIHumanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIHumanView.h; sourceTree = "<group>"; };
-		144AD35D11EEDF600080D7F0 /* GUIImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIImpl.cpp; sourceTree = "<group>"; };
-		144AD35E11EEDF600080D7F0 /* GUIImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIImpl.h; sourceTree = "<group>"; };
-		144AD35F11EEDF600080D7F0 /* GUIListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIListener.cpp; sourceTree = "<group>"; };
-		144AD36011EEDF600080D7F0 /* GUIListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIListener.h; sourceTree = "<group>"; };
-		144AD36111EEDF600080D7F0 /* GUIPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPlayer.cpp; sourceTree = "<group>"; };
-		144AD36211EEDF600080D7F0 /* GUIPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPlayer.h; sourceTree = "<group>"; };
-		144AD36311EEDF600080D7F0 /* GUIPlayerView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPlayerView.cpp; sourceTree = "<group>"; };
-		144AD36411EEDF600080D7F0 /* GUIPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPlayerView.h; sourceTree = "<group>"; };
-		144AD36511EEDF600080D7F0 /* GUIString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIString.cpp; sourceTree = "<group>"; };
-		144AD36611EEDF600080D7F0 /* GUIString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIString.h; sourceTree = "<group>"; };
-		144AD36711EEDF600080D7F0 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		144AD36811EEDF600080D7F0 /* SynchronizedQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynchronizedQueue.h; sourceTree = "<group>"; };
-		144AD36911EEDF600080D7F0 /* gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl.h; sourceTree = "<group>"; };
 		144AD3B111EEE2590080D7F0 /* SDL_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_image.framework; path = Library/Frameworks/SDL_image.framework; sourceTree = SDKROOT; };
 		144AD3BB11EEE2DC0080D7F0 /* guimain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = guimain.cpp; path = ../guimain.cpp; sourceTree = SOURCE_ROOT; };
 		144AD3CC11EEE30D0080D7F0 /* SDL_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_ttf.framework; path = Library/Frameworks/SDL_ttf.framework; sourceTree = SDKROOT; };
 		144AD3E211EEE3860080D7F0 /* cards.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cards.png; path = ../resources/cards.png; sourceTree = SOURCE_ROOT; };
 		144AD3E311EEE3860080D7F0 /* FreeMonoBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FreeMonoBold.ttf; path = ../resources/FreeMonoBold.ttf; sourceTree = SOURCE_ROOT; };
+		14C2D7AA121E387700F6BE31 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animation.h; sourceTree = "<group>"; };
+		14C2D7AB121E387700F6BE31 /* CardHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardHolder.h; sourceTree = "<group>"; };
+		14C2D7AC121E387700F6BE31 /* CardHolderImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardHolderImpl.h; sourceTree = "<group>"; };
+		14C2D7AD121E387700F6BE31 /* GUIApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIApp.cpp; sourceTree = "<group>"; };
+		14C2D7AE121E387700F6BE31 /* GUIApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIApp.h; sourceTree = "<group>"; };
+		14C2D7AF121E387700F6BE31 /* GUICard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUICard.cpp; sourceTree = "<group>"; };
+		14C2D7B0121E387700F6BE31 /* GUICard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUICard.h; sourceTree = "<group>"; };
+		14C2D7B1121E387700F6BE31 /* GUIHumanView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIHumanView.cpp; sourceTree = "<group>"; };
+		14C2D7B2121E387700F6BE31 /* GUIHumanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIHumanView.h; sourceTree = "<group>"; };
+		14C2D7B3121E387700F6BE31 /* GUIPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPlayer.cpp; sourceTree = "<group>"; };
+		14C2D7B4121E387700F6BE31 /* GUIPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPlayer.h; sourceTree = "<group>"; };
+		14C2D7B5121E387700F6BE31 /* GUIPlayerView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIPlayerView.cpp; sourceTree = "<group>"; };
+		14C2D7B6121E387700F6BE31 /* GUIPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIPlayerView.h; sourceTree = "<group>"; };
+		14C2D7B7121E387700F6BE31 /* GUIState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIState.h; sourceTree = "<group>"; };
+		14C2D7B8121E387700F6BE31 /* GUIString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUIString.cpp; sourceTree = "<group>"; };
+		14C2D7B9121E387700F6BE31 /* GUIString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIString.h; sourceTree = "<group>"; };
+		14C2D7BA121E387700F6BE31 /* GameOverState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameOverState.cpp; sourceTree = "<group>"; };
+		14C2D7BB121E387700F6BE31 /* GameOverState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOverState.h; sourceTree = "<group>"; };
+		14C2D7BC121E387700F6BE31 /* HumanCardHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HumanCardHolder.cpp; sourceTree = "<group>"; };
+		14C2D7BD121E387700F6BE31 /* HumanCardHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HumanCardHolder.h; sourceTree = "<group>"; };
+		14C2D7BE121E387700F6BE31 /* InGameState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InGameState.cpp; sourceTree = "<group>"; };
+		14C2D7BF121E387700F6BE31 /* InGameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InGameState.h; sourceTree = "<group>"; };
+		14C2D7C1121E387700F6BE31 /* PileCardHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PileCardHolder.h; sourceTree = "<group>"; };
+		14C2D7C2121E387700F6BE31 /* PlayedCardsView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayedCardsView.cpp; sourceTree = "<group>"; };
+		14C2D7C3121E387700F6BE31 /* PlayedCardsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayedCardsView.h; sourceTree = "<group>"; };
+		14C2D7C4121E387700F6BE31 /* QuitState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuitState.h; sourceTree = "<group>"; };
+		14C2D7C5121E387700F6BE31 /* SynchronizedQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynchronizedQueue.h; sourceTree = "<group>"; };
+		14C2D7C6121E387700F6BE31 /* gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl.h; sourceTree = "<group>"; };
+		14C2D7D2121E388C00F6BE31 /* shield.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shield.png; path = ../resources/shield.png; sourceTree = SOURCE_ROOT; };
+		14C2D7D3121E388C00F6BE31 /* shieldx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shieldx.png; path = ../resources/shieldx.png; sourceTree = SOURCE_ROOT; };
+		14C2D7D4121E388C00F6BE31 /* sword.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sword.png; path = ../resources/sword.png; sourceTree = SOURCE_ROOT; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -205,26 +224,37 @@
 			path = ../core;
 			sourceTree = SOURCE_ROOT;
 		};
-		144AD35811EEDF600080D7F0 /* gui */ = {
+		14C2D7A9121E387700F6BE31 /* gui */ = {
 			isa = PBXGroup;
 			children = (
-				144AD35911EEDF600080D7F0 /* GUICard.cpp */,
-				144AD35A11EEDF600080D7F0 /* GUICard.h */,
-				144AD35B11EEDF600080D7F0 /* GUIHumanView.cpp */,
-				144AD35C11EEDF600080D7F0 /* GUIHumanView.h */,
-				144AD35D11EEDF600080D7F0 /* GUIImpl.cpp */,
-				144AD35E11EEDF600080D7F0 /* GUIImpl.h */,
-				144AD35F11EEDF600080D7F0 /* GUIListener.cpp */,
-				144AD36011EEDF600080D7F0 /* GUIListener.h */,
-				144AD36111EEDF600080D7F0 /* GUIPlayer.cpp */,
-				144AD36211EEDF600080D7F0 /* GUIPlayer.h */,
-				144AD36311EEDF600080D7F0 /* GUIPlayerView.cpp */,
-				144AD36411EEDF600080D7F0 /* GUIPlayerView.h */,
-				144AD36511EEDF600080D7F0 /* GUIString.cpp */,
-				144AD36611EEDF600080D7F0 /* GUIString.h */,
-				144AD36711EEDF600080D7F0 /* Makefile */,
-				144AD36811EEDF600080D7F0 /* SynchronizedQueue.h */,
-				144AD36911EEDF600080D7F0 /* gl.h */,
+				14C2D7AA121E387700F6BE31 /* Animation.h */,
+				14C2D7AB121E387700F6BE31 /* CardHolder.h */,
+				14C2D7AC121E387700F6BE31 /* CardHolderImpl.h */,
+				14C2D7AD121E387700F6BE31 /* GUIApp.cpp */,
+				14C2D7AE121E387700F6BE31 /* GUIApp.h */,
+				14C2D7AF121E387700F6BE31 /* GUICard.cpp */,
+				14C2D7B0121E387700F6BE31 /* GUICard.h */,
+				14C2D7B1121E387700F6BE31 /* GUIHumanView.cpp */,
+				14C2D7B2121E387700F6BE31 /* GUIHumanView.h */,
+				14C2D7B3121E387700F6BE31 /* GUIPlayer.cpp */,
+				14C2D7B4121E387700F6BE31 /* GUIPlayer.h */,
+				14C2D7B5121E387700F6BE31 /* GUIPlayerView.cpp */,
+				14C2D7B6121E387700F6BE31 /* GUIPlayerView.h */,
+				14C2D7B7121E387700F6BE31 /* GUIState.h */,
+				14C2D7B8121E387700F6BE31 /* GUIString.cpp */,
+				14C2D7B9121E387700F6BE31 /* GUIString.h */,
+				14C2D7BA121E387700F6BE31 /* GameOverState.cpp */,
+				14C2D7BB121E387700F6BE31 /* GameOverState.h */,
+				14C2D7BC121E387700F6BE31 /* HumanCardHolder.cpp */,
+				14C2D7BD121E387700F6BE31 /* HumanCardHolder.h */,
+				14C2D7BE121E387700F6BE31 /* InGameState.cpp */,
+				14C2D7BF121E387700F6BE31 /* InGameState.h */,
+				14C2D7C1121E387700F6BE31 /* PileCardHolder.h */,
+				14C2D7C2121E387700F6BE31 /* PlayedCardsView.cpp */,
+				14C2D7C3121E387700F6BE31 /* PlayedCardsView.h */,
+				14C2D7C4121E387700F6BE31 /* QuitState.h */,
+				14C2D7C5121E387700F6BE31 /* SynchronizedQueue.h */,
+				14C2D7C6121E387700F6BE31 /* gl.h */,
 			);
 			name = gui;
 			path = ../gui;
@@ -254,11 +284,11 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				14C2D7A9121E387700F6BE31 /* gui */,
 				144AD3BB11EEE2DC0080D7F0 /* guimain.cpp */,
 				144AD33F11EEDF600080D7F0 /* ai */,
 				144AD34311EEDF600080D7F0 /* cli */,
 				144AD34911EEDF600080D7F0 /* core */,
-				144AD35811EEDF600080D7F0 /* gui */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -266,6 +296,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				14C2D7D2121E388C00F6BE31 /* shield.png */,
+				14C2D7D3121E388C00F6BE31 /* shieldx.png */,
+				14C2D7D4121E388C00F6BE31 /* sword.png */,
 				144AD3E211EEE3860080D7F0 /* cards.png */,
 				144AD3E311EEE3860080D7F0 /* FreeMonoBold.ttf */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -336,6 +369,9 @@
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				144AD3E411EEE3860080D7F0 /* cards.png in Resources */,
 				144AD3E511EEE3860080D7F0 /* FreeMonoBold.ttf in Resources */,
+				14C2D7D5121E388C00F6BE31 /* shield.png in Resources */,
+				14C2D7D6121E388C00F6BE31 /* shieldx.png in Resources */,
+				14C2D7D7121E388C00F6BE31 /* sword.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,15 +394,17 @@
 				144AD37211EEDF600080D7F0 /* Makefile in Sources */,
 				144AD37311EEDF600080D7F0 /* PlayerImpl.cpp in Sources */,
 				144AD37411EEDF600080D7F0 /* ScoreKeeper.cpp in Sources */,
-				144AD37511EEDF600080D7F0 /* GUICard.cpp in Sources */,
-				144AD37611EEDF600080D7F0 /* GUIHumanView.cpp in Sources */,
-				144AD37711EEDF600080D7F0 /* GUIImpl.cpp in Sources */,
-				144AD37811EEDF600080D7F0 /* GUIListener.cpp in Sources */,
-				144AD37911EEDF600080D7F0 /* GUIPlayer.cpp in Sources */,
-				144AD37A11EEDF600080D7F0 /* GUIPlayerView.cpp in Sources */,
-				144AD37B11EEDF600080D7F0 /* GUIString.cpp in Sources */,
-				144AD37C11EEDF600080D7F0 /* Makefile in Sources */,
 				144AD3BC11EEE2DC0080D7F0 /* guimain.cpp in Sources */,
+				14C2D7C7121E387700F6BE31 /* GUIApp.cpp in Sources */,
+				14C2D7C8121E387700F6BE31 /* GUICard.cpp in Sources */,
+				14C2D7C9121E387700F6BE31 /* GUIHumanView.cpp in Sources */,
+				14C2D7CA121E387700F6BE31 /* GUIPlayer.cpp in Sources */,
+				14C2D7CB121E387700F6BE31 /* GUIPlayerView.cpp in Sources */,
+				14C2D7CC121E387700F6BE31 /* GUIString.cpp in Sources */,
+				14C2D7CD121E387700F6BE31 /* GameOverState.cpp in Sources */,
+				14C2D7CE121E387700F6BE31 /* HumanCardHolder.cpp in Sources */,
+				14C2D7CF121E387700F6BE31 /* InGameState.cpp in Sources */,
+				14C2D7D1121E387700F6BE31 /* PlayedCardsView.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +476,7 @@
 					"$(HEADER_SEARCH_PATHS)",
 					/Users/zack/programming/ezdurak,
 					/usr/local/include,
+					/Users/zack/programming/Libraries/boost,
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -469,6 +508,7 @@
 					"$(HEADER_SEARCH_PATHS)",
 					/Users/zack/programming/ezdurak,
 					/usr/local/include,
+					/Users/zack/programming/Libraries/boost,
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
