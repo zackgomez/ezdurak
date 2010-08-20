@@ -157,7 +157,11 @@ public:
         {
             (*it)->render();
             if ((*it)->isDone())
+            {
                 it = anims_.erase(it);
+                if (it == anims_.end())
+                    break;
+            }
         }
     }
 

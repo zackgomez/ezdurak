@@ -35,6 +35,7 @@ public:
     virtual bool contains(const Card &c) const
     {
         assert(false && "This method should not be called.");
+        return false;
     }
 
     int getNumCards() const

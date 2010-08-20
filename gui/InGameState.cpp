@@ -166,7 +166,7 @@ void InGameState::gameOver(ConstPlayerPtr biscuit)
     attacker_ = PlayerPtr();
     defender_ = PlayerPtr();
     biscuit_ = biscuit;
-    animations_.push_back(DelayAnimation::create(30));
+    //animations_.push_back(DelayAnimation::create(30));
     animations_.push_back(SetAnimation::create(gameOver_));
 
     pthread_mutex_unlock(&guiLock_);
@@ -216,6 +216,10 @@ void InGameState::endRound(bool successfulDefend)
         animations_.push_back(SynchronizationAnimation::create(&cond));
         pthread_cond_wait(&cond, &guiLock_);
         pthread_cond_destroy(&cond);
+
+        // Get rid of the current attacker
+        animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_],
+                                                           GUIPlayerView::NONE));
 
         // Now add an animation crunching all of the cards to the discard pile
         animations_.push_back(playedCards_.getAnimation(&discard_, 25, DISCARD_X, DISCARD_Y));
@@ -309,6 +313,10 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
     pthread_cond_wait(&cond, &guiLock_);
     pthread_cond_destroy(&cond);
 
+    // Get rid of the current attacker
+    animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_],
+                                                        GUIPlayerView::NONE));
+
     float x, y, angle;
     getPlayerPosition(playerPositionMap_[player], x, y, angle);
     std::list<AnimationPtr> anims;
@@ -319,12 +327,6 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
 	
     pthread_mutex_unlock(&guiLock_);
 }
-
-void InGameState::wait(int ms)
-{
-    SDL_Delay(ms);
-}
-
 
 void InGameState::drawPlayedCards() {
     glTranslatef(GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0);

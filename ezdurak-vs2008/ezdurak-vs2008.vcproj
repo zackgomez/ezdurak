@@ -220,7 +220,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\gui\HumanCardHolder.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\gui\InGameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\gui\PlayedCardsView.cpp"
 				>
 			</File>
 			<File
@@ -258,15 +266,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\gui\ClearAnimation.h"
-				>
-			</File>
-			<File
 				RelativePath="..\core\Deck.h"
-				>
-			</File>
-			<File
-				RelativePath="..\gui\DelayAnimation.h"
 				>
 			</File>
 			<File
@@ -318,10 +318,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\gui\HumanCardHolder.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\gui\HumanCardHolder.h"
 				>
 			</File>
@@ -330,19 +326,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\gui\MoveAnimation.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\gui\MoveAnimation.h"
-				>
-			</File>
-			<File
-				RelativePath="..\gui\ParallelAnimation.h"
-				>
-			</File>
-			<File
-				RelativePath="..\gui\PlayedCardsView.cpp"
+				RelativePath="..\gui\PileCardHolder.h"
 				>
 			</File>
 			<File
@@ -363,14 +347,6 @@
 			</File>
 			<File
 				RelativePath="..\core\ScoreKeeper.h"
-				>
-			</File>
-			<File
-				RelativePath="..\gui\SetAnimation.h"
-				>
-			</File>
-			<File
-				RelativePath="..\gui\StatusChangeAnimation.h"
 				>
 			</File>
 			<File
