@@ -22,7 +22,7 @@ public:
     T dequeue()
     {
         pthread_mutex_lock(&lock_);
-        if (queue_.empty())
+        while (queue_.empty())
             pthread_cond_wait(&cond_, &lock_);
 
         T ret = queue_.front();
@@ -54,6 +54,13 @@ public:
         ret = queue_.empty();
         pthread_mutex_unlock(&lock_);
         return ret;
+    }
+
+    void interrupt()
+    {
+        pthread_mutex_lock(&lock_);
+        pthread_cond_signal(&cond_);
+        pthread_mutex_unlock(&lock_);
     }
 
 private:
