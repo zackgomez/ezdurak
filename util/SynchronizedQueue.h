@@ -19,14 +19,15 @@ public:
     T dequeue()
     {
         Lock l(lock_);
+        if (done_)
+            pthread_exit(NULL);
+
         while (queue_.empty())
         {
             cond_.wait(lock_);
             if (done_)
                 pthread_exit(NULL);
         }
-        if (done_)
-            pthread_exit(NULL);
 
         T ret = queue_.front();
         queue_.pop();
