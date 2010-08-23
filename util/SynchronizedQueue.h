@@ -7,7 +7,8 @@ class SynchronizedQueue
 {
 public:
     SynchronizedQueue() :
-        queue_()
+        queue_(),
+        done_(false)
     {
     }
 
@@ -19,7 +20,13 @@ public:
     {
         Lock l(lock_);
         while (queue_.empty())
+        {
             cond_.wait(lock_);
+            if (done_)
+                pthread_exit(NULL);
+        }
+        if (done_)
+            pthread_exit(NULL);
 
         T ret = queue_.front();
         queue_.pop();
@@ -54,8 +61,13 @@ public:
         cond_.signal();
     }
 
+    void killReader()
+    {
+    }
+
 private:
     std::queue<T> queue_;
     Mutex         lock_;
     CondVar       cond_;
+    bool          done_;
 };
