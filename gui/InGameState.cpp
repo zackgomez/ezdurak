@@ -63,7 +63,8 @@ InGameState::InGameState(int numPlayers) :
 InGameState::~InGameState()
 {
     animations_.clear();
-    gameThread_.kill();
+    queue_.killReader();
+    gameThread_.join();
     delete game;
 
     for (int i = 0; i < playersDisplay_.size(); i++)

@@ -25,6 +25,7 @@ public:
             SDL_KillThread(t_);
             SDL_WaitThread(t_, NULL);
         }
+        running_ = false;
     }
 
 private:

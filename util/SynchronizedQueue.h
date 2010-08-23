@@ -63,6 +63,9 @@ public:
 
     void killReader()
     {
+        Lock l(lock_);
+        done_ = true;
+        cond_.signal();
     }
 
 private:

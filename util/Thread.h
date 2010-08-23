@@ -18,6 +18,13 @@ public:
         running_ = true;
     }
 
+    void join()
+    {
+        if (running_)
+            pthread_join(t_, NULL);
+        running_ = false;
+    }
+
     void kill()
     {
         if (running_)
@@ -25,6 +32,7 @@ public:
             pthread_cancel(t_);
             pthread_join(t_, NULL);
         }
+        running_ = false;
     }
 
 private:
