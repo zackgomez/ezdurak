@@ -69,7 +69,6 @@ InGameState::~InGameState()
 {
     animations_.clear();
     pthread_cancel(game_thread);
-    queue_.interrupt();
     pthread_join(game_thread, NULL);
     delete game;
 
