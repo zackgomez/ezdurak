@@ -1,5 +1,5 @@
 #pragma once
-#include "SynchronizedQueue.h"
+#include "util/SynchronizedQueue.h"
 #include "core/PlayerImpl.h"
 
 class GUIPlayer :

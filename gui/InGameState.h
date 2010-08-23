@@ -4,14 +4,14 @@
 #include <vector>
 #include <list>
 #include <map>
-#include "GUIString.h"
 #include "core/Card.h"
 #include "core/Player.h"
-#include "SynchronizedQueue.h"
+#include "util/Thread.h"
+#include "util/SynchronizedQueue.h"
+#include "GUIString.h"
 #include "PlayedCardsView.h"
 #include "PileCardHolder.h"
 #include "Animation.h"
-#include "util/Thread.h"
 
 class Game;
 class GUIListener;
