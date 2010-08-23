@@ -25,11 +25,9 @@ using namespace std;
 
 void* game_thread_main(void *gameobj)
 {
-    srand(time(NULL));
-    Game *game = (Game*) gameobj;
+    srand(time(NULL)); Game *game = (Game*) gameobj;
     game->run();
 
-    pthread_exit(NULL);
     return NULL;
 }
 
@@ -44,9 +42,6 @@ InGameState::InGameState(int numPlayers) :
     validPlayerDisplays_(true),
     humanView_(NULL)
 {
-    pthread_mutex_init(&guiLock_, NULL);
-    pthread_cond_init (&displaysCV_, NULL);
-
     assert(numPlayers >= 2 && numPlayers <= 6);
     std::vector<PlayerPtr> players(numPlayers);
     players[0] = PlayerPtr(new GUIPlayer("guiplayer", queue_));
@@ -62,21 +57,17 @@ InGameState::InGameState(int numPlayers) :
     game = new Game(players);
     game->addListener(this);
     agent_ = game;
-    pthread_create(&game_thread, NULL, game_thread_main, game);
+    gameThread_.run(game_thread_main, game);
 }
 
 InGameState::~InGameState()
 {
     animations_.clear();
-    pthread_cancel(game_thread);
-    queue_.interrupt();
-    pthread_join(game_thread, NULL);
+    gameThread_.kill();
     delete game;
 
     for (int i = 0; i < playersDisplay_.size(); i++)
         delete playersDisplay_[i];
-    pthread_mutex_destroy(&guiLock_);
-    pthread_cond_destroy (&displaysCV_);
 }
 
 void InGameState::render()
@@ -88,13 +79,12 @@ void InGameState::render()
     glLoadIdentity();
 
     // Lock
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
+
     drawPlayedCards();
     drawPiles();
     drawAnimations();
     drawPlayers();
-    // Unlock
-    pthread_mutex_unlock(&guiLock_);
 
 }
 
@@ -140,7 +130,7 @@ void InGameState::processEvent(SDL_Event &e)
 
 void InGameState::gameStart()
 {
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
 
     // First set the trumpCard in case we need it later
     trumpCard_ = agent_->getTrumpCard();
@@ -154,14 +144,12 @@ void InGameState::gameStart()
     setPlayers(players);
 
     // Now we wait for the displays to be created in another thread
-    pthread_cond_wait(&displaysCV_, &guiLock_);
-
-    pthread_mutex_unlock(&guiLock_);
+    syncCond_.wait(guiLock_);
 }
 
 void InGameState::gameOver(ConstPlayerPtr biscuit)
 {
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
     attacker_ = PlayerPtr();
@@ -170,12 +158,11 @@ void InGameState::gameOver(ConstPlayerPtr biscuit)
     //animations_.push_back(DelayAnimation::create(30));
     animations_.push_back(SetAnimation::create(gameOver_));
 
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 {
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
     
     playedCards_.clearNextLocation();
@@ -187,36 +174,30 @@ void InGameState::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     animations_.push_back(DelayAnimation::create(20));
     attacker_ = attacker;
     defender_ = defender;
-
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::attackerPassed(ConstPlayerPtr newAttacker)
 {
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
     
     animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_], GUIPlayerView::NONE,
                                                         playerDisplayMap_[newAttacker], GUIPlayerView::ATTACKER));
     animations_.push_back(DelayAnimation::create(20));
     attacker_ = newAttacker;
-
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::endRound(bool successfulDefend)
 {
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
     if (successfulDefend)
     {
         // We need to wait until all the animations up to this point are complete
-        pthread_cond_t cond;
-        pthread_cond_init(&cond, NULL);
-        animations_.push_back(SynchronizationAnimation::create(&cond));
-        pthread_cond_wait(&cond, &guiLock_);
-        pthread_cond_destroy(&cond);
+        CondVar c;
+        animations_.push_back(SynchronizationAnimation::create(&c));
+        c.wait(guiLock_);
 
         // Get rid of the current attacker
         animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_],
@@ -230,14 +211,12 @@ void InGameState::endRound(bool successfulDefend)
         animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[defender_],
                                                             GUIPlayerView::DEFENDERLOST));
     }
-
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::attackingCard(const Card &c)
 {
     // Lock
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
     float x0, y0, angle, x1, y1;
@@ -245,14 +224,12 @@ void InGameState::attackingCard(const Card &c)
     playedCards_.getNextCardLocation(true, x1, y1);
     animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[attacker_]->getCardHolder(), playedCards_.getAttackingHolder(),
                                                 25, x0, y0, x1, y1));
-    // Unlock
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::defendingCard(const Card &c)
 {
     // Lock
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
     float x0, y0, angle, x1, y1;
@@ -260,14 +237,12 @@ void InGameState::defendingCard(const Card &c)
     playedCards_.getNextCardLocation(false, x1, y1);
     animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[defender_]->getCardHolder(), playedCards_.getDefendingHolder(),
                                                 25, x0, y0, x1, y1));
-    // Unlock
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::piledOnCard(const Card &c)
 {
     // Lock
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
     float x0, y0, angle, x1, y1;
@@ -275,23 +250,19 @@ void InGameState::piledOnCard(const Card &c)
     playedCards_.getNextCardLocation(true, x1, y1);
     animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[attacker_]->getCardHolder(), playedCards_.getAttackingHolder(),
                                                 25, x0, y0, x1, y1));
-    // Unlock
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::playedOut(ConstPlayerPtr player)
 {
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
     // TODO some kind of animation here (v2.0)
-
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::givenCards(ConstPlayerPtr player, int numCards)
 {
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
     float x, y, angle;
@@ -299,20 +270,17 @@ void InGameState::givenCards(ConstPlayerPtr player, int numCards)
     for (int i = 0; i < numCards; i++)
         animations_.push_back(MoveAnimation::create(Card(), &deck_, playerDisplayMap_[player]->getCardHolder(),
                                                     25, DECK_X, DECK_Y, x, y));
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& cards)
 {
-    pthread_mutex_lock(&guiLock_);
+    Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
     // We need to wait until all the animations up to this point are complete
-    pthread_cond_t cond;
-    pthread_cond_init(&cond, NULL);
-    animations_.push_back(SynchronizationAnimation::create(&cond));
-    pthread_cond_wait(&cond, &guiLock_);
-    pthread_cond_destroy(&cond);
+    CondVar c;
+    animations_.push_back(SynchronizationAnimation::create(&c));
+    c.wait(guiLock_);
 
     // Get rid of the current attacker
     animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_],
@@ -325,8 +293,6 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
         anims.push_back(playedCards_.getAnimation(cards[i], playerDisplayMap_[player]->getCardHolder(),
                                                   25, x, y));
     animations_.push_back(ParallelAnimation::create(anims));
-	
-    pthread_mutex_unlock(&guiLock_);
 }
 
 void InGameState::drawPlayedCards() {
@@ -428,7 +394,7 @@ void InGameState::updatePlayers()
             playerDisplayMap_[players_[i]] = playersDisplay_[i];
         // We have created the players, signal to the other thread
         validPlayerDisplays_ = true;
-        pthread_cond_signal(&displaysCV_);
+        syncCond_.signal();
     }
 }
 
