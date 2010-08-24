@@ -1,7 +1,7 @@
 #pragma once
 #include "GUIPlayerView.h"
 #include "GUIString.h"
-#include "SynchronizedQueue.h"
+#include "util/SynchronizedQueue.h"
 #include "HumanCardHolder.h"
 
 class GUIPlayer;

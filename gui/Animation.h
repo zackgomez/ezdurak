@@ -2,7 +2,7 @@
 #include "core/Card.h"
 #include <boost/shared_ptr.hpp>
 #include <list>
-#include <pthread.h>
+#include "util/Thread.h"
 #include "GUICard.h"
 #include "GUIPlayerView.h"
 
@@ -295,7 +295,7 @@ class SynchronizationAnimation :
     public Animation
 {
 public:
-    static AnimationPtr create(pthread_cond_t *cond)
+    static AnimationPtr create(CondVar *cond)
     {
         AnimationPtr ret(new SynchronizationAnimation(cond));
         return ret;
@@ -307,18 +307,18 @@ public:
     }
     void render()
     {
-        pthread_cond_signal(cond_);
+        cond_->signal();
         signalled_ = true;
     }
 
 private:
     // Private constructor for create idiom
-    SynchronizationAnimation(pthread_cond_t *c) :
+    SynchronizationAnimation(CondVar *c) :
         cond_(c),
         signalled_(false)
     { /* Empty */ }
 
-    pthread_cond_t *cond_;
+    CondVar *cond_;
     bool signalled_;
 };
 

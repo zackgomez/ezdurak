@@ -4,11 +4,11 @@
 #include <vector>
 #include <list>
 #include <map>
-#include <pthread.h>
-#include "GUIString.h"
 #include "core/Card.h"
 #include "core/Player.h"
-#include "SynchronizedQueue.h"
+#include "util/Thread.h"
+#include "util/SynchronizedQueue.h"
+#include "GUIString.h"
 #include "PlayedCardsView.h"
 #include "PileCardHolder.h"
 #include "Animation.h"
@@ -82,7 +82,6 @@ private:
 
     // Player display members
     bool validPlayerDisplays_;
-    // TODO:2010-07-19:zack: Make this a smart ptr (probably auto_ptr)
     GUIHumanView *humanView_;
     std::vector<GUIPlayerView*> playersDisplay_;
     std::map<ConstPlayerPtr, GUIPlayerView*> playerDisplayMap_;
@@ -95,8 +94,8 @@ private:
     // Game members
     Game *game;
     GameAgent *agent_;
-    pthread_t game_thread;
     SynchronizedQueue<int> queue_;
-    pthread_mutex_t guiLock_;
-    pthread_cond_t  displaysCV_;
+    Thread gameThread_;
+    Mutex guiLock_;
+    CondVar syncCond_;;
 };

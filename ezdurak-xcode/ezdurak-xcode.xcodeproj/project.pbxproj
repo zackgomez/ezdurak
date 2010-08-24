@@ -66,7 +66,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8D1107260486CEB800E47090 /* ezdurak-xcode */;
+			remoteGlobalIDString = 8D1107260486CEB800E47090;
 			remoteInfo = "ezdurak-xcode";
 		};
 /* End PBXContainerItemProxy section */
