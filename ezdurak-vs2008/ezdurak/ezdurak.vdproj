@@ -33,8 +33,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_152FA0177D5443679C2F901134B80A63"
-        "OwnerKey" = "8:_6B85FE19D24F4414A8F84F878465510D"
+        "MsmKey" = "8:_1980E34B1743480F958DB0C9830FA828"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -53,12 +53,6 @@
         {
         "MsmKey" = "8:_3DBF462F606848049A45C6A42E2DB6EE"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_424BB741B63B4619AF05FEB7F4CD9991"
-        "OwnerKey" = "8:_152FA0177D5443679C2F901134B80A63"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -111,6 +105,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_9B3AB4249A4640E4AEBE8751E6B62BAE"
+        "OwnerKey" = "8:_6B85FE19D24F4414A8F84F878465510D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C33B773B42EE49FFB526331EE20985C1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -143,6 +143,12 @@
         {
         "MsmKey" = "8:_F62B49E83DA3F592B0888794749318BA"
         "OwnerKey" = "8:_6B85FE19D24F4414A8F84F878465510D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F6D948ED3ED642A9A4BD29F5A0B79E83"
+        "OwnerKey" = "8:_9B3AB4249A4640E4AEBE8751E6B62BAE"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -305,6 +311,26 @@
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1980E34B1743480F958DB0C9830FA828"
+            {
+            "SourcePath" = "8:..\\..\\resources\\EZDurakIcon.ico"
+            "TargetName" = "8:EZDurakIcon.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_4A422826A0374275A3969A911AB97471"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2FC1BB36505E473FB8114E41DAB3248C"
@@ -816,7 +842,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_4C062920161E4FDF9BCC9A0500709549"
             {
-            "Name" = "8:ezdurak"
+            "Name" = "8:EZDurak"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -825,12 +851,12 @@
             "Target" = "8:_6B85FE19D24F4414A8F84F878465510D"
             "Folder" = "8:_0D39F1F841AF41F5832D563371E47F50"
             "WorkingFolder" = "8:_59917D8C1C344682A6FF6AA0D24DEB4A"
-            "Icon" = "8:"
+            "Icon" = "8:_1980E34B1743480F958DB0C9830FA828"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CD7FC0DEF0F640D69D90BC1F41AC8D36"
             {
-            "Name" = "8:ezdurak"
+            "Name" = "8:EZDurak"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -839,7 +865,7 @@
             "Target" = "8:_6B85FE19D24F4414A8F84F878465510D"
             "Folder" = "8:_268B53BEF139474B9256991922CCD42B"
             "WorkingFolder" = "8:_59917D8C1C344682A6FF6AA0D24DEB4A"
-            "Icon" = "8:"
+            "Icon" = "8:_1980E34B1743480F958DB0C9830FA828"
             "Feature" = "8:"
             }
         }
@@ -1238,7 +1264,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_152FA0177D5443679C2F901134B80A63"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_9B3AB4249A4640E4AEBE8751E6B62BAE"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1252,7 +1278,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_424BB741B63B4619AF05FEB7F4CD9991"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_F6D948ED3ED642A9A4BD29F5A0B79E83"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
