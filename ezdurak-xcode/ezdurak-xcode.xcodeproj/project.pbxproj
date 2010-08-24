@@ -44,6 +44,7 @@
 		144AD3E511EEE3860080D7F0 /* FreeMonoBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 144AD3E311EEE3860080D7F0 /* FreeMonoBold.ttf */; };
 		14845CDF11F0319100CBFACE /* SDL_image.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 144AD3B111EEE2590080D7F0 /* SDL_image.framework */; };
 		14845CE011F0319100CBFACE /* SDL_ttf.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 144AD3CC11EEE30D0080D7F0 /* SDL_ttf.framework */; };
+		148526BB1223668C000D304E /* EZDurakIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 148526BA1223668C000D304E /* EZDurakIcon.icns */; };
 		14C2D7C7121E387700F6BE31 /* GUIApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7AD121E387700F6BE31 /* GUIApp.cpp */; };
 		14C2D7C8121E387700F6BE31 /* GUICard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7AF121E387700F6BE31 /* GUICard.cpp */; };
 		14C2D7C9121E387700F6BE31 /* GUIHumanView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14C2D7B1121E387700F6BE31 /* GUIHumanView.cpp */; };
@@ -122,6 +123,7 @@
 		144AD3CC11EEE30D0080D7F0 /* SDL_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_ttf.framework; path = Library/Frameworks/SDL_ttf.framework; sourceTree = SDKROOT; };
 		144AD3E211EEE3860080D7F0 /* cards.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cards.png; path = ../resources/cards.png; sourceTree = SOURCE_ROOT; };
 		144AD3E311EEE3860080D7F0 /* FreeMonoBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FreeMonoBold.ttf; path = ../resources/FreeMonoBold.ttf; sourceTree = SOURCE_ROOT; };
+		148526BA1223668C000D304E /* EZDurakIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = EZDurakIcon.icns; path = ../resources/EZDurakIcon.icns; sourceTree = SOURCE_ROOT; };
 		14C2D7AA121E387700F6BE31 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animation.h; sourceTree = "<group>"; };
 		14C2D7AB121E387700F6BE31 /* CardHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardHolder.h; sourceTree = "<group>"; };
 		14C2D7AC121E387700F6BE31 /* CardHolderImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardHolderImpl.h; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* EZDurak.app */,
+				148526BA1223668C000D304E /* EZDurakIcon.icns */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 				14C2D7D5121E388C00F6BE31 /* shield.png in Resources */,
 				14C2D7D6121E388C00F6BE31 /* shieldx.png in Resources */,
 				14C2D7D7121E388C00F6BE31 /* sword.png in Resources */,
+				148526BB1223668C000D304E /* EZDurakIcon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
