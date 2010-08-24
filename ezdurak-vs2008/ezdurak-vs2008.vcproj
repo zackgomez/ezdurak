@@ -346,6 +346,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\resource2.h"
+				>
+			</File>
+			<File
 				RelativePath="..\core\ScoreKeeper.h"
 				>
 			</File>
@@ -361,6 +365,18 @@
 			>
 			<File
 				RelativePath="..\resources\cards.png"
+				>
+			</File>
+			<File
+				RelativePath=".\ezdurak-vs20082.rc"
+				>
+			</File>
+			<File
+				RelativePath="C:\Users\Zack Gomez\Desktop\EZDurakIcon.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\resources\EZDurakIcon.ico"
 				>
 			</File>
 			<File
