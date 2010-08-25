@@ -2,12 +2,11 @@
 #include "core/Card.h"
 #include <boost/shared_ptr.hpp>
 #include <list>
-#include "util/Thread.h"
-#include "GUICard.h"
 #include "GUIPlayerView.h"
 
 class Animation;
 class CardHolder;
+
 typedef boost::shared_ptr<Animation> AnimationPtr;
 
 // -----------------------------------------------------------------------------
@@ -32,42 +31,16 @@ class StatusChangeAnimation :
 {
 public:
     static AnimationPtr create(GUIPlayerView *p1, GUIPlayerView::Status s1,
-                                GUIPlayerView *p2, GUIPlayerView::Status s2)
-    {
-        AnimationPtr ret(new StatusChangeAnimation(p1, s1, p2, s2));
-        return ret;
-    }
-    static AnimationPtr create(GUIPlayerView *p1, GUIPlayerView::Status s1)
-    {
-        AnimationPtr ret(new StatusChangeAnimation(p1, s1,
-                                                   NULL, GUIPlayerView::NONE));
-        return ret;
-    }
+                                GUIPlayerView *p2, GUIPlayerView::Status s2);
+    static AnimationPtr create(GUIPlayerView *p1, GUIPlayerView::Status s1);
 
-    virtual void render()
-    {
-        if (p1_)
-            p1_->setStatus(s1_);
-        if (p2_)
-            p2_->setStatus(s2_);
+    virtual void render();
 
-        done_ = true;
-    }
-
-    virtual bool isDone() const
-    {
-        return done_;
-    }
+    virtual bool isDone() const;
 
 private:
     StatusChangeAnimation(GUIPlayerView *p1, GUIPlayerView::Status s1,
-                          GUIPlayerView *p2, GUIPlayerView::Status s2) :
-        p1_(p1), p2_(p2),
-        s1_(s1), s2_(s2),
-        done_(false)
-    {
-        done_ = !p1_ && !p2_;
-    }
+                          GUIPlayerView *p2, GUIPlayerView::Status s2);
 
     GUIPlayerView *p1_, *p2_;
     GUIPlayerView::Status s1_, s2_;
@@ -81,26 +54,14 @@ class ClearAnimation :
     public Animation
 {
 public:
-    static AnimationPtr create(CardHolder *target)
-    {
-        AnimationPtr ret(new ClearAnimation(target));
-        return ret;
-    }
+    static AnimationPtr create(CardHolder *target);
 
-    virtual bool isDone() const
-    {
-        return done_;
-    }
+    virtual bool isDone() const;
 
-    virtual void render()
-    {
-        target_->clear();
-        done_ = true;
-    }
+    virtual void render();
 
 private:
-    ClearAnimation(CardHolder *target) : done_(false), target_(target)
-    { /* Empty */ }
+    ClearAnimation(CardHolder *target);
 
     bool done_;
     CardHolder *target_;
@@ -114,26 +75,14 @@ class DelayAnimation :
     public Animation
 {
 public:
-    static AnimationPtr create(int duration)
-    {
-        AnimationPtr ret(new DelayAnimation(duration));
-        return ret;
-    }
+    static AnimationPtr create(int duration);
 
-    void render()
-    {
-        --remaining_;
-    }
+    void render();
 
-    bool isDone() const
-    {
-        return remaining_ <= 0;
-    }
+    bool isDone() const;
 
 private:
-    DelayAnimation(int duration) :
-        remaining_(duration)
-    { /* Empty */ }
+    DelayAnimation(int duration);
 
     int remaining_;
 };
@@ -145,35 +94,14 @@ class ParallelAnimation :
     public Animation
 {
 public:
-    static AnimationPtr create(const std::list<AnimationPtr>& anims)
-    {
-        AnimationPtr ret(new ParallelAnimation(anims));
-        return ret;
-    }
+    static AnimationPtr create(const std::list<AnimationPtr>& anims);
 
-    virtual void render()
-    {
-        for(std::list<AnimationPtr>::iterator it = anims_.begin(); it != anims_.end(); it++)
-        {
-            (*it)->render();
-            if ((*it)->isDone())
-            {
-                it = anims_.erase(it);
-                if (it == anims_.end())
-                    break;
-            }
-        }
-    }
+    virtual void render();
 
-    virtual bool isDone() const
-    {
-        return anims_.empty();
-    }
+    virtual bool isDone() const;
 
 private:
-    ParallelAnimation(const std::list<AnimationPtr>& a) :
-        anims_(a)
-    { /* Empty */ }
+    ParallelAnimation(const std::list<AnimationPtr>& a);
 
     std::list<AnimationPtr> anims_;
 
@@ -187,25 +115,14 @@ class SetAnimation :
     public Animation
 {
 public:
-    static AnimationPtr create(bool &var)
-    {
-        AnimationPtr ret(new SetAnimation(var));
-        return ret;
-    }
+    static AnimationPtr create(bool &var);
 
-    virtual void render()
-    {
-        var_ = true;
-    }
+    virtual void render();
 
-    virtual bool isDone() const
-    {
-        return var_;
-    }
+    virtual bool isDone() const;
 
 private:
-    SetAnimation(bool &var) : var_(var)
-    { /* Empty */ }
+    SetAnimation(bool &var);
 
     bool &var_;
 };
@@ -219,63 +136,16 @@ class MoveAnimation :
 {
 public:
     static AnimationPtr create(Card c, CardHolder *source, CardHolder *target,
-                               int duration, int x0, int y0, int x1, int y1)
-    {
-        AnimationPtr ret(new MoveAnimation(c, source, target, duration,
-                                           x0, y0, x1, y1));
-        return ret;
-    }
+                               int duration, int x0, int y0, int x1, int y1);
 
+    virtual bool isDone() const;
 
-    virtual ~MoveAnimation()
-    {
-    }
-
-    virtual bool isDone() const
-    {
-        return elapsed_ >= duration_;
-    }
-
-    virtual void render()
-    {
-        // Remove from the source on the first frame
-        if (elapsed_ == 0 && source_)
-            source_->removeCard(card_);
-
-        // Position
-        float x = x0_ + (x1_ - x0_) * ((float) elapsed_ / duration_);
-        float y = y0_ + (y1_ - y0_) * ((float) elapsed_ / duration_);
-
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
-        glTranslatef(x, y, 0);
-
-        glColor3f(1,1,1);
-        if (card_)
-            GUICard::draw(card_);
-        else
-            GUICard::drawCardBack();
-        glPopMatrix();
-
-        elapsed_++;
-        // Add the card on the last frame
-        if (elapsed_ >= duration_)
-            target_->addCard(card_);
-    }
+    virtual void render();
 
 private:
     // Private constructor for create idiom
     MoveAnimation(Card c, CardHolder *s, CardHolder *t, int d,
-                  int x0, int y0, int x1, int y1) :
-        card_(c),
-        source_(s),
-        target_(t),
-        elapsed_(0),
-        duration_(d),
-        x0_(x0), y0_(y0),
-        x1_(x1), y1_(y1)
-    { /* Empty */ }
+                  int x0, int y0, int x1, int y1);
 
     // Data Members 
     Card card_;
