@@ -195,17 +195,12 @@ void InGameState::endRound(bool successfulDefend)
 
     if (successfulDefend)
     {
-        // We need to wait until all the animations up to this point are complete
-        CondVar c;
-        animations_.push_back(SynchronizationAnimation::create(&c));
-        c.wait(guiLock_);
-
         // Get rid of the current attacker
         animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_],
                                                            GUIPlayerView::NONE));
 
         // Now add an animation crunching all of the cards to the discard pile
-        animations_.push_back(playedCards_.getAnimation(&discard_, 25, DISCARD_X, DISCARD_Y));
+        animations_.push_back(CrunchAnimation::create(&playedCards_, &discard_, 25, DISCARD_X, DISCARD_Y));
     }
     else
     {
@@ -278,22 +273,15 @@ void InGameState::givenCards(ConstPlayerPtr player, const std::vector<Card>& car
     Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
-    // We need to wait until all the animations up to this point are complete
-    CondVar c;
-    animations_.push_back(SynchronizationAnimation::create(&c));
-    c.wait(guiLock_);
-
     // Get rid of the current attacker
     animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_],
                                                         GUIPlayerView::NONE));
 
+    // TODO change this to another crunch animation
     float x, y, angle;
     getPlayerPosition(playerPositionMap_[player], x, y, angle);
-    std::list<AnimationPtr> anims;
-    for (int i = 0; i < cards.size(); i++)
-        anims.push_back(playedCards_.getAnimation(cards[i], playerDisplayMap_[player]->getCardHolder(),
-                                                  25, x, y));
-    animations_.push_back(ParallelAnimation::create(anims));
+    animations_.push_back(CrunchAnimation::create(&playedCards_, cards, playerDisplayMap_[player]->getCardHolder(),
+        25, x, y));
 }
 
 void InGameState::drawPlayedCards() {

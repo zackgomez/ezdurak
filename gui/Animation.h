@@ -288,37 +288,36 @@ private:
     int x1_, y1_;
 };
 
+
 // -----------------------------------------------------------------------------
-// Synchronization Animation - Signals a condition variable
+// Crunch Animation - "Crunches" the played cards to a given CardHolder and pos
 // -----------------------------------------------------------------------------
-class SynchronizationAnimation :
+// Forward Declaration
+class PlayedCardsView;
+class CrunchAnimation :
     public Animation
 {
 public:
-    static AnimationPtr create(CondVar *cond)
-    {
-        AnimationPtr ret(new SynchronizationAnimation(cond));
-        return ret;
-    }
+    static AnimationPtr create(PlayedCardsView *pc, CardHolder *target,
+        int duration, float x1, float y1);
+    static AnimationPtr create(PlayedCardsView *pc, const std::vector<Card> &cards,
+        CardHolder *target, int duration, float x1, float y1);
 
-    bool isDone() const
-    {
-        return signalled_;
-    }
-    void render()
-    {
-        cond_->signal();
-        signalled_ = true;
-    }
+    bool isDone() const;
+
+    void render();
 
 private:
-    // Private constructor for create idiom
-    SynchronizationAnimation(CondVar *c) :
-        cond_(c),
-        signalled_(false)
-    { /* Empty */ }
+    CrunchAnimation(PlayedCardsView *pc, CardHolder *t, int d, float x, float y);
+    CrunchAnimation(PlayedCardsView *pc, const std::vector<Card> &cs,
+        CardHolder *t, int d, float x, float y);
+          
+    PlayedCardsView *pc_;
+    const std::vector<Card> cards_;
+    CardHolder *target_;
+    int dur_;
+    float x1_, y1_;
 
-    CondVar *cond_;
-    bool signalled_;
+    bool generated_;
+    AnimationPtr anim_;
 };
-

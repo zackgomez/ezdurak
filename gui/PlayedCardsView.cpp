@@ -60,34 +60,15 @@ void PlayedCardsView::clearNextLocation()
     nextDefendingIdx_ = 0;
 }
 
-AnimationPtr PlayedCardsView::getAnimation(const Card &c, CardHolder *target,
+AnimationPtr PlayedCardsView::getAnimation(const std::vector<Card> &cs, CardHolder *target,
                                            int dur, float x1, float y1)
 {
-    CardHolderImpl *source = NULL;
-    float x0, y0;
-    bool attacking;
-    if (attackingCards_.contains(c))
-    {
-        source = &attackingCards_;
-        attacking = true;
-    }
-    else if (defendingCards_.contains(c))
-    {
-        source = &defendingCards_;
-        attacking = false;
-    }
-    else
-        assert(false && "Card not found");
+    std::list<AnimationPtr> anims;
 
-    std::vector<Card>::iterator it = std::find(source->getCards().begin(),
-                                               source->getCards().end(), c);
-    assert(it != source->getCards().end());
-    int idx = it - source->getCards().begin();
+    for (int i = 0; i < cs.size(); i++)
+        anims.push_back(getAnimation(cs[i], target, dur, x1, y1));
 
-    getCardLocation(attacking, idx, x0, y0);
-
-    return MoveAnimation::create(c, source, target, dur, x0, y0, x1, y1);
-                                 
+    return ParallelAnimation::create(anims);
 }
 
 AnimationPtr PlayedCardsView::getAnimation(CardHolder *target, int dur,
@@ -119,4 +100,35 @@ void PlayedCardsView::getCardLocation(bool attacking, int index, float &x, float
     x += (index % 3) * 1.4 * GUICard::CARDX;
     if (!attacking)
         x += 0.2 * GUICard::CARDX;
+}
+
+
+AnimationPtr PlayedCardsView::getAnimation(const Card &c, CardHolder *target,
+                                           int dur, float x1, float y1)
+{
+    CardHolderImpl *source = NULL;
+    float x0, y0;
+    bool attacking;
+    if (attackingCards_.contains(c))
+    {
+        source = &attackingCards_;
+        attacking = true;
+    }
+    else if (defendingCards_.contains(c))
+    {
+        source = &defendingCards_;
+        attacking = false;
+    }
+    else
+        assert(false && "Card not found");
+
+    std::vector<Card>::iterator it = std::find(source->getCards().begin(),
+                                               source->getCards().end(), c);
+    assert(it != source->getCards().end());
+    int idx = it - source->getCards().begin();
+
+    getCardLocation(attacking, idx, x0, y0);
+
+    return MoveAnimation::create(c, source, target, dur, x0, y0, x1, y1);
+                                 
 }

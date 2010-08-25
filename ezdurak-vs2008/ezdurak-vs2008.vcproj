@@ -176,6 +176,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\gui\Animation.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\core\Card.cpp"
 				>
 			</File>
