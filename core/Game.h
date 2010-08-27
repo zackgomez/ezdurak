@@ -20,7 +20,7 @@ public:
     /**
      * Run the Durak game.
      */
-    void run();
+    virtual void run();
 
     // Constants
     /// The number of cards in a starting hand
@@ -37,6 +37,10 @@ public:
     ConstPlayerPtr getDefender() const;
     const std::vector<PlayerPtr> getPlayers() const;
     const std::vector<Card>& getPlayedCards() const;
+
+protected:
+    Game();
+    void setPlayers(const std::vector<PlayerPtr>& players);
 
 private:
     Deck deck_;

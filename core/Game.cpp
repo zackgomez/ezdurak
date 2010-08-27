@@ -9,8 +9,19 @@ using namespace std;
 
 const int Game::HAND_SIZE = 6;
 
+Game::Game()
+{ /* Empty */ }
+
 Game::Game(const vector<PlayerPtr>& players) :
     players_(players)
+{
+    setPlayers(players);
+}
+
+Game::~Game()
+{ /* Empty */ }
+
+void Game::setPlayers(const vector<PlayerPtr>& players)
 {
     assert(players_.size() >= 2 && players_.size() <= 6);
 
@@ -19,9 +30,6 @@ Game::Game(const vector<PlayerPtr>& players) :
     defender_ = players_[1];
     defenderIdx_ = 1;
 }
-
-Game::~Game()
-{ /* Empty */ }
 
 void Game::run()
 {
