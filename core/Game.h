@@ -15,7 +15,7 @@ class Game : public GameAgent
 public:
     // Constructors
     Game(const std::vector<PlayerPtr>& players);
-    ~Game();
+    virtual ~Game();
 
     /**
      * Run the Durak game.
@@ -42,7 +42,6 @@ protected:
     Game();
     void setPlayers(const std::vector<PlayerPtr>& players);
 
-private:
     Deck deck_;
     Card trumpCard_;
     std::vector<PlayerPtr> players_;
@@ -58,6 +57,8 @@ private:
 
     std::set<GameListener*>::iterator lit_;
     std::set<GameListener*> listeners_;
+
+private:
 
     /** Deals a the initial hands to the players */
     void deal();

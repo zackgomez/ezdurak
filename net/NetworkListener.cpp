@@ -32,8 +32,9 @@ bool NetworkListener::getConnection(const std::string &port)
         return false;
     }
 
-    return true;
+    std::cout << "Got connection\n";
 
+    return true;
 }
 
 void NetworkListener::gameStart()

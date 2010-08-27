@@ -17,7 +17,8 @@ string createMessage(char type, const string& payload)
     uint16_t size = payload.size();
 
     // First write the 2 byte size
-    ss.write((char *)&size, 2);
+    ss.put(size % 256);
+    ss.put(size / 256);
 
     // Then the 1 byte type
     ss.write(&type, 1);
@@ -110,12 +111,12 @@ vector<Card> readCards(const string &s)
     return ret;
 }
 
-ConstPlayerPtr readPlayer(const string &s, const vector<PlayerPtr> &ps)
+PlayerPtr readPlayer(const string &s, const vector<PlayerPtr> &ps)
 {
     int i = s[0];
     assert(i < ps.size());
 
-    return ConstPlayerPtr(ps[i]);
+    return ps[i];
 }
 
 string readString(const string &s)

@@ -29,6 +29,6 @@ std::string serializeBool(bool b);
 
 Card              readCard(const std::string& in);
 std::vector<Card> readCards(const std::string& in);
-ConstPlayerPtr    readPlayer(const std::string& in, const std::vector<PlayerPtr>& ps);
+PlayerPtr         readPlayer(const std::string& in, const std::vector<PlayerPtr>& ps);
 std::string       readString(const std::string& in);
 bool              readBool(const std::string& in);
