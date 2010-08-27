@@ -6,5 +6,3 @@ RANLIB  = ranlib
 RM      = rm
 ECHO    = echo
 SHELL   = /bin/sh
-
-.SILENT:

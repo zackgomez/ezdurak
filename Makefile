@@ -3,7 +3,7 @@ include Makefile.inc
 DIRS	= gui core cli ai www
 EXE	= ezdurak-gui ezdurak-cli
 OBJS	= guimain.o climain.o
-OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a libezdurakai.a
+OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a libezdurakai.a libezduraknet.a
 LIBS	= -L.
 GUILIBS = `sdl-config --libs` -lSDL_ttf -lSDL_image -lGL
 CXXFLAGS = -I. $(PRJCXXFLAGS)
