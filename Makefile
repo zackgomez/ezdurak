@@ -1,8 +1,8 @@
 include Makefile.inc
 
 DIRS	= gui core cli ai www
-EXE	= ezdurak-gui ezdurak-cli
-OBJS	= guimain.o climain.o
+EXE	= ezdurak-gui ezdurak-cli clientmain
+OBJS	= guimain.o climain.o clientmain.o
 OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a libezdurakai.a libezduraknet.a
 LIBS	= -L.
 GUILIBS = `sdl-config --libs` -lSDL_ttf -lSDL_image -lGL
@@ -16,6 +16,9 @@ ezdurak-gui: guimain.o libezdurakcore.a libezdurakgui.a libezdurakai.a
 ezdurak-cli: climain.o libezdurakcore.a libezdurakcli.a libezdurakai.a
 	$(ECHO) $(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o
 	$(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o
+
+clientmain: clientmain.o libezdurakcore.a libezdurakcli.a libezduraknet.a
+	g++ -o clientmain clientmain.o $(LIBS) -lezdurakcore libezdurakcli.a libezduraknet.a -lpthread
 
 
 libezdurakgui.a: force_look
@@ -33,6 +36,10 @@ libezdurakcli.a: force_look
 libezdurakai.a: force_look
 	$(ECHO) looking into ai : $(MAKE) $(MFLAGS)
 	cd ai; $(MAKE) $(MFLAGS)
+
+libezduraknet.a: force_look
+	$(ECHO) looking into net : $(MAKE) $(MFLAGS)
+	cd net; $(MAKE) $(MFLAGS)
 
 clean:
 	$(ECHO) $(RM) -rf $(EXE) $(OBJS) $(OBJLIBS) ezdurak-linux

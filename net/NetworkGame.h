@@ -24,8 +24,8 @@ public:
     virtual void run();
 
     // Functions overriden from GameAgent interface
-    int getDeckSize() const;
-    int getDiscardSize() const;
+    virtual int getDeckSize() const;
+    virtual int getDiscardSize() const;
 
 private:
     kissnet::tcp_socket_ptr sock_;

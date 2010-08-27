@@ -3,8 +3,9 @@
 
 using namespace kissnet;
 
-NetworkListener::NetworkListener() :
-    connected_(false)
+NetworkListener::NetworkListener(GameAgent *agent) :
+    connected_(false),
+    agent_(agent)
 {
 }
 

@@ -48,9 +48,9 @@ NetworkGame::NetworkGame() :
     connected_(false)
 {
     network_running = false;
+    sock_ = kissnet::tcp_socket::create();
     /* Empty */
 }
-
 NetworkGame::~NetworkGame()
 {
     if (connected_)
@@ -193,8 +193,8 @@ bool NetworkGame::connectTo(const std::string &host, const std::string &port)
     }
     catch (kissnet::socket_exception &e)
     {
-        std::cerr << "Unable to connect to " << host << ":" << port << e.what()
-            << '\n';
+        std::cerr << "Unable to connect to " << host << ":" << port << ' '
+            << e.what() << '\n';
         return false;
     }
 
@@ -202,3 +202,14 @@ bool NetworkGame::connectTo(const std::string &host, const std::string &port)
 
     return true;
 }
+
+int NetworkGame::getDeckSize() const
+{
+    return deckSize_;
+}
+
+int NetworkGame::getDiscardSize() const
+{
+    return discardSize_;
+}
+

@@ -1,7 +1,5 @@
 #include "NetworkProtocol.h"
 #include <string>
-// TODO change this to kissnet.h
-#include <arpa/inet.h>
 #include <sstream>
 
 using std::string;
@@ -14,7 +12,7 @@ string createMessage(char type, const string& payload)
 
     // Size must fit in 2 bytes
     assert (payload.size() < 256*256);
-    uint16_t size = payload.size();
+    short size = payload.size();
 
     // First write the 2 byte size
     ss.put(size % 256);
