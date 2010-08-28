@@ -152,11 +152,11 @@ void NetworkGame::run()
             std::cerr << "Got MSG_NEWROUND\n";
             assert(payload.size() == 2);
             // Set attacker
-            cp = readPlayer(payload, players_);
-            attacker_ = cp;
+            p = readPlayer(payload, players_);
+            attacker_ = p;
             // Set defender
-            cp = readPlayer(string(payload.c_str()[1], 1), players_);
-            defender_ = cp;
+            p = readPlayer(string(payload.c_str()[1], 1), players_);
+            defender_ = p;
             // Reset variables
             playedCards_.clear();
             tricksLeft_ = std::min(defender_->getNumCards(), Game::HAND_SIZE);
@@ -176,9 +176,9 @@ void NetworkGame::run()
             break;
         case MSG_ATTACKERPASSED:
             std::cerr << "Got MSG_ATTACKERPASSED\n";
-            cp = readPlayer(m.payload, players_);
+            p = readPlayer(m.payload, players_);
             // Set new attacker
-            attacker_ = cp;
+            attacker_ = p;
             // Broadcast
             for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
                 (*lit_)->attackerPassed(p);
@@ -232,7 +232,7 @@ void NetworkGame::run()
         case MSG_GIVENCARDSCS:
             std::cerr << "Got MSG_GIVENCARDSCS\n";
             // Add cs.size cards to player
-            p = readPlayers(m.payload, players_);
+            p = readPlayer(m.payload, players_);
             cs = readCards(string(payload.c_str() + 1, payload.size() - 1));
             p->addCards(cs);
             // Broadcast
