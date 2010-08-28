@@ -1,7 +1,11 @@
 #include "NetworkListener.h"
+#include "NetworkProtocol.h"
+#include "core/GameAgent.h"
 #include <iostream>
+#include <string>
 
 using namespace kissnet;
+using std::string;
 
 NetworkListener::NetworkListener(GameAgent *agent) :
     connected_(false),
@@ -40,17 +44,24 @@ bool NetworkListener::getConnection(const std::string &port)
 
 void NetworkListener::gameStart()
 {
+    string payload = serializeCard(agent_->getTrumpCard());
+    payload.push_back(players_.size());
+    for (int i = 0; i < players_.size(); i++)
+    {
+        payload.append(serializeString(players_[i]->getName()));
+    }
+    string message = createMessage(MSG_GAMESTARTING, payload);
+    clisock_->send(message);
 }
 
 void NetworkListener::gameOver(ConstPlayerPtr biscuit)
 {
+    string serialBiscuit = serializePlayer(biscuit, players_);
+    string message = createMessage(MSG_GAMEOVER, serialBiscuit);
+    clisock_->send(message);
 }
 
 void NetworkListener::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
-{
-}
-
-void NetworkListener::endRound(bool successfulDefend)
 {
 }
 
