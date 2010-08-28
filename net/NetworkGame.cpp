@@ -54,6 +54,9 @@ void * game_thread(void *arg)
         m.type = type;
         m.payload = string(raw_payload, payload_size);
 
+        if (m.type == MSG_END)
+            network_running = false;
+
         queue->enqueue(m);
     }
 
@@ -243,7 +246,7 @@ void NetworkGame::run()
             cp = readPlayer(m.payload, players_);
             // Broadcast
             for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->playedOut(p);
+                (*lit_)->playedOut(cp);
             break;
         case MSG_GIVENCARDSN:
             std::cerr << "Got MSG_GIVENCARDSN\n";
