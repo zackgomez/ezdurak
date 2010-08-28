@@ -64,6 +64,8 @@ void NetworkListener::gameOver(ConstPlayerPtr biscuit)
     string serialBiscuit = serializePlayer(biscuit, players_);
     string message = createMessage(MSG_GAMEOVER, serialBiscuit);
     clisock_->send(message);
+    string end = createMessage(MSG_END, "");
+    clisock_->send(end);
 }
 
 void NetworkListener::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
@@ -76,30 +78,53 @@ void NetworkListener::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 
 void NetworkListener::attackerPassed(ConstPlayerPtr newAttacker)
 {
+    string payload = serializePlayer(newAttacker, players_);
+    string message = createMessage(MSG_ATTACKERPASSED, payload);
+    clisock_->send(message);
 }
 
 void NetworkListener::attackingCard(const Card &c)
 {
+    string payload = serializeCard(c);
+    string message = createMessage(MSG_ATTACKINGCARD, payload);
+    clisock_->send(message);
 }
 
 void NetworkListener::defendingCard(const Card &c)
 {
+    string payload = serializeCard(c);
+    string message = createMessage(MSG_DEFENDINGCARD, payload);
+    clisock_->send(message);
 }
 
 void NetworkListener::piledOnCard(const Card &c)
 {
+    string payload = serializeCard(c);
+    string message = createMessage(MSG_PILEDONCARD, payload);
+    clisock_->send(message);
 }
 
 void NetworkListener::playedOut(ConstPlayerPtr player)
 {
+    string payload = serializePlayer(player, players_);
+    string message = createMessage(MSG_PLAYEDOUT, payload);
+    clisock_->send(message);
 }
 
 void NetworkListener::givenCards(ConstPlayerPtr player, int numCards)
 {
+   string payload = serializePlayer(player, players_);
+   payload.push_back((char) numCards);
+   string message = createMessage(MSG_GIVENCARDSN, payload);
+   clisock_->send(message);
 }
 
-void NetworkListener::givenCards(ConstPlayerPtr, const std::vector<Card>& cards)
+void NetworkListener::givenCards(ConstPlayerPtr player, const std::vector<Card>& cards)
 {
+    string payload = serializePlayer(player, players_);
+    payload.append(serializeCards(cards));
+    string message = createMessage(MSG_GIVENCARDSCS, payload);
+    clisock_->send(message);
 }
 
 void NetworkListener::endRound(bool successfulDefend)
