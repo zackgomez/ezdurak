@@ -50,6 +50,10 @@ void NetworkListener::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 {
 }
 
+void NetworkListener::endRound(bool successfulDefend)
+{
+}
+
 void NetworkListener::attackerPassed(ConstPlayerPtr newAttacker)
 {
 }

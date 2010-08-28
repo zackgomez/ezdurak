@@ -19,6 +19,8 @@ void * game_thread(void *arg)
     SynchronizedQueue<Message> *queue = args->queue;
     kissnet::tcp_socket_ptr sock = args->sock;
 
+    // TODO send handshake
+
     char header[3];
     // Now read from the socket and push messages on to the queue
     while (network_running)
