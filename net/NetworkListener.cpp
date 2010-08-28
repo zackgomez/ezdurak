@@ -1,5 +1,6 @@
 #include "NetworkListener.h"
 #include <iostream>
+#include "NetworkProtocol.h"
 
 using namespace kissnet;
 
@@ -19,23 +20,26 @@ bool NetworkListener::getConnection(const std::string &port)
 {
     try
     {
-    tcp_socket_ptr servsock = tcp_socket::create();
-    servsock->listen(port, 5);
-    clisock_ = servsock->accept();
+        tcp_socket_ptr servsock = tcp_socket::create();
+        servsock->listen(port, 5);
+        clisock_ = servsock->accept();
 
-    // TODO check for handshake
-
-    connected_ = true;
+        // Check for handshake message
+        char header[3];
+        clisock_->recv(header, 3);
+        if (header[2] == MSG_READY)
+        {
+            connected_ = true;
+            std::cout << "Got connection and ready message!\n";
+        }
     }
     catch (socket_exception &e)
     {
         std::cerr << "Unable to getConnection: " << e.what() << '\n';
-        return false;
+        connected_ = false;
     }
 
-    std::cout << "Got connection\n";
-
-    return true;
+    return connected_;
 }
 
 void NetworkListener::gameStart()

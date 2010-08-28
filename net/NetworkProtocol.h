@@ -6,6 +6,10 @@
 
 enum network_message_t
 {
+    // Network Management messages
+    MSG_READY = 1,         // For the start of a session
+    MSG_END,               // For the end of a session
+    // Game listener messages
     MSG_GAMESTARTING = 10,
     MSG_GAMEOVER,
     MSG_NEWROUND,
@@ -16,7 +20,8 @@ enum network_message_t
     MSG_PILEDONCARD,
     MSG_PLAYEDOUT,
     MSG_GIVENCARDSN,
-    MSG_GIVENCARDSCS
+    MSG_GIVENCARDSCS,
+    // Player Messages
 };
 
 std::string createMessage(char type, const std::string &payload);

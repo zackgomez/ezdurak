@@ -15,7 +15,7 @@ public:
         numCards_(6)
     { /* Empty */ }
 
-    ~ProxyPlayer
+    ~ProxyPlayer()
     { /* Empty */ }
 
     // Functions used by a proxy agent 
