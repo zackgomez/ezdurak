@@ -94,6 +94,7 @@ void NetworkGame::run()
     Message m;
     PlayerPtr p;
     ConstPlayerPtr cp;
+    ProxyPlayer *pp;
     Card c;
     std::vector<Card> cs;
     std::string s;
@@ -141,6 +142,7 @@ void NetworkGame::run()
         case MSG_GAMEOVER:
             // TESTED WORKS
             std::cerr << "Got MSG_GAMEOVER\n";
+            assert(payload.size() == 1);
             cp = readPlayer(payload, players_);
             // Broadcast, kill thread, exit
             for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
@@ -167,6 +169,7 @@ void NetworkGame::run()
             break;
         case MSG_ENDROUND:
             std::cerr << "Got MSG_ENDROUND\n";
+            assert(payload.size() == 1);
             b = readBool(m.payload);
             // On successful defend, add to discard size
             if (b)
@@ -177,6 +180,7 @@ void NetworkGame::run()
             break;
         case MSG_ATTACKERPASSED:
             std::cerr << "Got MSG_ATTACKERPASSED\n";
+            assert(payload.size() == 1);
             p = readPlayer(m.payload, players_);
             // Set new attacker
             attacker_ = p;
@@ -186,26 +190,52 @@ void NetworkGame::run()
             break;
         case MSG_ATTACKINGCARD:
             std::cerr << "Got MSG_ATTACKINGCARD\n";
-            // TODO
+            assert(payload.size() == 2);
+            c = readCard(payload);
             // Remove card from attacker_
+            pp = (ProxyPlayer *) attacker_.get();
+            pp->removeCards(1);
             // Add to played cards & playableRanks
+            playedCards_.push_back(c);
+            playableRanks_.insert(c);
             // update tricksLeft
+            tricksLeft_--;
             // Broadcast
+            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+                (*lit_)->attackingCard(c);
             break;
         case MSG_DEFENDINGCARD:
             std::cerr << "Got MSG_DEFENDINGCARD\n";
-            // TODO
-            // Remove card from defender_
-            // Add to played cards & playableRanks
+            assert(payload.size() == 2);
             // Broadcast
+            std::cerr << "Got MSG_PILEDONCARD\n";
+            assert(payload.size() == 2);
+            c = readCard(payload);
+            // Remove card from defender
+            pp = (ProxyPlayer *) defender_.get();
+            pp->removeCards(1);
+            // Add to played cards & playableRanks
+            playedCards_.push_back(c);
+            playableRanks_.insert(c);
+            // Broadcast
+            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+                (*lit_)->defendingCard(c);
             break;
         case MSG_PILEDONCARD:
             std::cerr << "Got MSG_PILEDONCARD\n";
-            // TODO
+            assert(payload.size() == 2);
+            c = readCard(payload);
             // Remove card from attacker_
+            pp = (ProxyPlayer *) attacker_.get();
+            pp->removeCards(1);
             // Add to played cards & playableRanks
+            playedCards_.push_back(c);
+            playableRanks_.insert(c);
             // update tricksLeft
+            tricksLeft_--;
             // Broadcast
+            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+                (*lit_)->piledOnCard(c);
             break;
         case MSG_PLAYEDOUT:
             std::cerr << "Got MSG_PLAYEDOUT\n";
@@ -252,7 +282,6 @@ bool NetworkGame::connectTo(const std::string &host, const std::string &port)
     try
     {
         sock_->connect(host, port);
-        // TODO handshake
         connected_ = true;
     }
     catch (kissnet::socket_exception &e)
