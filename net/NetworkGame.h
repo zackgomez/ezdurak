@@ -16,6 +16,7 @@ class NetworkGame :
 {
 public:
     NetworkGame();
+    NetworkGame(PlayerPtr localPlayer);
     ~NetworkGame();
 
     bool connectTo(const std::string &host, const std::string &port);
@@ -34,6 +35,7 @@ private:
     Thread game_thread_;
     SynchronizedQueue<Message> queue_;
 
+    PlayerPtr localPlayer_;
     int deckSize_;
     int discardSize_;
 };

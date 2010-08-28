@@ -13,6 +13,47 @@ NetworkPlayer::~NetworkPlayer()
     // Taken care of by ~NetworkListener
 }
 
+bool NetworkPlayer::getConnection(const std::string &port)
+{
+    try
+    {
+        tcp_socket_ptr servsock = tcp_socket::create();
+        servsock->listen(port, 5);
+        clisock_ = servsock->accept();
+
+        // Check for handshake messages
+        bool ready = false;
+        while (!ready)
+        {
+            char header[3];
+            clisock_->recv(header, 3);
+            if (header[2] == MSG_READY)
+            {
+                connected_ = true;
+                std::cout << "Got connection and ready message!\n";
+            }
+            else if (header[2] == MSG_NAME)
+            {
+                // TODO
+                int payload_size = header[0] + 256 * header[1];
+            }
+            else
+            {
+                std::cout << "Got unknown message during handshake\n";
+                std::cout << "Header: "; std::cout.write(header,3);
+                std::cout << '\n';
+            }
+        }
+    }
+    catch (socket_exception &e)
+    {
+        std::cerr << "Unable to getConnection: " << e.what() << '\n';
+        connected_ = false;
+    }
+
+    return connected_;
+}
+
 void NetworkPlayer::gameStarting(GameAgent *agent)
 {
     // read MSG_NAME and set name

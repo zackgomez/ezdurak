@@ -68,8 +68,15 @@ NetworkGame::NetworkGame() :
 {
     network_running = false;
     sock_ = kissnet::tcp_socket::create();
-    /* Empty */
 }
+
+NetworkGame::NetworkGame(PlayerPtr localPlayer) :
+    localPlayer_(localPlayer)
+{
+    network_running = false;
+    sock_ = kissnet::tcp_socket::create();
+}
+
 NetworkGame::~NetworkGame()
 {
     if (connected_)
@@ -84,6 +91,15 @@ NetworkGame::~NetworkGame()
 
 void NetworkGame::run()
 {
+    // TODO need to send MSG_NAME somewhere if localPlayer_ is set
+    // Send the name as name#id where id is some unique identifier
+    // Send before the game_thread starts
+    if (localPlayer_.get())
+    {
+        string payload = serializeString(localPlayer_->getName() + "#NETP");
+        sock_->send(createMessage(MSG_NAME, payload));
+    }
+
     // Start the game thread
     network_running = true;
     struct game_thread_arg arg;
@@ -129,6 +145,7 @@ void NetworkGame::run()
             stridx = 3;
             for (int i = 0; i < numPlayers; i++)
             {
+                // TODO check for the player who's name we set to name#id
                 string name = readString(string(payload.c_str()+stridx));
                 stridx += name.length() + 1;
                 p = PlayerPtr(new ProxyPlayer(name));

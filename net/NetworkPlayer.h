@@ -1,14 +1,19 @@
 #pragma once
 #include "NetworkListener.h"
+#include "core/Player.h"
 
 class NetworkPlayer :
-    public NetworkListener
+    public NetworkListener,
+    public Player
 {
 public:
     NetworkPlayer(GameAgent* agent);
     virtual ~NetworkPlayer();
 
-    // Methods inherited from the player interface
+    // Overriden from NetworkListener
+    bool getConnection(const std::string &port);
+
+    // Methods inherited from the Player interface
     virtual void gameStarting(GameAgent *agent);
     virtual Card defend(const Card &attC, Card::cardsuit trump);
     virtual Card attack(std::set<int> playableRanks);

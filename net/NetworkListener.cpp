@@ -28,12 +28,22 @@ bool NetworkListener::getConnection(const std::string &port)
         clisock_ = servsock->accept();
 
         // Check for handshake message
-        char header[3];
-        clisock_->recv(header, 3);
-        if (header[2] == MSG_READY)
+        bool ready = false;
+        while (!ready)
         {
-            connected_ = true;
-            std::cout << "Got connection and ready message!\n";
+            char header[3];
+            clisock_->recv(header, 3);
+            if (header[2] == MSG_READY)
+            {
+                connected_ = true;
+                std::cout << "Got connection and ready message!\n";
+            }
+            else
+            {
+                std::cout << "Got unknown message during handshake\n";
+                std::cout << "Header: "; std::cout.write(header,3);
+                std::cout << '\n';
+            }
         }
     }
     catch (socket_exception &e)
