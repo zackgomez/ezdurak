@@ -68,6 +68,10 @@ void NetworkListener::gameOver(ConstPlayerPtr biscuit)
 
 void NetworkListener::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
 {
+    string payload = serializePlayer(attacker, players_);
+    payload.append(serializePlayer(defender, players_));
+    string message = createMessage(MSG_NEWROUND, payload);
+    clisock_->send(message);
 }
 
 void NetworkListener::attackerPassed(ConstPlayerPtr newAttacker)
@@ -100,4 +104,7 @@ void NetworkListener::givenCards(ConstPlayerPtr, const std::vector<Card>& cards)
 
 void NetworkListener::endRound(bool successfulDefend)
 {
+    string payload = serializeBool(successfulDefend);
+    string message = createMessage(MSG_ENDROUND, payload);
+    clisock_->send(message);
 }
