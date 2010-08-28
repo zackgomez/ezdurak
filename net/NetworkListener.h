@@ -28,6 +28,6 @@ private:
     bool connected_;
     GameAgent *agent_;
     kissnet::tcp_socket_ptr clisock_;
-    const std::vector<PlayerPtr> players_;
+    std::vector<PlayerPtr> players_;
 };
 

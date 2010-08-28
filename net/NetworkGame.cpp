@@ -47,8 +47,9 @@ void * game_thread(void *arg)
         char type = header[2];
 
         char *raw_payload = new char[payload_size];
-        sock->recv(raw_payload, payload_size);
-
+        bytes_recieved = sock->recv(raw_payload, payload_size);
+        if (bytes_recieved != payload_size)
+            std::cerr << "Unable to read entire payload in one shot.\n";
         Message m;
         m.type = type;
         m.payload = string(raw_payload, payload_size);
@@ -116,7 +117,6 @@ void NetworkGame::run()
             return;
         case MSG_GAMESTARTING:
             std::cerr << "Got MSG_GAMESTARTING\n";
-            // TODO
             // Read trump, player name array
             trumpCard_ = readCard(payload);
             // Build players array, and give to super class
@@ -143,7 +143,7 @@ void NetworkGame::run()
             cp = readPlayer(payload, players_);
             // Broadcast, kill thread, exit
             for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->gameOver(p);
+                (*lit_)->gameOver(cp);
             network_running = false;
             return;
             break;

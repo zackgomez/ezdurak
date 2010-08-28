@@ -47,8 +47,10 @@ bool NetworkListener::getConnection(const std::string &port)
 
 void NetworkListener::gameStart()
 {
+    players_ = agent_->getPlayers();
     string payload = serializeCard(agent_->getTrumpCard());
-    payload.push_back(players_.size());
+    char size = players_.size();
+    payload.push_back(size);
     for (int i = 0; i < players_.size(); i++)
     {
         payload.append(serializeString(players_[i]->getName()));
@@ -93,5 +95,9 @@ void NetworkListener::givenCards(ConstPlayerPtr player, int numCards)
 }
 
 void NetworkListener::givenCards(ConstPlayerPtr, const std::vector<Card>& cards)
+{
+}
+
+void NetworkListener::endRound(bool successfulDefend)
 {
 }
