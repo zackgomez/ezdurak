@@ -19,7 +19,7 @@ void * game_thread(void *arg)
     struct game_thread_arg *args = (struct game_thread_arg *) arg;
     SynchronizedQueue<Message> *queue = args->queue;
     kissnet::tcp_socket_ptr sock = args->sock;
-// Send ready handshake
+    // Send ready handshake
     {
         std::string handshake = createMessage(MSG_READY, "");
         sock->send(handshake);
