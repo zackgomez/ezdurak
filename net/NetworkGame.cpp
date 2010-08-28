@@ -155,7 +155,8 @@ void NetworkGame::run()
             p = readPlayer(payload, players_);
             attacker_ = p;
             // Set defender
-            p = readPlayer(string(payload.c_str()[1], 1), players_);
+            s = ""; s.push_back(payload[1]);
+            p = readPlayer(s, players_);
             defender_ = p;
             // Reset variables
             playedCards_.clear();
