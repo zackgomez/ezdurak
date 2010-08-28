@@ -61,7 +61,7 @@ public:
         return name_;
     }
 
-private:
+protected:
     std::string name_;
     int numCards_;
 };

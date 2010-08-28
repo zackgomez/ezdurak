@@ -7,7 +7,7 @@ class NetworkListener :
 {
 public:
     NetworkListener(GameAgent *agent);
-    ~NetworkListener();
+    virtual ~NetworkListener();
 
     bool getConnection(const std::string &port);
 
@@ -24,7 +24,7 @@ public:
     void givenCards(ConstPlayerPtr player, int numCards);
     void givenCards(ConstPlayerPtr player, const std::vector<Card>& cards);
 
-private:
+protected:
     bool connected_;
     GameAgent *agent_;
     kissnet::tcp_socket_ptr clisock_;

@@ -77,7 +77,6 @@ NetworkGame::~NetworkGame()
 
     if (network_running)
     {
-        // TODO make this better
         network_running = false;
         game_thread_.join();
     }
