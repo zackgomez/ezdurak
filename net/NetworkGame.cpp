@@ -111,17 +111,8 @@ void NetworkGame::run()
     // Sit in a loop and read messages from the message queue, acting upon them
     // as they come in.
     Message m;
-    PlayerPtr p;
-    ConstPlayerPtr cp;
-    ProxyPlayer *pp;
-    Card c;
-    std::vector<Card> cs;
-    std::string s;
-    bool b;
-    char n;
-    int numPlayers;
-    int stridx;
-    for (;;)
+    running_ = true;
+    while (running_)
     {
         m = queue_.dequeue();
         string payload = m.payload;
@@ -133,168 +124,262 @@ void NetworkGame::run()
             break;
         case MSG_END:
             std::cerr << "Got MSG_END, quitting...\n";
-            network_running = false;
-            return;
+            endMessage(payload);
+            break;
         case MSG_GAMESTARTING:
-            // TESTED WORKS
             std::cerr << "Got MSG_GAMESTARTING\n";
-            // Read trump, player name array
-            trumpCard_ = readCard(payload);
-            // Build players array, and give to super class
-            numPlayers = payload[2];
-            assert(numPlayers >= 2 && numPlayers <= 6);
-            stridx = 3;
-            for (int i = 0; i < numPlayers; i++)
-            {
-                // TODO check for the player who's name we set to name#id
-                string name = readString(string(payload.c_str()+stridx));
-                stridx += name.length() + 1;
-                p = PlayerPtr(new ProxyPlayer(name));
-                players_.push_back(p);
-            }
-            // Set deckSize
-            deckSize_ = 36 - numPlayers * Game::HAND_SIZE;
-            discardSize_ = 0;
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->gameStart();
+            gameStartingMessage(payload);
             break;
         case MSG_GAMEOVER:
-            // TESTED WORKS
             std::cerr << "Got MSG_GAMEOVER\n";
-            assert(payload.size() == 1);
-            cp = readPlayer(payload, players_);
-            // Broadcast, kill thread, exit
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->gameOver(cp);
-            network_running = false;
-            return;
+            gameOverMessage(payload);
             break;
         case MSG_NEWROUND:
             std::cerr << "Got MSG_NEWROUND\n";
-            assert(payload.size() == 2);
-            // Set attacker
-            p = readPlayer(payload, players_);
-            attacker_ = p;
-            // Set defender
-            s = ""; s.push_back(payload[1]);
-            p = readPlayer(s, players_);
-            defender_ = p;
-            // Reset variables
-            playedCards_.clear();
-            tricksLeft_ = std::min(defender_->getNumCards(), Game::HAND_SIZE);
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->newRound(attacker_, defender_);
+            newRoundMessage(payload);
             break;
         case MSG_ENDROUND:
             std::cerr << "Got MSG_ENDROUND\n";
-            assert(payload.size() == 1);
-            b = readBool(m.payload);
-            // On successful defend, add to discard size
-            if (b)
-                discardSize_ += playedCards_.size();
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->endRound(b);
+            endRoundMessage(payload);
             break;
         case MSG_ATTACKERPASSED:
             std::cerr << "Got MSG_ATTACKERPASSED\n";
-            assert(payload.size() == 1);
-            p = readPlayer(m.payload, players_);
-            // Set new attacker
-            attacker_ = p;
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->attackerPassed(p);
+            attackerPassedMessage(payload);
             break;
         case MSG_ATTACKINGCARD:
             std::cerr << "Got MSG_ATTACKINGCARD\n";
-            assert(payload.size() == 2);
-            c = readCard(payload);
-            // Remove card from attacker_
-            pp = (ProxyPlayer *) attacker_.get();
-            pp->removeCards(1);
-            // Add to played cards & playableRanks
-            playedCards_.push_back(c);
-            playableRanks_.insert(c);
-            // update tricksLeft
-            tricksLeft_--;
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->attackingCard(c);
+            attackingCardMessage(payload);
             break;
         case MSG_DEFENDINGCARD:
             std::cerr << "Got MSG_DEFENDINGCARD\n";
-            assert(payload.size() == 2);
-            // Broadcast
-            std::cerr << "Got MSG_PILEDONCARD\n";
-            assert(payload.size() == 2);
-            c = readCard(payload);
-            // Remove card from defender
-            pp = (ProxyPlayer *) defender_.get();
-            pp->removeCards(1);
-            // Add to played cards & playableRanks
-            playedCards_.push_back(c);
-            playableRanks_.insert(c);
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->defendingCard(c);
+            defendingCardMessage(payload);
             break;
         case MSG_PILEDONCARD:
             std::cerr << "Got MSG_PILEDONCARD\n";
-            assert(payload.size() == 2);
-            c = readCard(payload);
-            // Remove card from attacker_
-            pp = (ProxyPlayer *) attacker_.get();
-            pp->removeCards(1);
-            // Add to played cards & playableRanks
-            playedCards_.push_back(c);
-            playableRanks_.insert(c);
-            // update tricksLeft
-            tricksLeft_--;
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->piledOnCard(c);
+            piledOnCardMessage(payload);
             break;
         case MSG_PLAYEDOUT:
             std::cerr << "Got MSG_PLAYEDOUT\n";
-            assert (m.payload.size() == 1);
-            cp = readPlayer(m.payload, players_);
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->playedOut(cp);
+            playedOutMessage(payload);
             break;
         case MSG_GIVENCARDSN:
             std::cerr << "Got MSG_GIVENCARDSN\n";
-            assert(payload.size() == 2);
-            p = readPlayer(m.payload, players_);
-            n = m.payload[1];
-            // Remove cards n from the deck
-            assert(deckSize_ >= n);
-            deckSize_ -= n;
-            // Add n cards to player
-            cs.resize(n);
-            p->addCards(cs);
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->givenCards(p, n);
+            givenCardsNMessage(payload);
             break;
         case MSG_GIVENCARDSCS:
             std::cerr << "Got MSG_GIVENCARDSCS\n";
-            // Add cs.size cards to player
-            p = readPlayer(m.payload, players_);
-            cs = readCards(string(payload.c_str() + 1, payload.size() - 1));
-            p->addCards(cs);
-            // Broadcast
-            for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-                (*lit_)->givenCards(p, cs);
+            givenCardsCSMessage(payload);
+            break;
+        case MSG_ATTACK:
+            std::cerr << "Got MSG_ATTACK\n";
+            attackMessage(payload);
+            break;
+        case MSG_DEFEND:
+            std::cerr << "Got MSG_ATTACK\n";
+            defendMessage(payload);
+            break;
+        case MSG_PILEON:
+            std::cerr << "Got MSG_ATTACK\n";
+            pileOnMessage(payload);
+            break;
+        case MSG_PLAYED:
+            std::cerr << "Got MSG_ATTACK\n";
+            std::cerr << "Should not have gotten this message!\n";
+            break;
+        case MSG_ADDCARDS:
+            std::cerr << "Got MSG_ATTACK\n";
+            addCardsMessage(payload);
             break;
         default:
             std::cerr << "NetworkGame: Unknown message type\n";
         }
     }
 
+}
+
+void NetworkGame::endMessage(const std::string &payload)
+{
+    network_running = false;
+    running_ = false;
+}
+
+void NetworkGame::gameStartingMessage(const std::string &payload)
+{
+    // Read trump, player name array
+    trumpCard_ = readCard(payload);
+    // Build players array, and give to super class
+    int numPlayers = payload[2];
+    assert(numPlayers >= 2 && numPlayers <= 6);
+    int stridx = 3;
+    for (int i = 0; i < numPlayers; i++)
+    {
+        // TODO check for the player who's name we set to name#id
+        // Put them in the array instead of a ProxyPlayer
+        string name = readString(string(payload.c_str()+stridx));
+        stridx += name.length() + 1;
+        PlayerPtr p(new ProxyPlayer(name));
+        players_.push_back(p);
+    }
+    // Set deckSize
+    deckSize_ = 36 - numPlayers * Game::HAND_SIZE;
+    discardSize_ = 0;
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->gameStart();
+}
+
+void NetworkGame::gameOverMessage(const std::string &payload)
+{
+    assert(payload.size() == 1);
+    ConstPlayerPtr biscuit = readPlayer(payload, players_);
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->gameOver(biscuit);
+}
+
+void NetworkGame::newRoundMessage(const std::string &payload)
+{
+    assert(payload.size() == 2);
+    // Set attacker
+    attacker_ = readPlayer(payload, players_);
+    // Set defender
+    string s = ""; s.push_back(payload[1]);
+    defender_ = readPlayer(s, players_);
+    // Reset variables
+    playedCards_.clear();
+    tricksLeft_ = std::min(defender_->getNumCards(), Game::HAND_SIZE);
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->newRound(attacker_, defender_);
+}
+
+void NetworkGame::endRoundMessage(const std::string &payload)
+{
+    assert(payload.size() == 1);
+    bool successfulDefend = readBool(payload);
+    // On successful defend, add to discard size
+    if (successfulDefend)
+        discardSize_ += playedCards_.size();
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->endRound(successfulDefend);
+}
+
+void NetworkGame::attackerPassedMessage(const std::string &payload)
+{
+    assert(payload.size() == 1);
+    // Set new attacker
+    attacker_ = readPlayer(payload, players_);
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->attackerPassed(attacker_);
+}
+
+void NetworkGame::attackingCardMessage(const std::string &payload)
+{
+    // TODO check for localPlayer_
+    assert(payload.size() == 2);
+    Card c = readCard(payload);
+    // Remove card from attacker_
+    ProxyPlayer *pp = (ProxyPlayer *) attacker_.get();
+    pp->removeCards(1);
+    // Add to played cards & playableRanks
+    playedCards_.push_back(c);
+    playableRanks_.insert(c);
+    // update tricksLeft
+    tricksLeft_--;
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->attackingCard(c);
+}
+
+void NetworkGame::defendingCardMessage(const std::string &payload)
+{
+    // TODO check for localPlayer_
+    assert(payload.size() == 2);
+    // Broadcast
+    std::cerr << "Got MSG_PILEDONCARD\n";
+    assert(payload.size() == 2);
+    Card c = readCard(payload);
+    // Remove card from defender
+    ProxyPlayer *pp = (ProxyPlayer *) defender_.get();
+    pp->removeCards(1);
+    // Add to played cards & playableRanks
+    playedCards_.push_back(c);
+    playableRanks_.insert(c);
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->defendingCard(c);
+}
+
+void NetworkGame::piledOnCardMessage(const std::string &payload)
+{
+    // TODO check for localPlayer_
+    assert(payload.size() == 2);
+    Card c = readCard(payload);
+    // Remove card from attacker_
+    ProxyPlayer *pp = (ProxyPlayer *) attacker_.get();
+    pp->removeCards(1);
+    // Add to played cards & playableRanks
+    playedCards_.push_back(c);
+    playableRanks_.insert(c);
+    // update tricksLeft
+    tricksLeft_--;
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->piledOnCard(c);
+}
+
+void NetworkGame::playedOutMessage(const std::string &payload)
+{
+    assert (payload.size() == 1);
+    ConstPlayerPtr p = readPlayer(payload, players_);
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->playedOut(p);
+}
+
+void NetworkGame::givenCardsNMessage(const std::string &payload)
+{
+    assert(payload.size() == 2);
+    PlayerPtr p = readPlayer(payload, players_);
+    int n = payload[1];
+    // Remove cards n from the deck
+    assert(deckSize_ >= n);
+    deckSize_ -= n;
+    // Add n cards to player
+    std::vector<Card> cs(n);
+    p->addCards(cs);
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->givenCards(p, n);
+}
+
+void NetworkGame::givenCardsCSMessage(const std::string &payload)
+{
+    // Add cs.size cards to player
+    PlayerPtr p = readPlayer(payload, players_);
+    std::vector<Card> cs = readCards(string(payload.c_str()+1, payload.size()-1));
+    p->addCards(cs);
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->givenCards(p, cs);
+}
+
+void NetworkGame::attackMessage(const std::string &payload)
+{
+}
+
+void NetworkGame::defendMessage(const std::string &payload)
+{
+}
+
+void NetworkGame::pileOnMessage(const std::string &payload)
+{
+}
+
+void NetworkGame::addCardsMessage(const std::string &payload)
+{
 }
 
 bool NetworkGame::connectTo(const std::string &host, const std::string &port)
