@@ -7,9 +7,6 @@ OBJS = NetworkListener.o kissnet.o NetworkProtocol.o NetworkGame.o
 .PHONY: all
 all: $(OBJLIBS)
 
-clientmain: $(OBJLIBS) clientmain.o
-	g++ -L../ -lezduraknet -lezdurakcore -lezdurakcli
-
 ../libezduraknet.a: $(OBJS)
 	echo $(ARFLAGS)
 	$(AR) $(ARFLAGS) ../libezduraknet.a $?

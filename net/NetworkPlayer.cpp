@@ -34,8 +34,11 @@ bool NetworkPlayer::getConnection(const std::string &port)
             }
             else if (header[2] == MSG_NAME)
             {
-                // TODO
                 int payload_size = header[0] + 256 * header[1];
+                char *payload = new char[payload_size];
+                clisock_->recv(payload, payload_size);
+                name_ = string(clisock_, payload_size);
+                delete payload;
             }
             else
             {

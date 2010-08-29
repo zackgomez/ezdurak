@@ -53,6 +53,7 @@ void * game_thread(void *arg)
         Message m;
         m.type = type;
         m.payload = string(raw_payload, payload_size);
+        delete raw_payload;
 
         if (m.type == MSG_END)
             network_running = false;
@@ -91,11 +92,11 @@ NetworkGame::~NetworkGame()
 
 void NetworkGame::run()
 {
-    // TODO need to send MSG_NAME somewhere if localPlayer_ is set
     // Send the name as name#id where id is some unique identifier
     // Send before the game_thread starts
     if (localPlayer_.get())
     {
+        // TODO make a unique ID, using a random number or something
         string payload = serializeString(localPlayer_->getName() + "#NETP");
         sock_->send(createMessage(MSG_NAME, payload));
     }
