@@ -213,11 +213,21 @@ void NetworkGame::gameStartingMessage(const std::string &payload)
     int stridx = 3;
     for (int i = 0; i < numPlayers; i++)
     {
-        // TODO check for the player who's name we set to name#id
-        // Put them in the array instead of a ProxyPlayer
         string name = readString(string(payload.c_str()+stridx));
         stridx += name.length() + 1;
-        PlayerPtr p(new ProxyPlayer(name));
+
+        PlayerPtr p;
+        // Are they a localPlayer?
+        if (name.find('#') != string::npos)
+        {
+            assert(localPlayer_.get());
+            p = localPlayer_;
+        }
+        // if not, use a proxy
+        else
+        {
+            p = PlayerPtr(new ProxyPlayer(name));
+        }
         players_.push_back(p);
     }
     // Set deckSize
@@ -277,12 +287,15 @@ void NetworkGame::attackerPassedMessage(const std::string &payload)
 
 void NetworkGame::attackingCardMessage(const std::string &payload)
 {
-    // TODO check for localPlayer_
     assert(payload.size() == 2);
     Card c = readCard(payload);
-    // Remove card from attacker_
-    ProxyPlayer *pp = (ProxyPlayer *) attacker_.get();
-    pp->removeCards(1);
+    // Remove card from attacker_, but only if it's a proxy, otherwise
+    // it has already been removed
+    if (attacker_ != localPlayer_)
+    {
+        ProxyPlayer *pp = (ProxyPlayer *) attacker_.get();
+        pp->removeCards(1);
+    }
     // Add to played cards & playableRanks
     playedCards_.push_back(c);
     playableRanks_.insert(c);
@@ -295,15 +308,18 @@ void NetworkGame::attackingCardMessage(const std::string &payload)
 
 void NetworkGame::defendingCardMessage(const std::string &payload)
 {
-    // TODO check for localPlayer_
     assert(payload.size() == 2);
     // Broadcast
     std::cerr << "Got MSG_PILEDONCARD\n";
     assert(payload.size() == 2);
     Card c = readCard(payload);
-    // Remove card from defender
-    ProxyPlayer *pp = (ProxyPlayer *) defender_.get();
-    pp->removeCards(1);
+    // Remove card from defender_, but only if it's a proxy, otherwise
+    // it has already been removed
+    if (defender_ != localPlayer_)
+    {
+        ProxyPlayer *pp = (ProxyPlayer *) defender_.get();
+        pp->removeCards(1);
+    }
     // Add to played cards & playableRanks
     playedCards_.push_back(c);
     playableRanks_.insert(c);
@@ -314,12 +330,15 @@ void NetworkGame::defendingCardMessage(const std::string &payload)
 
 void NetworkGame::piledOnCardMessage(const std::string &payload)
 {
-    // TODO check for localPlayer_
     assert(payload.size() == 2);
     Card c = readCard(payload);
-    // Remove card from attacker_
-    ProxyPlayer *pp = (ProxyPlayer *) attacker_.get();
-    pp->removeCards(1);
+    // Remove card from attacker_, but only if it's a proxy, otherwise
+    // it has already been removed
+    if (attacker_ != localPlayer_)
+    {
+        ProxyPlayer *pp = (ProxyPlayer *) attacker_.get();
+        pp->removeCards(1);
+    }
     // Add to played cards & playableRanks
     playedCards_.push_back(c);
     playableRanks_.insert(c);
