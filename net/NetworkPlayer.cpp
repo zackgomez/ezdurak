@@ -134,8 +134,15 @@ Card NetworkPlayer::pileOn(std::set<int> playableRanks)
 void NetworkPlayer::addCards(const std::vector<Card> &cards)
 {
     // Add Cards
+    for (int i = 0; i < cards.size(); i++)
+    {
+        hand_.insert(cards[i]);
+    }
 
     // Send over network
+    string payload = serializeCards(cards);
+    string message = createMessage(MSG_ADDCARDS, payload);
+    clisock_->send(message);
 }
 
 int NetworkPlayer::getNumCards() const
