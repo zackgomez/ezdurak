@@ -41,7 +41,7 @@ void Game::run()
     for (it = players_.begin(); it != players_.end(); it++)
         (*it)->gameStarting(this);
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-        (*lit_)->gameStart();
+        (*lit_)->gameStart(this);
 
     // The game continues while there is more than 1 player
     while (players_.size() > 1)

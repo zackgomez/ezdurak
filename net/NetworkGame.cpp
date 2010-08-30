@@ -235,7 +235,7 @@ void NetworkGame::gameStartingMessage(const std::string &payload)
     discardSize_ = 0;
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-        (*lit_)->gameStart();
+        (*lit_)->gameStart(this);
 }
 
 void NetworkGame::gameOverMessage(const std::string &payload)

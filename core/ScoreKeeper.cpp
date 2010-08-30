@@ -19,7 +19,7 @@ void ScoreKeeper::print()
     }
 }
 
-void ScoreKeeper::gameStart()
+void ScoreKeeper::gameStart(GameAgent *)
 { /* Empty */ }
 
 void ScoreKeeper::gameOver(const ConstPlayerPtr biscuit)

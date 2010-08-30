@@ -8,11 +8,11 @@ class CLIListener :
     public GameListener
 {
 public:
-    CLIListener(GameAgent *);
+    CLIListener();
     virtual ~CLIListener();
 
     // Methods inherited from GameListener
-    void gameStart();
+    void gameStart(GameAgent *);
     void gameOver(ConstPlayerPtr);
     void newRound(ConstPlayerPtr, ConstPlayerPtr);
     void endRound(bool);

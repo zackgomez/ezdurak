@@ -7,7 +7,8 @@
 int main()
 {
     std::vector<PlayerPtr> players;
-    for (int i = 0; i < 4; i++)
+    players.push_back(new NetworkPlayer());
+    for (int i = 1; i < 4; i++)
     {
         std::string name("AIPlayer");
         name.push_back('1' + i);

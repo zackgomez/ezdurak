@@ -8,7 +8,7 @@ class NetworkPlayer :
     public Player
 {
 public:
-    NetworkPlayer(GameAgent* agent);
+    NetworkPlayer();
     virtual ~NetworkPlayer();
 
     // Overriden from NetworkListener

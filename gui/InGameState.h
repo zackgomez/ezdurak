@@ -35,17 +35,17 @@ public:
     virtual GUIStatePtr nextState();
 
     // Functions inherited from GameListener Interface
-    void gameStart();
-    void gameOver(ConstPlayerPtr biscuit);
-    void newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender);
-    void attackerPassed(ConstPlayerPtr newAttacker);
-    void endRound(bool successfulDefend);
-    void attackingCard(const Card &c);
-    void defendingCard(const Card &c);
-    void piledOnCard(const Card &c);
-    void playedOut(ConstPlayerPtr player);
-    void givenCards(ConstPlayerPtr player, int numCard);
-    void givenCards(ConstPlayerPtr player, const std::vector<Card>& cards);
+    virtual void gameStart(GameAgent *);
+    virtual void gameOver(ConstPlayerPtr biscuit);
+    virtual void newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender);
+    virtual void attackerPassed(ConstPlayerPtr newAttacker);
+    virtual void endRound(bool successfulDefend);
+    virtual void attackingCard(const Card &c);
+    virtual void defendingCard(const Card &c);
+    virtual void piledOnCard(const Card &c);
+    virtual void playedOut(ConstPlayerPtr player);
+    virtual void givenCards(ConstPlayerPtr player, int numCard);
+    virtual void givenCards(ConstPlayerPtr player, const std::vector<Card>& cards);
 
 private:
     // Private constructors for create idiom

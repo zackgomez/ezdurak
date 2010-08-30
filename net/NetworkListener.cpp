@@ -7,9 +7,8 @@
 using namespace kissnet;
 using std::string;
 
-NetworkListener::NetworkListener(GameAgent *agent) :
-    connected_(false),
-    agent_(agent)
+NetworkListener::NetworkListener() :
+    connected_(false)
 {
 }
 
@@ -56,8 +55,9 @@ bool NetworkListener::getConnection(const std::string &port)
     return connected_;
 }
 
-void NetworkListener::gameStart()
+void NetworkListener::gameStart(GameAgent *agent)
 {
+    agent_ = agent;
     players_ = agent_->getPlayers();
     string payload = serializeCard(agent_->getTrumpCard());
     char size = players_.size();

@@ -15,7 +15,7 @@ public:
      * the first attacker is just about to start.  It would be a good time to
      * get starting information from the game and do some initialization.
      */
-    virtual void gameStart() = 0;
+    virtual void gameStart(GameAgent *agent) = 0;
 
     /**
      * Called when the game is over.
