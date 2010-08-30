@@ -1,11 +1,15 @@
 #include "NetworkPlayer.h"
+#include "NetworkProtocol.h"
+#include <cassert>
+#include <iostream>
+#include <string>
+
+using std::string;
 
 NetworkPlayer::NetworkPlayer(GameAgent *agent) :
     NetworkListener(agent),
     name_("Uninitialized NetworkPlayer")
 {
-    // TODO Initialize hand_ member, see NetworkListener.h
-    // (You may not need to)
 }
 
 NetworkPlayer::~NetworkPlayer()
@@ -17,7 +21,7 @@ bool NetworkPlayer::getConnection(const std::string &port)
 {
     try
     {
-        tcp_socket_ptr servsock = tcp_socket::create();
+        kissnet::tcp_socket_ptr servsock = kissnet::tcp_socket::create();
         servsock->listen(port, 5);
         clisock_ = servsock->accept();
 
@@ -37,7 +41,7 @@ bool NetworkPlayer::getConnection(const std::string &port)
                 int payload_size = header[0] + 256 * header[1];
                 char *payload = new char[payload_size];
                 clisock_->recv(payload, payload_size);
-                name_ = string(clisock_, payload_size);
+                name_ = std::string(payload, payload_size);
                 delete payload;
             }
             else
@@ -48,7 +52,7 @@ bool NetworkPlayer::getConnection(const std::string &port)
             }
         }
     }
-    catch (socket_exception &e)
+    catch (kissnet::socket_exception &e)
     {
         std::cerr << "Unable to getConnection: " << e.what() << '\n';
         connected_ = false;
@@ -59,34 +63,53 @@ bool NetworkPlayer::getConnection(const std::string &port)
 
 void NetworkPlayer::gameStarting(GameAgent *agent)
 {
-    // read MSG_NAME and set name
 }
 
 Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
 {
-    // Send MSG_DEFEND
+    bool answered = false;
+    Card defCard;
+    while (!answered)
+    {
+        // Send MSG_DEFEND
+        string message = createMessage(MSG_DEFEND, "");
+        clisock_->send(message);
 
-    // Wait for MSG_PLAYED
-    // Use a 3 byte character array as a header.
-    char header[3];
-    // Then read in the header from the socket, the socket is from NetworkListener
-    int bytes_recieved = clisock_->recv(header, 3); // buffer, length
-    // Make sure that bytes_recieved is 3
-    // Make sure that size is 2 (the size of a serialized card)
-    int size = header[0] + header[1] * 256;
-    // Make sure that type is MSG_PLAYED
-    char type = header[2];
-    // Read the rest of the data
-    char payload[2];
-    bytes_recieved = clisock_->recv(payload, 2);
-    // Check bytes_received = 2
 
-    // Make sure the card is valid, if not, start from the top
+        // Wait for MSG_PLAYED
+        // Use a 3 byte character array as a header.
+        char header[3];
+        // Then read in the header from the socket, the socket is from NetworkListener
+        int bytes_received = clisock_->recv(header, 3); // buffer, length
+        // Make sure that bytes_recieved is 3
+        assert (bytes_received == 3);
+        // Make sure that size is 2 (the size of a serialized card)
+        int size = header[0] + header[1] * 256;
+        assert(size == 2);
+        // Make sure that type is MSG_PLAYED
+        char type = header[2];
+        assert(type == MSG_PLAYED);
+        // Read the rest of the data
+        char payload[2];
+        bytes_received = clisock_->recv(payload, 2);
+        // Check bytes_received = 2
+        assert(bytes_received == 2);
+
+        // Make sure the card is valid, if not, start from the top
+        defCard = readCard(payload);
+        if (defCard.beats(attc, trump) || !defCard)
+        {
+            answered = true;
+        }
+    }
 
     // Remove the card from the hand, return it
+    assert (hand_.find(defCard) != hand_.end());
+    hand_.erase(hand_.find(defCard));
+    return defCard;
 }
 
-Card NetworkPlayer::attack(std::set<int> playableRanks);
+Card NetworkPlayer::attack(std::set<int> playableRanks)
 {
     // Send MSG_ATTACK
 
@@ -97,7 +120,7 @@ Card NetworkPlayer::attack(std::set<int> playableRanks);
     // Remove the card from the hand, return it
 }
 
-Card NetworkPlayer::pileOn(std::set<int> playableRanks);
+Card NetworkPlayer::pileOn(std::set<int> playableRanks)
 {
     // Send MSG_PILEON
 
@@ -117,8 +140,10 @@ void NetworkPlayer::addCards(const std::vector<Card> &cards)
 
 int NetworkPlayer::getNumCards() const
 {
+    return hand_.size();
 }
 
 std::string NetworkPlayer::getName() const
 {
+    return name_;
 }

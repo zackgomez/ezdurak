@@ -1,6 +1,7 @@
 #pragma once
 #include "NetworkListener.h"
 #include "core/Player.h"
+#include <set>
 
 class NetworkPlayer :
     public NetworkListener,
@@ -24,6 +25,6 @@ public:
 
 
 private:
-    // TODO add a member variable for the hand
+    std::set<Card> hand_;
     std::string name_;
 };
