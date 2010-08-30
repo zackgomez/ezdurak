@@ -67,9 +67,8 @@ void NetworkPlayer::gameStarting(GameAgent *agent)
 
 Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
 {
-    bool answered = false;
     Card defCard;
-    while (!answered)
+    for (;;)
     {
         // Send MSG_DEFEND
         string message = createMessage(MSG_DEFEND, "");
@@ -97,38 +96,111 @@ Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
 
         // Make sure the card is valid, if not, start from the top
         defCard = readCard(payload);
-        if (defCard.beats(attc, trump) || !defCard)
+        if (defCard.beats(attc, trump))
         {
-            answered = true;
+            assert (hand_.find(defCard) != hand_.end());
+            // Remove the card from the hand, return it
+            hand_.erase(hand_.find(defCard));
+            return defCard;
+        }
+        if (!defCard)
+        {
+            return defCard;
         }
     }
 
-    // Remove the card from the hand, return it
-    assert (hand_.find(defCard) != hand_.end());
-    hand_.erase(hand_.find(defCard));
-    return defCard;
 }
 
 Card NetworkPlayer::attack(std::set<int> playableRanks)
 {
-    // Send MSG_ATTACK
+    Card attCard;
+    for (;;)
+    {
+        // Send MSG_ATTACK
+        string message = createMessage(MSG_ATTACK, "");
+        clisock_->send(message);
 
-    // Wait for MSG_PLAYED
+        // Wait for MSG_PLAYED
+        // Use a 3 byte character array as a header.
+        char header[3];
+        // Then read in the header from the socket, the socket is from NetworkListener
+        int bytes_received = clisock_->recv(header, 3); // buffer, length
+        // Make sure that bytes received = 3
+        assert (bytes_received == 3);
+        //Make sure that size is 2 (the size of a serialized card)
+        int size = header[0] + header[1] * 256;
+        assert(size == 2);
+        // Make sure that type is MSG_PLAYED
+        char type = header[2];
+        assert(type == MSG_PLAYED);
+        // Read the rest of the data
+        char payload[2];
+        bytes_received = clisock_->recv(payload, 2);
+        // Check bytes_received = 2
+        assert(bytes_received == 2);
 
-    // Make sure the card is valid, if not, start from the top
+        // Make sure the card is valid, if not, start from the top
+        attCard = readCard(payload);
+        if (attCard && (playableRanks.find(attCard) != playableRanks.end() 
+                        || playableRanks.size() != 0))
+        {
+            assert (hand_.find(attCard) != hand_.end());
+            // Remove the card from the hand, return it
+            hand_.erase(hand_.find(attCard));
+            return attCard;
+        }
+        if (!attCard && playableRanks.size() != 0)
+        {
+            return attCard;
+        }
 
-    // Remove the card from the hand, return it
+    }
+
 }
 
 Card NetworkPlayer::pileOn(std::set<int> playableRanks)
 {
-    // Send MSG_PILEON
+    Card pCard;
+    for (;;)
+    {
+        // Send MSG_PILEON
+        string message = createMessage(MSG_PILEON, "");
+        clisock_->send(message);
 
-    // Wait for MSG_PLAYED
+        // Wait for MSG_PLAYED
+        // Use a 3 byte character array as a header.
+        char header[3];
+        // Then read in the header from the socket, the socket is from NetworkListener
+        int bytes_received = clisock_->recv(header, 3); // buffer, length
+        // Make sure that bytes received = 3
+        assert (bytes_received == 3);
+        //Make sure that size is 2 (the size of a serialized card)
+        int size = header[0] + header[1] * 256;
+        assert(size == 2);
+        // Make sure that type is MSG_PLAYED
+        char type = header[2];
+        assert(type == MSG_PLAYED);
+        // Read the rest of the data
+        char payload[2];
+        bytes_received = clisock_->recv(payload, 2);
+        // Check bytes_received = 2
+        assert(bytes_received == 2);
 
-    // Make sure the card is valid, if not, start from the top
+        // Make sure the card is valid, if not, start from the top
+        pCard = readCard(payload);
+        if (playableRanks.find(pCard) != playableRanks.end())
+        {
+            assert(hand_.find(pCard) != hand_.end());
+            // Remove the card from the hand, return it
+            hand_.erase(hand_.find(pCard));
+            return pCard;
+        }
+        if (!pCard)
+        {
+            return pCard;
+        }
 
-    // Remove the card from the hand, return it
+    }
 }
 
 void NetworkPlayer::addCards(const std::vector<Card> &cards)
