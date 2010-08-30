@@ -37,6 +37,7 @@ bool NetworkListener::getConnection(const std::string &port)
             {
                 connected_ = true;
                 std::cout << "Got connection and ready message!\n";
+                ready = true;
             }
             else
             {
