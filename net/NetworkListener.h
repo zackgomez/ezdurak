@@ -6,13 +6,13 @@ class NetworkListener :
     public GameListener
 {
 public:
-    NetworkListener(GameAgent *agent);
+    NetworkListener();
     virtual ~NetworkListener();
 
     bool getConnection(const std::string &port);
 
     // Methods inherited from GameListener
-    void gameStart();
+    void gameStart(GameAgent *);
     void gameOver(ConstPlayerPtr);
     void newRound(ConstPlayerPtr, ConstPlayerPtr);
     void endRound(bool);

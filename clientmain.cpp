@@ -5,7 +5,8 @@
 int main(int argc, char **argv)
 {
     NetworkGame game;
-    CLIListener listener(&game);
+    CLIListener listener;
+    game.addListener(&listener);
     if(game.connectTo("localhost", "54321"))
         game.run();
     else

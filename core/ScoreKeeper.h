@@ -17,7 +17,7 @@ public:
     void print();
 
     // Caught messages from GameListener interface
-    void gameStart();
+    void gameStart(GameAgent *agent);
     void gameOver(const ConstPlayerPtr biscuit);
 
     // Ignored messages

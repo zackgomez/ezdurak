@@ -33,8 +33,9 @@ int main(int argc, char** argv)
 
         Game game(players);
 
-        CLIListener listener(&game);
+        CLIListener listener;
 	game.addListener(&sk);
+        game.addListener(&listener);
 
         game.run();
     }

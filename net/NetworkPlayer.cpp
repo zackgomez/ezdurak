@@ -6,8 +6,8 @@
 
 using std::string;
 
-NetworkPlayer::NetworkPlayer(GameAgent *agent) :
-    NetworkListener(agent),
+NetworkPlayer::NetworkPlayer() :
+    NetworkListener(),
     name_("Uninitialized NetworkPlayer")
 {
 }
@@ -155,7 +155,6 @@ Card NetworkPlayer::attack(std::set<int> playableRanks)
         }
 
     }
-
 }
 
 Card NetworkPlayer::pileOn(std::set<int> playableRanks)

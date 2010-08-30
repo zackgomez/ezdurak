@@ -129,7 +129,7 @@ void InGameState::processEvent(SDL_Event &e)
     }
 }
 
-void InGameState::gameStart()
+void InGameState::gameStart(GameAgent *agent)
 {
     Lock l(guiLock_);
 
