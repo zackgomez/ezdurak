@@ -75,6 +75,7 @@ Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
         // Send MSG_DEFEND
         string message = createMessage(MSG_DEFEND, "");
         clisock_->send(message);
+        std::cerr << "DEBUG - NetworkPlayer: sent MSG_DEFEND\n";
 
 
         // Wait for MSG_PLAYED
@@ -95,9 +96,10 @@ Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
         bytes_received = clisock_->recv(payload, 2);
         // Check bytes_received = 2
         assert(bytes_received == 2);
+        string payloadstr(payload, 2);
 
         // Make sure the card is valid, if not, start from the top
-        defCard = readCard(payload);
+        defCard = readCard(payloadstr);
         if (defCard.beats(attc, trump))
         {
             assert (hand_.find(defCard) != hand_.end());
@@ -115,12 +117,12 @@ Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
 
 Card NetworkPlayer::attack(std::set<int> playableRanks)
 {
-    Card attCard;
     for (;;)
     {
         // Send MSG_ATTACK
         string message = createMessage(MSG_ATTACK, "");
         clisock_->send(message);
+        std::cerr << "DEBUG - NetworkPlayer: sent MSG_ATTACK\n";
 
         // Wait for MSG_PLAYED
         // Use a 3 byte character array as a header.
@@ -140,11 +142,12 @@ Card NetworkPlayer::attack(std::set<int> playableRanks)
         bytes_received = clisock_->recv(payload, 2);
         // Check bytes_received = 2
         assert(bytes_received == 2);
+        string payloadstr(payload, 2);
 
         // Make sure the card is valid, if not, start from the top
-        attCard = readCard(payload);
-        if (attCard && (playableRanks.find(attCard) != playableRanks.end() 
-                        || playableRanks.size() != 0))
+        Card attCard = readCard(payloadstr);
+        if (attCard && (playableRanks.count(attCard.getNum()) > 0
+                        || playableRanks.size() == 0))
         {
             assert (hand_.find(attCard) != hand_.end());
             // Remove the card from the hand, return it
@@ -167,6 +170,7 @@ Card NetworkPlayer::pileOn(std::set<int> playableRanks)
         // Send MSG_PILEON
         string message = createMessage(MSG_PILEON, "");
         clisock_->send(message);
+        std::cerr << "DEBUG - NetworkPlayer: sent MSG_PILEON\n";
 
         // Wait for MSG_PLAYED
         // Use a 3 byte character array as a header.
@@ -186,9 +190,10 @@ Card NetworkPlayer::pileOn(std::set<int> playableRanks)
         bytes_received = clisock_->recv(payload, 2);
         // Check bytes_received = 2
         assert(bytes_received == 2);
+        string payloadstr(payload, 2);
 
         // Make sure the card is valid, if not, start from the top
-        pCard = readCard(payload);
+        pCard = readCard(payloadstr);
         if (playableRanks.find(pCard) != playableRanks.end())
         {
             assert(hand_.find(pCard) != hand_.end());

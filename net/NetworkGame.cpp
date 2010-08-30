@@ -44,16 +44,24 @@ void * game_thread(void *arg)
         }
         // Calculate payload size, lsb first in header, and message type
         int payload_size = header[0] + 256 * header[1];
+        assert (payload_size >= 0);
         char type = header[2];
 
-        char *raw_payload = new char[payload_size];
-        bytes_recieved = sock->recv(raw_payload, payload_size);
-        if (bytes_recieved != payload_size)
-            std::cerr << "Unable to read entire payload in one shot.\n";
         Message m;
         m.type = type;
-        m.payload = string(raw_payload, payload_size);
-        delete raw_payload;
+
+
+        if (payload_size > 0)
+        {
+            char *raw_payload = new char[payload_size];
+            bytes_recieved = sock->recv(raw_payload, payload_size);
+            if (bytes_recieved != payload_size)
+                std::cerr << "Unable to read entire payload in one shot.\n";
+            m.payload = string(raw_payload, payload_size);
+            delete raw_payload;
+        }
+        else
+            m.payload = "";
 
         if (m.type == MSG_END)
             network_running = false;
@@ -175,19 +183,19 @@ void NetworkGame::run()
             attackMessage(payload);
             break;
         case MSG_DEFEND:
-            std::cerr << "Got MSG_ATTACK\n";
+            std::cerr << "Got MSG_DEFEND\n";
             defendMessage(payload);
             break;
         case MSG_PILEON:
-            std::cerr << "Got MSG_ATTACK\n";
+            std::cerr << "Got MSG_PILEON\n";
             pileOnMessage(payload);
             break;
         case MSG_PLAYED:
-            std::cerr << "Got MSG_ATTACK\n";
+            std::cerr << "Got MSG_PLAYED\n";
             std::cerr << "Should not have gotten this message!\n";
             break;
         case MSG_ADDCARDS:
-            std::cerr << "Got MSG_ATTACK\n";
+            std::cerr << "Got MSG_ADDCARDS\n";
             addCardsMessage(payload);
             break;
         default:
@@ -233,6 +241,9 @@ void NetworkGame::gameStartingMessage(const std::string &payload)
     // Set deckSize
     deckSize_ = 36 - numPlayers * Game::HAND_SIZE;
     discardSize_ = 0;
+    // Tell the player, if they exist
+    if (localPlayer_.get())
+        localPlayer_->gameStarting(this);
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->gameStart(this);
@@ -257,6 +268,7 @@ void NetworkGame::newRoundMessage(const std::string &payload)
     defender_ = readPlayer(s, players_);
     // Reset variables
     playedCards_.clear();
+    playableRanks_.clear();
     tricksLeft_ = std::min(defender_->getNumCards(), Game::HAND_SIZE);
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
@@ -366,9 +378,13 @@ void NetworkGame::givenCardsNMessage(const std::string &payload)
     // Remove cards n from the deck
     assert(deckSize_ >= n);
     deckSize_ -= n;
-    // Add n cards to player
-    std::vector<Card> cs(n);
-    p->addCards(cs);
+    // Only if they're a proxy
+    if (p != localPlayer_)
+    {
+        // Add n cards to player
+        std::vector<Card> cs(n);
+        p->addCards(cs);
+    }
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->givenCards(p, n);
@@ -379,7 +395,11 @@ void NetworkGame::givenCardsCSMessage(const std::string &payload)
     // Add cs.size cards to player
     PlayerPtr p = readPlayer(payload, players_);
     std::vector<Card> cs = readCards(string(payload.c_str()+1, payload.size()-1));
-    p->addCards(cs);
+    // Only if they're a proxy
+    if (p != localPlayer_)
+    {
+        p->addCards(cs);
+    }
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->givenCards(p, cs);
@@ -390,6 +410,7 @@ void NetworkGame::attackMessage(const std::string &payload)
     assert(payload.size() == 0);
     if (localPlayer_.get())
     {
+        assert(localPlayer_->getNumCards() > 0);
         // Get the card from the player and send it across the wire
         Card c = localPlayer_->attack(playableRanks_);
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
@@ -403,6 +424,7 @@ void NetworkGame::defendMessage(const std::string &payload)
     assert(payload.size() == 0);
     if (localPlayer_.get())
     {
+        assert(localPlayer_->getNumCards() > 0);
         // Get the card from the player and send it across the wire
         Card c = localPlayer_->defend(playedCards_.back(), trumpCard_.getSuit());
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
@@ -416,6 +438,7 @@ void NetworkGame::pileOnMessage(const std::string &payload)
     assert(payload.size() == 0);
     if (localPlayer_.get())
     {
+        assert(localPlayer_->getNumCards() > 0);
         // Get the card from the player and send it across the wire
         Card c = localPlayer_->pileOn(playableRanks_);
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
