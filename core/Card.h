@@ -27,6 +27,7 @@ public:
     // Operator Overloads
     bool operator==(const Card& rhs) const;
     bool operator!=(const Card& rhs) const;
+    bool operator<(const Card& rhs) const;
 
     // Returns false if this card is the default card
     operator bool() const;
