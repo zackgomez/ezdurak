@@ -1,7 +1,7 @@
 include Makefile.inc
 
 DIRS	= gui core cli ai www net
-EXE	= ezdurak-gui ezdurak-cli clientmain
+EXE	= ezdurak-gui ezdurak-cli
 OBJS	= guimain.o climain.o clientmain.o
 OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a libezdurakai.a libezduraknet.a
 LIBS	= -L.
@@ -14,12 +14,7 @@ ezdurak-gui: guimain.o libezdurakcore.a libezdurakgui.a libezdurakai.a
 	g++ -o ezdurak-gui guimain.o libezdurakgui.a libezdurakcore.a -lSDL -lSDL_ttf -lSDL_image -lGL libezdurakai.a
 
 ezdurak-cli: climain.o libezdurakcore.a libezdurakcli.a libezdurakai.a
-	$(ECHO) $(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o
-	$(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o
-
-clientmain: clientmain.o libezdurakcore.a libezdurakcli.a libezduraknet.a
-	g++ -o clientmain clientmain.o $(LIBS) -lezdurakcore libezdurakcli.a libezduraknet.a -lpthread
-
+	$(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o -lpthread
 
 libezdurakgui.a: force_look
 	$(ECHO) looking into gui : $(MAKE) $(MFLAGS)

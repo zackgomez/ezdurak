@@ -1,5 +1,6 @@
 #include "NetworkPlayer.h"
 #include "NetworkProtocol.h"
+#include "core/GameAgent.h"
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -26,8 +27,8 @@ bool NetworkPlayer::getConnection(const std::string &port)
         clisock_ = servsock->accept();
 
         // Check for handshake messages
-        bool ready = false;
-        while (!ready)
+        connected_ = false;
+        while (!connected_)
         {
             char header[3];
             clisock_->recv(header, 3);
@@ -41,7 +42,7 @@ bool NetworkPlayer::getConnection(const std::string &port)
                 int payload_size = header[0] + 256 * header[1];
                 char *payload = new char[payload_size];
                 clisock_->recv(payload, payload_size);
-                name_ = std::string(payload, payload_size);
+                name_ = std::string(payload, payload_size - 1);
                 delete payload;
             }
             else
@@ -63,6 +64,7 @@ bool NetworkPlayer::getConnection(const std::string &port)
 
 void NetworkPlayer::gameStarting(GameAgent *agent)
 {
+    agent->addListener(this);
 }
 
 Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)

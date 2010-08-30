@@ -1,14 +1,16 @@
 #include <iostream>
 #include "core/Game.h"
 #include "net/NetworkListener.h"
+#include "net/NetworkPlayer.h"
 #include "ai/AIPlayer.h"
 #include "cli/CLIListener.h"
 
 int main()
 {
     std::vector<PlayerPtr> players;
-    players.push_back(new NetworkPlayer());
-    for (int i = 1; i < 4; i++)
+    boost::shared_ptr<NetworkPlayer> netp(new NetworkPlayer());
+    players.push_back(netp);
+    for (int i = 0; i < 3; i++)
     {
         std::string name("AIPlayer");
         name.push_back('1' + i);
@@ -17,13 +19,12 @@ int main()
     }
 
     Game game(players);
-    NetworkListener nl(&game);
+    CLIListener l;
+    game.addListener(&l);
 
-    if (nl.getConnection("54321"))
-        game.addListener(&nl);
+    if (netp->getConnection("54321"))
+        game.run();
     else
         std::cout << "Error getting connection, Quitting\n";
 
-    CLIListener l(&game);
-    game.run();
 }

@@ -47,6 +47,13 @@ bool Card::operator!=(const Card& rhs) const
     return !(*this == rhs);
 }
 
+bool Card::operator<(const Card& rhs) const
+{
+    if (num_ == rhs.num_)
+        return suit_ < rhs.suit_;
+    return num_ < rhs.num_;
+}
+
 Card::operator bool() const
 {
     return (num_ != NONUM && suit_ != none);
