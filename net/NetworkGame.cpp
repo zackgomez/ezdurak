@@ -387,18 +387,52 @@ void NetworkGame::givenCardsCSMessage(const std::string &payload)
 
 void NetworkGame::attackMessage(const std::string &payload)
 {
+    assert(payload.size() == 0);
+    if (localPlayer_.get())
+    {
+        // Get the card from the player and send it across the wire
+        Card c = localPlayer_->attack(playableRanks_);
+        sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
+    }
+    else
+        std::cerr << "ERROR: got attack message with no local player\n";
 }
 
 void NetworkGame::defendMessage(const std::string &payload)
 {
+    assert(payload.size() == 0);
+    if (localPlayer_.get())
+    {
+        // Get the card from the player and send it across the wire
+        Card c = localPlayer_->defend(playedCards_.back(), trumpCard_.getSuit());
+        sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
+    }
+    else
+        std::cerr << "ERROR: got defend message with no local player\n";
 }
 
 void NetworkGame::pileOnMessage(const std::string &payload)
 {
+    assert(payload.size() == 0);
+    if (localPlayer_.get())
+    {
+        // Get the card from the player and send it across the wire
+        Card c = localPlayer_->pileOn(playableRanks_);
+        sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
+    }
+    else
+        std::cerr << "ERROR: got pileOn message with no local player\n";
 }
 
 void NetworkGame::addCardsMessage(const std::string &payload)
 {
+    if (localPlayer_.get())
+    {
+        std::vector<Card> cards = readCards(payload);
+        localPlayer_->addCards(cards);
+    }
+    else
+        std::cerr << "ERROR: got addCards message with no local player\n";
 }
 
 bool NetworkGame::connectTo(const std::string &host, const std::string &port)
