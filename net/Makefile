@@ -2,7 +2,8 @@ include ../Makefile.inc
 
 CXXFLAGS = $(PRJCXXFLAGS) -I..
 OBJLIBS  = ../libezduraknet.a
-OBJS = NetworkListener.o kissnet.o NetworkProtocol.o NetworkGame.o NetworkPlayer.o
+OBJS = NetworkListener.o kissnet.o NetworkProtocol.o NetworkGame.o NetworkPlayer.o \
+       NetworkHost.o
 
 .PHONY: all
 all: $(OBJLIBS)
