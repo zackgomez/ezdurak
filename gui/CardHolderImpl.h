@@ -4,6 +4,10 @@
 #include <cassert>
 #include <algorithm>
 
+/** 
+ * A base implementation of the CardHolder interface that can be held by 
+ * classes that desire CardHolder functionality.  It can also be subclassed.
+ */
 class CardHolderImpl :
     public CardHolder
 {

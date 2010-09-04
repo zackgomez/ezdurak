@@ -58,6 +58,9 @@ dist: ezdurak-gui
 deploy: dist force_look
 	cd www; $(MAKE) deploy
 
+docs: Doxyfile
+	doxygen
+
 .PHONY: force_look
 force_look:
 	true

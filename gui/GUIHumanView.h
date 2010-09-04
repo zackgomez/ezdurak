@@ -6,6 +6,11 @@
 
 class GUIPlayer;
 
+/** 
+ * An implementation of the GUIPlayerView for the user interacting with the GUI.
+ * Has a method for handling mouse clicks and also draws the front of cards 
+ * instead of the backs.
+ */
 class GUIHumanView :
     public GUIPlayerView
 {

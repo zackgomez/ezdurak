@@ -7,6 +7,12 @@
 
 class GameAgent;
 
+/** 
+ * Interface that a class must implement to play a game in the Game class.
+ * Contains methods for each action a player must take, attacking defending 
+ * and drawing cards.  It also contains some getters for information about the
+ * player like a name, ID or number of cards in hand.
+ */
 class Player
 {
 public:

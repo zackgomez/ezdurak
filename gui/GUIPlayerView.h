@@ -6,6 +6,11 @@
 
 class Player;
 
+/** 
+ * View for a player in the GUI.  Responsible for drawing the player's hands and
+ * the status of the player (attacking, defending, etc).  Contains a CardHolder
+ * for the Player's hand.
+ */
 class GUIPlayerView
 {
 public:

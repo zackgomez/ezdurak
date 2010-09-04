@@ -1,6 +1,9 @@
 #pragma once
 #include <ostream>
 
+/** 
+ * This class represents a card.  It has a suit and num.
+ */
 class Card
 {
 public:
@@ -41,7 +44,10 @@ private:
 // Operator Overloads
 std::ostream& operator<<(std::ostream& os, const Card &c);
 
-// Card comparison functor
+/** 
+ * This class compares two cards and returns true if the left card is less
+ * than the right card.  It takes into account the trump suit.
+ */
 class CardComp
 {
 private:

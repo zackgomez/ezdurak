@@ -4,6 +4,12 @@
 
 class GUIPlayer;
 
+/** 
+ * A CardHolder implementation with extra methods needed for display a human
+ * players cards.  These methods include getting all of the cards the CardHolder
+ * currently contains.  Interfaces with the GUIPlayer class and crosschecks
+ * requests with the hand that GUIPlayer holds.
+ */
 class HumanCardHolder :
     public CardHolder
 {

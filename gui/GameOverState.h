@@ -3,6 +3,9 @@
 #include "GUIString.h"
 #include "core/Player.h"
 
+/** 
+ * This state displays the results of the last game and prompts for action.
+ */
 class GameOverState :
     public GUIState
 {

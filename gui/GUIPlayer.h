@@ -2,6 +2,11 @@
 #include "util/SynchronizedQueue.h"
 #include "core/PlayerImpl.h"
 
+/** 
+ * This is an implemenation of the Player interface for use in the GUI.  Has
+ * additional methods for communicating information to the GUI that normal 
+ * players don't need.
+ */
 class GUIPlayer :
     public PlayerImpl
 {

@@ -1,6 +1,9 @@
 #pragma once
 #include <pthread.h>
 
+/** 
+ * Encapsulates a thread and contains methods for starting and stopping one.
+ */
 class Thread
 {
 public:
@@ -45,6 +48,9 @@ private:
 
 class CondVar;
 
+/** 
+ * Encapsulates a mutex.
+ */
 class Mutex
 {
 public:
@@ -74,6 +80,9 @@ private:
     pthread_mutex_t m_;
 };
 
+/** 
+ * RAII idiom for locking a mutex.
+ */
 class Lock
 {
 public:
@@ -91,6 +100,9 @@ private:
     Mutex &m_;
 };
 
+/** 
+ * Encapsulates a condition variable.
+ */
 class CondVar
 {
 public:

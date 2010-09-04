@@ -19,6 +19,9 @@ class GUIListener;
 class GUIPlayerView;
 class GUIHumanView;
 
+/** 
+ * GUIApp state for actually playing an EZDurak game.
+ */
 class InGameState :
     public GUIState,
     public GameListener

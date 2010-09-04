@@ -5,13 +5,26 @@
 class GUIState;
 typedef std::auto_ptr<GUIState> GUIStatePtr;
 
-// TODO:2010-07-21:zack: Comment this class.
+/** 
+ * The GUIApp class uses this as the states in its implementation of a state
+ * machine.  Has methods for transitioning to another state as well as 
+ * responsibilities.  A GUIState must implement the render and processEvent 
+ * methods.
+ */
 class GUIState
 {
 public:
 	virtual ~GUIState() {};
 
+        /** 
+         * Called once per frame.
+         */
 	virtual void render() = 0;
+        /** 
+         * A user event, can be ignored.
+         * 
+         * @param e The event
+         */
 	virtual void processEvent(SDL_Event& e) = 0;
 
         /**
@@ -20,7 +33,8 @@ public:
         virtual bool needsTransition() const = 0;
         /**
          * Returns the next state, or GUIStatePtr() if the Application should
-         * quit.
+         * quit.  In this implementation, only QuitState returns a null ptr,
+         * given a uniform exit point for the application to save state.
          */
 	virtual GUIStatePtr nextState() = 0;
 

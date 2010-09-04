@@ -1,6 +1,10 @@
 #pragma once
 #include "CardHolder.h"
 
+/** 
+ * A CardHolder implementation that only cards about the number of cards it 
+ * contains.  Used for the deck and discard piles.
+ */
 class PileCardHolder :
     public CardHolder
 {

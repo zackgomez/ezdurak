@@ -3,10 +3,16 @@
 
 class GameAgent;
 
+/** 
+ * Interface that recieves information from a GameAgent.  It receives all
+ * relevant and information that a person could gather from watching a game
+ * in progress without looking into players hands.  In combination with the 
+ * GameAgent interface all information about a currently running game can be
+ * found.
+ */
 class GameListener
 {
 public:
-    GameListener() { /* Empty */ }
     /** All intended base classes must have virtual destructors. */
     virtual ~GameListener() { /* Empty */ }
 

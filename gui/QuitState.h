@@ -1,6 +1,10 @@
 #pragma once
 #include "GUIState.h"
 
+/** 
+ * The GUI should be put to this state when the application should exit. Cleans 
+ * up and exits the application.
+ */
 class QuitState :
     public GUIState
 {
