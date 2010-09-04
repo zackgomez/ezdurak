@@ -8,26 +8,26 @@ enum network_message_t
 {
     // Network Management messages
     MSG_READY = 1,         // For the start of a session
-    MSG_NAME,
-    MSG_END,               // For the end of a session
+    MSG_NAME =  2,
+    MSG_END =   3,               // For the end of a session
     // Game listener messages
-    MSG_GAMESTARTING = 10,
-    MSG_GAMEOVER,
-    MSG_NEWROUND,
-    MSG_ATTACKERPASSED,
-    MSG_ENDROUND,
-    MSG_ATTACKINGCARD,
-    MSG_DEFENDINGCARD,
-    MSG_PILEDONCARD,
-    MSG_PLAYEDOUT,
-    MSG_GIVENCARDSN,
-    MSG_GIVENCARDSCS,
+    MSG_GAMESTARTING   = 10,
+    MSG_GAMEOVER       = 11,
+    MSG_NEWROUND       = 12,
+    MSG_ATTACKERPASSED = 13,
+    MSG_ENDROUND       = 14,
+    MSG_ATTACKINGCARD  = 15,
+    MSG_DEFENDINGCARD  = 16,
+    MSG_PILEDONCARD    = 17,
+    MSG_PLAYEDOUT      = 18,
+    MSG_GIVENCARDSN    = 19,
+    MSG_GIVENCARDSCS   = 20,
     // Player Messages
-    MSG_ATTACK = 100,
-    MSG_DEFEND,
-    MSG_PILEON,
-    MSG_PLAYED,
-    MSG_ADDCARDS,
+    MSG_ATTACK   = 100,
+    MSG_DEFEND   = 101,
+    MSG_PILEON   = 102,
+    MSG_PLAYED   = 103,
+    MSG_ADDCARDS = 104,
 };
 
 /** 
