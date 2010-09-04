@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <cstdio>
 #include <cstring>
+#include <sstream>
 
 NetworkClient::NetworkClient(const std::string &bport) :
     bport_(bport)
@@ -49,6 +50,7 @@ kissnet::tcp_socket_ptr NetworkClient::getConnection()
     struct sockaddr_storage fromsaddr;
     struct in_addr fromaddr;
     socklen_t addrlen = sizeof(fromsaddr);
+    kissnet::tcp_socket_ptr ret;
     for (;;)
     {
         socklen_t len = addrlen;
@@ -62,8 +64,30 @@ kissnet::tcp_socket_ptr NetworkClient::getConnection()
         printf("DEBUG _ NetworkClient: got message from: %s\n", addrbuf);
         printf("DEBUG - NetworkClient: got data from udp sock: %.*s\n", n, buf);
 
+        std::stringstream ss;
+        ss.write(buf, n);
+        unsigned short conport;
+        ss >> conport;
+
+        printf("DEBUG - NetworkClient: trying %s on port %d\n", addrbuf, conport);
         int consock = socket(AF_INET, SOCK_STREAM, 0);
+        struct sockaddr_in conaddr;
+        memset(&conaddr, 0, sizeof(conaddr));
+        conaddr.sin_family = AF_INET;
+        conaddr.sin_port = htons(conport);
+        conaddr.sin_addr = fromaddr;
+        if (connect(consock, (struct sockaddr *)&conaddr, sizeof(conaddr)))
+        {
+            perror("connect");
+            printf("DEBUG - NetworkClient: resuming broadcast listening\n");
+        }
+        else
+        {
+            printf("DEBUG - NetworkClient: got connection\n");
+            ret = kissnet::tcp_socket::create(consock);
+            break;
+        }
     }
 
-    return kissnet::tcp_socket_ptr();
+    return ret;
 }

@@ -9,6 +9,7 @@ public:
     NetworkListener();
     virtual ~NetworkListener();
 
+    bool getConnection(kissnet::tcp_socket_ptr sock);
     bool getConnection(const std::string &port);
 
     // Methods inherited from GameListener
@@ -25,6 +26,13 @@ public:
     void givenCards(ConstPlayerPtr player, const std::vector<Card>& cards);
 
 protected:
+    /** 
+     * @brief Negotiates the handshake for the connection.
+     * 
+     * @return True if the handshake was successful, false otherwise.
+     */
+    virtual bool doHandshake();
+
     bool connected_;
     GameAgent *agent_;
     kissnet::tcp_socket_ptr clisock_;

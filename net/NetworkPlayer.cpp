@@ -18,48 +18,35 @@ NetworkPlayer::~NetworkPlayer()
     // Taken care of by ~NetworkListener
 }
 
-bool NetworkPlayer::getConnection(const std::string &port)
+bool NetworkPlayer::doHandshake()
 {
-    try
+    bool ready = false;
+    while (!ready)
     {
-        kissnet::tcp_socket_ptr servsock = kissnet::tcp_socket::create();
-        servsock->listen(port, 5);
-        clisock_ = servsock->accept();
-
-        // Check for handshake messages
-        connected_ = false;
-        while (!connected_)
+        char header[3];
+        clisock_->recv(header, 3);
+        if (header[2] == MSG_READY)
         {
-            char header[3];
-            clisock_->recv(header, 3);
-            if (header[2] == MSG_READY)
-            {
-                connected_ = true;
-                std::cout << "Got connection and ready message!\n";
-            }
-            else if (header[2] == MSG_NAME)
-            {
-                int payload_size = header[0] + 256 * header[1];
-                char *payload = new char[payload_size];
-                clisock_->recv(payload, payload_size);
-                name_ = std::string(payload, payload_size - 1);
-                delete payload;
-            }
-            else
-            {
-                std::cout << "Got unknown message during handshake\n";
-                std::cout << "Header: "; std::cout.write(header,3);
-                std::cout << '\n';
-            }
+            ready = true;
+            std::cout << "Got connection and ready message!\n";
+        }
+        else if (header[2] == MSG_NAME)
+        {
+            int payload_size = header[0] + 256 * header[1];
+            char *payload = new char[payload_size];
+            clisock_->recv(payload, payload_size);
+            name_ = std::string(payload, payload_size - 1);
+            delete payload;
+        }
+        else
+        {
+            std::cout << "Got unknown message during handshake\n";
+            std::cout << "Header: "; std::cout.write(header,3);
+            std::cout << '\n';
         }
     }
-    catch (kissnet::socket_exception &e)
-    {
-        std::cerr << "Unable to getConnection: " << e.what() << '\n';
-        connected_ = false;
-    }
 
-    return connected_;
+    return true;
 }
 
 void NetworkPlayer::gameStarting(GameAgent *agent)

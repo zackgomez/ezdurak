@@ -458,6 +458,16 @@ void NetworkGame::addCardsMessage(const std::string &payload)
         std::cerr << "ERROR: got addCards message with no local player\n";
 }
 
+bool NetworkGame::connectTo(kissnet::tcp_socket_ptr sock)
+{
+    sock_ = sock;
+    connected_ = true;
+
+    std::cout << "Used passed socket as connection\n";
+
+    return connected_;
+}
+
 bool NetworkGame::connectTo(const std::string &host, const std::string &port)
 {
     try

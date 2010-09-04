@@ -19,6 +19,7 @@ public:
     NetworkGame(PlayerPtr localPlayer);
     ~NetworkGame();
 
+    bool connectTo(kissnet::tcp_socket_ptr sock);
     bool connectTo(const std::string &host, const std::string &port);
 
     // Message handlers

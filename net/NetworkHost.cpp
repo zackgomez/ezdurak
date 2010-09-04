@@ -86,6 +86,11 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
     pollee[0].fd = lsock_;
     pollee[0].events = POLLIN;
 
+    // Set up broadcast message
+    std::string msg = lport_;
+    msg.push_back(' ');
+    msg.append(bmsg);
+
     // bind and listen on the listen port
     listen(lsock_, 5);
 
@@ -94,7 +99,7 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
     {
         // Broadcast a packet
         printf("DEBUG - NetworkHost: broadcasting...\n");
-        if (sendto(bsock_, bmsg.data(), bmsg.size(), 0,
+        if (sendto(bsock_, msg.data(), msg.size(), 0,
                 (struct sockaddr *)&outaddr, sizeof(outaddr)) == -1)
         {
             perror("broadcasting: sendto");

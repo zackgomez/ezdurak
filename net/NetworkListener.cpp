@@ -18,6 +18,15 @@ NetworkListener::~NetworkListener()
         clisock_->close();
 }
 
+bool NetworkListener::getConnection(kissnet::tcp_socket_ptr sock)
+{
+    clisock_ = sock;
+
+    connected_ = doHandshake();
+
+    return connected_;
+}
+
 bool NetworkListener::getConnection(const std::string &port)
 {
     try
@@ -27,24 +36,7 @@ bool NetworkListener::getConnection(const std::string &port)
         clisock_ = servsock->accept();
 
         // Check for handshake message
-        bool ready = false;
-        while (!ready)
-        {
-            char header[3];
-            clisock_->recv(header, 3);
-            if (header[2] == MSG_READY)
-            {
-                connected_ = true;
-                std::cout << "Got connection and ready message!\n";
-                ready = true;
-            }
-            else
-            {
-                std::cout << "Got unknown message during handshake\n";
-                std::cout << "Header: "; std::cout.write(header,3);
-                std::cout << '\n';
-            }
-        }
+        connected_ = doHandshake();
     }
     catch (socket_exception &e)
     {
@@ -53,6 +45,29 @@ bool NetworkListener::getConnection(const std::string &port)
     }
 
     return connected_;
+}
+
+bool NetworkListener::doHandshake()
+{
+    bool ready = false;
+    while (!ready)
+    {
+        char header[3];
+        clisock_->recv(header, 3);
+        if (header[2] == MSG_READY)
+        {
+            std::cout << "Got connection and ready message!\n";
+            ready = true;
+        }
+        else
+        {
+            std::cout << "Got unknown message during handshake\n";
+            std::cout << "Header: "; std::cout.write(header,3);
+            std::cout << '\n';
+        }
+    }
+
+    return true;
 }
 
 void NetworkListener::gameStart(GameAgent *agent)

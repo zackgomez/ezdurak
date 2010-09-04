@@ -11,9 +11,6 @@ public:
     NetworkPlayer();
     virtual ~NetworkPlayer();
 
-    // Overriden from NetworkListener
-    bool getConnection(const std::string &port);
-
     // Methods inherited from the Player interface
     virtual void gameStarting(GameAgent *agent);
     virtual Card defend(const Card &attC, Card::cardsuit trump);
@@ -22,6 +19,10 @@ public:
     virtual void addCards(const std::vector<Card>& cards);
     virtual int  getNumCards() const;
     virtual std::string getName() const;
+
+protected:
+    // Override from NetworkListener
+    virtual bool doHandshake();
 
 
 private:
