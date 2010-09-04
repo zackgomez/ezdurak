@@ -8,10 +8,12 @@
 
 int main()
 {
-    const int numcon = 1;
+    const int numcon = 2;
     const int numplayers = 4;
     const std::string broadcastp = "12345";
     const std::string gamep = "54321";
+
+    srand(time(NULL));
 
     NetworkHost nh(broadcastp, gamep);
 

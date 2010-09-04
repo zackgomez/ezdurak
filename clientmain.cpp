@@ -7,6 +7,7 @@
 
 int main(int argc, char **argv)
 {
+    srand(time(NULL));
 
     //PlayerPtr localPlayer(new AIPlayer("networkai"));
     PlayerPtr localPlayer(new CLIPlayer("zack"));

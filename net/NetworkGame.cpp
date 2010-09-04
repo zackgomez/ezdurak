@@ -314,7 +314,7 @@ void NetworkGame::attackingCardMessage(const std::string &payload)
     }
     // Add to played cards & playableRanks
     playedCards_.push_back(c);
-    playableRanks_.insert(c);
+    playableRanks_.insert(c.getNum());
     // update tricksLeft
     tricksLeft_--;
     // Broadcast
@@ -326,7 +326,6 @@ void NetworkGame::defendingCardMessage(const std::string &payload)
 {
     assert(payload.size() == 2);
     // Broadcast
-    std::cerr << "Got MSG_PILEDONCARD\n";
     assert(payload.size() == 2);
     Card c = readCard(payload);
     // Remove card from defender_, but only if it's a proxy, otherwise
@@ -338,7 +337,7 @@ void NetworkGame::defendingCardMessage(const std::string &payload)
     }
     // Add to played cards & playableRanks
     playedCards_.push_back(c);
-    playableRanks_.insert(c);
+    playableRanks_.insert(c.getNum());
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->defendingCard(c);
@@ -357,7 +356,7 @@ void NetworkGame::piledOnCardMessage(const std::string &payload)
     }
     // Add to played cards & playableRanks
     playedCards_.push_back(c);
-    playableRanks_.insert(c);
+    playableRanks_.insert(c.getNum());
     // update tricksLeft
     tricksLeft_--;
     // Broadcast
