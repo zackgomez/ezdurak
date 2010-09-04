@@ -17,7 +17,7 @@ ezdurak-cli: climain.o libezdurakcore.a libezdurakcli.a libezdurakai.a
 	$(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o -lpthread
 
 clientmain: clientmain.o libezduraknet.a libezdurakcore.a libezdurakai.a libezdurakcli.a
-	$(LD) -o $@ $^ $(LIBS) -lpthread core/PlayerImpl.o
+	$(LD) -o $@ $^ $(LIBS) -lpthread  core/PlayerImpl.o
 
 servermain: servermain.o libezduraknet.a libezdurakcore.a libezdurakai.a libezdurakcli.a
 	$(LD) -o $@ $^ $(LIBS) -lpthread core/PlayerImpl.o

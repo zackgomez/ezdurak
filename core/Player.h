@@ -64,11 +64,19 @@ public:
     virtual int getNumCards() const = 0;
 
     /**
-     * This function should return a unique name for this player.  The unique-
-     * ness is only within the game, not globally.
+     * This function should return this players name.  It may not contain the
+     * '#' character.
      * @return The players name.
      */
     virtual std::string getName() const = 0;
+
+    /** 
+     * This function should return a unique ID for this player.  It must begin
+     * with a '#'.
+     * 
+     * @return 
+     */
+    virtual std::string getID() const = 0;
 };
 
 typedef boost::shared_ptr<Player> PlayerPtr;

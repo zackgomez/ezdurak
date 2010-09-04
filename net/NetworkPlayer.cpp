@@ -1,15 +1,18 @@
 #include "NetworkPlayer.h"
 #include "NetworkProtocol.h"
 #include "core/GameAgent.h"
+#include "core/PlayerImpl.h"
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <boost/algorithm/string.hpp>
 
 using std::string;
 
 NetworkPlayer::NetworkPlayer() :
     NetworkListener(),
-    name_("Uninitialized NetworkPlayer")
+    name_("Uninitialized NetworkPlayer"),
+    ID_("#ERROR")
 {
 }
 
@@ -35,7 +38,14 @@ bool NetworkPlayer::doHandshake()
             int payload_size = header[0] + 256 * header[1];
             char *payload = new char[payload_size];
             clisock_->recv(payload, payload_size);
-            name_ = std::string(payload, payload_size - 1);
+
+            std::string nameid(payload, payload_size - 1);
+            std::vector<std::string> vals;
+            boost::algorithm::split(vals, nameid, boost::is_any_of("#"));
+            assert(vals.size() == 2);
+            name_ = vals[0];
+            ID_ = "#" + vals[1];
+
             delete payload;
         }
         else
@@ -214,6 +224,7 @@ void NetworkPlayer::addCards(const std::vector<Card> &cards)
     // Send over network
     string payload = serializeCards(cards);
     string message = createMessage(MSG_ADDCARDS, payload);
+    std::cerr << "DEBUG - NetworkPlayer: sent MSG_ADDCARDS\n";
     clisock_->send(message);
 }
 
@@ -225,4 +236,9 @@ int NetworkPlayer::getNumCards() const
 std::string NetworkPlayer::getName() const
 {
     return name_;
+}
+
+std::string NetworkPlayer::getID() const
+{
+    return ID_;
 }

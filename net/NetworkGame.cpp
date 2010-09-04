@@ -5,6 +5,8 @@
 #include "core/GameListener.h"
 #include "NetworkProtocol.h"
 #include "ProxyPlayer.h"
+#include <algorithm>
+#include <boost/algorithm/string.hpp>
 
 using std::string;
 
@@ -44,7 +46,7 @@ void * game_thread(void *arg)
             continue;
         }
         // Calculate payload size, lsb first in header, and message type
-        int payload_size = header[0] + 256 * header[1];
+        int payload_size = (unsigned char)header[0] + 256 * (unsigned char)header[1];
         assert (payload_size >= 0);
         char type = header[2];
 
@@ -105,11 +107,7 @@ void NetworkGame::run()
     // Send before the game_thread starts
     if (localPlayer_.get())
     {
-        // Make random id
-        std::stringstream ss;
-        ss << "#NETP" << rand() % 1000;
-        localID_ = ss.str();
-        string payload = serializeString(localPlayer_->getName() + localID_);
+        string payload = serializeString(localPlayer_->getName() + localPlayer_->getID());
         sock_->send(createMessage(MSG_NAME, payload));
     }
 
@@ -225,20 +223,29 @@ void NetworkGame::gameStartingMessage(const std::string &payload)
     int stridx = 3;
     for (int i = 0; i < numPlayers; i++)
     {
-        string name = readString(string(payload.c_str()+stridx));
-        stridx += name.length() + 1;
+        string nameid = readString(string(payload.c_str()+stridx));
+        stridx += nameid.length() + 1;
+
+        std::vector<std::string> vals;
+        boost::algorithm::split(vals, nameid, boost::is_any_of("#"));
+
+        // Make random id
+        std::cerr << "DEBUG - NetworkGame: payload = " << payload << '\n';
+        std::cerr << "DEBUG - NetworkGame: nameid = " << nameid << '\n';
+        assert(vals.size() == 2);
+        string name = vals[0];
+        string ID = vals[1];
 
         PlayerPtr p;
         // Are they a localPlayer?
-        if (name.find(localID_) != string::npos)
+        if (localPlayer_.get() && localPlayer_->getID() == ID)
         {
-            assert(localPlayer_.get());
             p = localPlayer_;
         }
         // if not, use a proxy
         else
         {
-            p = PlayerPtr(new ProxyPlayer(name));
+            p = PlayerPtr(new ProxyPlayer(name, ID));
         }
         players_.push_back(p);
     }

@@ -79,10 +79,13 @@ void NetworkListener::gameStart(GameAgent *agent)
     payload.push_back(size);
     for (int i = 0; i < players_.size(); i++)
     {
-        payload.append(serializeString(players_[i]->getName()));
+        string nameid = players_[i]->getName();
+        nameid.append(players_[i]->getID());
+        payload.append(serializeString(nameid));
     }
     string message = createMessage(MSG_GAMESTARTING, payload);
     std::cerr << "DEBUG - NetworkListener: sending MSG_GAMESTARTING\n";
+    std::cerr << "DEBUG - NetworkListener: message has size " << message.size() << '\n';
     clisock_->send(message);
 }
 

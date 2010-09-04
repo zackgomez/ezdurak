@@ -13,7 +13,8 @@ using std::sort;
 
 AIPlayer::AIPlayer(const string& name) :
     PlayerImpl(name)
-{ /* Empty */ }
+{
+}
 
 AIPlayer::~AIPlayer()
 { /* Empty */ }

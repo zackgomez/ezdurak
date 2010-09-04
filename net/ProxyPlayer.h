@@ -10,8 +10,9 @@ class ProxyPlayer :
     public Player
 {
 public:
-    ProxyPlayer(const std::string &name) :
+    ProxyPlayer(const std::string &name, const std::string &ID) :
         name_(name),
+        ID_(ID),
         numCards_(6)
     { /* Empty */ }
 
@@ -61,8 +62,14 @@ public:
         return name_;
     }
 
+    virtual std::string getID() const
+    {
+        return ID_;
+    }
+
 protected:
     std::string name_;
+    std::string ID_;
     int numCards_;
 };
 

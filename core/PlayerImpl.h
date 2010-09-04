@@ -14,8 +14,21 @@ class PlayerImpl :
     public Player
 {
 public:
-    PlayerImpl(const std::string &name);
+    /** 
+     * Creates a PlayerImpl.
+     * 
+     * @param name The player's name.
+     * @param ID
+     */
+    PlayerImpl(const std::string &name, const std::string &ID = "");
     virtual ~PlayerImpl();
+
+    /** 
+     * Creates a unique ID suitable for use as the ID parameter.
+     * 
+     * @return A unique ID.
+     */
+    static std::string getUniqueID();
 
     /**
      * Called at the start of the game.
@@ -29,6 +42,7 @@ public:
     virtual void addCards(const std::vector<Card>& cards);
     virtual int getNumCards() const;
     virtual std::string getName() const;
+    virtual std::string getID() const;
 
     void print() const;
 
@@ -37,6 +51,8 @@ protected:
     std::vector<Card> hand_;
     /// The Player's name
     std::string name_;
+    /// THe Player's ID
+    std::string ID_;
     /// The GameAgent for the game, only valid after gameStarting.
     GameAgent *agent_;
 };

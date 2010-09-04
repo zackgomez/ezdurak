@@ -6,12 +6,15 @@
 #include "ai/AIPlayer.h"
 #include "cli/CLIListener.h"
 
-int main()
+int main(int argc, char **argv)
 {
-    const int numcon = 2;
     const int numplayers = 4;
+    int numcon = 2;
     const std::string broadcastp = "12345";
     const std::string gamep = "54321";
+
+    if (argc == 2)
+        numcon = atoi(argv[1]);
 
     srand(time(NULL));
 

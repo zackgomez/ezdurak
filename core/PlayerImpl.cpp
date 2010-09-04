@@ -1,12 +1,27 @@
 #include "PlayerImpl.h"
 #include <iostream>
+#include <sstream>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
-PlayerImpl::PlayerImpl(const std::string& name)
-    : Player(), hand_(), name_(name), agent_(NULL)
-{}
+PlayerImpl::PlayerImpl(const std::string& name, const std::string &ID)
+    : Player(), hand_(), name_(name), ID_(ID), agent_(NULL)
+{
+    if (ID_.empty())
+        ID_ = getUniqueID();
+}
 
 PlayerImpl::~PlayerImpl()
 {}
+
+std::string PlayerImpl::getUniqueID()
+{
+    boost::uuids::uuid id = boost::uuids::random_generator()();
+    std::stringstream ss;
+    ss << '#' << id;
+    return ss.str();
+}
 
 void PlayerImpl::gameStarting(GameAgent *agent)
 {
@@ -26,6 +41,11 @@ int PlayerImpl::getNumCards() const
 std::string PlayerImpl::getName() const
 {
     return name_;
+}
+
+std::string PlayerImpl::getID() const
+{
+    return ID_;
 }
 
 void PlayerImpl::print() const

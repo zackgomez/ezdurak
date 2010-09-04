@@ -33,6 +33,7 @@ public:
     virtual void addCards(const std::vector<Card>& cards);
     virtual int  getNumCards() const;
     virtual std::string getName() const;
+    virtual std::string getID() const;
 
 protected:
     // Overriden from NetworkListener
@@ -42,4 +43,5 @@ protected:
 private:
     std::set<Card> hand_;
     std::string name_;
+    std::string ID_;
 };
