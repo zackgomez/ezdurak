@@ -309,7 +309,10 @@ void InGameState::drawPiles()
     {
         GUICard::drawCardBack();
         glColor3f(0, 0, 0);
-        //deckString_->draw();
+        std::stringstream ss;
+        ss << deck_.getNumCards();
+        GUIStringPtr deckstr = GUIString::create(ss.str());
+        deckstr->draw();
     }
 
     if (discard_.getNumCards() > 0)
@@ -319,7 +322,6 @@ void InGameState::drawPiles()
         glColor3f(1, 1, 1);
         GUICard::drawCardBack();
         glColor3f(0, 0, 0);
-        //discardString_->draw();
     }
 }
 
