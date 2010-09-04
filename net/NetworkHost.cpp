@@ -6,9 +6,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/fcntl.h>
+#include <arpa/inet.h>
 #include <poll.h>
 
 using namespace kissnet;
+
+const int NetworkHost::BROADCAST_DELAY = 500;
 
 NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     bport_(bport),
@@ -24,7 +27,8 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     int yes = 1;
     int status;
     // set up the broadcast (UDP) socket
-    if ((bsock_ = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
+    if ((bsock_ = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+    {
         perror("socket (udp)");
         return;
     }
@@ -97,8 +101,8 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
             break;
         }
 
-        // Wait for a connection, sleep for 500ms
-        int rv = poll(pollee, 1, 500);
+        // Wait for a connection, sleep for BROADCAST_DELAY ms
+        int rv = poll(pollee, 1, BROADCAST_DELAY);
         if (rv < 0)
         {
             perror("poll");
@@ -108,11 +112,14 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
         {
             // Some socket activity...
             printf("DEBUG - NetworkHost: socket activity\n");
-            // TODO capture addr
-            int clisock = accept(lsock_, NULL, NULL);
+            struct sockaddr_storage inaddr;
+            socklen_t inaddrsize = sizeof(inaddr);
+            int clisock = accept(lsock_, (struct sockaddr*) &inaddr, &inaddrsize);
             if (clisock)
             {
-                printf("DEBUG - NetworkHost: got connection\n");
+                char buf[INET_ADDRSTRLEN];
+                printf("DEBUG - NetworkHost: got connection from %s\n", inet_ntop(AF_INET,
+                            &(((struct sockaddr_in *)&inaddr)->sin_addr), buf, INET_ADDRSTRLEN));
                 return tcp_socket::create(clisock);
             }
             else
@@ -120,7 +127,6 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
                 perror("accept");
             }
         }
-
         // Repeat
     }
 

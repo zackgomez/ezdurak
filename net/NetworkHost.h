@@ -8,6 +8,8 @@ public:
     NetworkHost(const std::string &bport, const std::string &lport);
     ~NetworkHost();
 
+    static const int BROADCAST_DELAY;
+
     kissnet::tcp_socket_ptr getConnection(const std::string &bmsg);
 
 private:
