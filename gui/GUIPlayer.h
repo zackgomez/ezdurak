@@ -23,3 +23,4 @@ private:
     SynchronizedQueue<int> &queue_;
 };
 
+typedef boost::shared_ptr<GUIPlayer> GUIPlayerPtr;

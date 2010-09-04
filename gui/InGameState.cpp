@@ -44,7 +44,8 @@ InGameState::InGameState(int numPlayers) :
 {
     assert(numPlayers >= 2 && numPlayers <= 6);
     std::vector<PlayerPtr> players(numPlayers);
-    players[0] = PlayerPtr(new GUIPlayer("guiplayer", queue_));
+    guiPlayer_ = GUIPlayerPtr(new GUIPlayer("guiplayer", queue_));
+    players[0] = guiPlayer_;
     for (int i = 1; i < players.size(); i++)
     {
         std::stringstream ss;
@@ -396,7 +397,7 @@ void InGameState::setPlayers(const vector<PlayerPtr>& players)
     vector<PlayerPtr>::iterator it;
     for (it = players_.begin(); it != players_.end(); it++)
     {
-        if ((*it)->getName() == "guiplayer")
+        if ((*it)->getID() == guiPlayer_->getID())
         {
             std::rotate(players_.begin(), it, players_.end());
             break;

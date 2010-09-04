@@ -12,6 +12,7 @@
 #include "PlayedCardsView.h"
 #include "PileCardHolder.h"
 #include "Animation.h"
+#include "GUIPlayer.h"
 
 class Game;
 class GUIListener;
@@ -75,6 +76,7 @@ private:
     Card trumpCard_;
 
     // Game Player members
+    GUIPlayerPtr guiPlayer_;
     std::vector<PlayerPtr> players_;
     ConstPlayerPtr attacker_, defender_;
     ConstPlayerPtr biscuit_;
