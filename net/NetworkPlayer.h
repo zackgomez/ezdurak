@@ -3,12 +3,26 @@
 #include "core/Player.h"
 #include <set>
 
+/** 
+ * A proxy Player class that forwards all the information necessary for a 
+ * player at the other end of the network to play as though there were 
+ * this player.  Uses the NetworkListener interface and should be connected
+ * to a NetworkGame constructed with a local player.
+ *
+ * After constructoion, the NetworkListener::getConnection method should be 
+ * used to create a valid connection between the NetworkPlayer and remote
+ * NetworkGame objects.
+ */
 class NetworkPlayer :
     public NetworkListener,
     public Player
 {
 public:
+    /** 
+     * Creates an unconnected NetworkPlayer object.
+     */
     NetworkPlayer();
+    /// Destructor
     virtual ~NetworkPlayer();
 
     // Methods inherited from the Player interface
@@ -21,7 +35,7 @@ public:
     virtual std::string getName() const;
 
 protected:
-    // Override from NetworkListener
+    // Overriden from NetworkListener
     virtual bool doHandshake();
 
 

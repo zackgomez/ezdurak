@@ -5,21 +5,48 @@
 #include "util/Thread.h"
 #include "util/SynchronizedQueue.h"
 
-struct Message
-{
-    char type;
-    std::string payload;
-};
-
+/** 
+ * A Proxy Game object.  Receives information from a NetworkListener or maybe
+ * a NetworkPlayer.  Forwards those messages through the GameAgent interface to
+ * any attached GameListeners.  Also forwards any messages from the Player 
+ * interface if constructed with a player and connected to a NetworkPlayer.
+ */
 class NetworkGame :
     public Game
 {
 public:
+    /** 
+     * Creates a NetworkGame object that will not have a localPlayer and will
+     * only relay GameListener messages.
+     */
     NetworkGame();
+    /** 
+     * Creates a NetworkGame object that will relay Player interface methods to
+     * the passed localPlayer object.  Must be connected to a NetworkPlayer.
+     * 
+     * @param localPlayer The player connect to the other end.
+     */
     NetworkGame(PlayerPtr localPlayer);
+    /// Destructor
     ~NetworkGame();
 
+    /** 
+     * Does any handshaking needed on the already connected socket passed.
+     * 
+     * @param sock A socket that is already connected
+     * 
+     * @return true if successful, false otherwise
+     */
     bool connectTo(kissnet::tcp_socket_ptr sock);
+    /** 
+     * Connets to the given host:port combination and then commences the 
+     * handshake.
+     * 
+     * @param host The host to connect to IP or hostname format
+     * @param port The port to connect on
+     * 
+     * @return  true if successful, false otherwise
+     */
     bool connectTo(const std::string &host, const std::string &port);
 
     // Message handlers
@@ -47,7 +74,15 @@ public:
     virtual int getDeckSize() const;
     virtual int getDiscardSize() const;
 
+    // Types
+    struct Message
+    {
+        char type;
+        std::string payload;
+    };
+
 private:
+
     kissnet::tcp_socket_ptr sock_;
     bool connected_;
     bool running_;

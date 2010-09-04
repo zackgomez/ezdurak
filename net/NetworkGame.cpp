@@ -10,7 +10,7 @@ using std::string;
 
 struct game_thread_arg
 {
-    SynchronizedQueue<Message> *queue;
+    SynchronizedQueue<NetworkGame::Message> *queue;
     kissnet::tcp_socket_ptr sock;
 };
 
@@ -18,7 +18,7 @@ static bool network_running;
 void * game_thread(void *arg)
 {
     struct game_thread_arg *args = (struct game_thread_arg *) arg;
-    SynchronizedQueue<Message> *queue = args->queue;
+    SynchronizedQueue<NetworkGame::Message> *queue = args->queue;
     kissnet::tcp_socket_ptr sock = args->sock;
     // Send ready handshake
     {
@@ -38,7 +38,7 @@ void * game_thread(void *arg)
             std::cout << "unable to read full header, quitting\n";
 
             // Push an exit message so that the other thread knows...
-            Message m;
+            NetworkGame::Message m;
             m.type = MSG_END;
             queue->enqueue(m);
             continue;
@@ -48,7 +48,7 @@ void * game_thread(void *arg)
         assert (payload_size >= 0);
         char type = header[2];
 
-        Message m;
+        NetworkGame::Message m;
         m.type = type;
 
 
@@ -132,74 +132,74 @@ void NetworkGame::run()
         switch(m.type)
         {
         case MSG_READY:
-            std::cerr << "Got MSG_READY, should not have happened.\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_READY, should not have happened.\n";
             break;
         case MSG_END:
-            std::cerr << "Got MSG_END, quitting...\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_END, quitting...\n";
             endMessage(payload);
             break;
         case MSG_GAMESTARTING:
-            std::cerr << "Got MSG_GAMESTARTING\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_GAMESTARTING\n";
             gameStartingMessage(payload);
             break;
         case MSG_GAMEOVER:
-            std::cerr << "Got MSG_GAMEOVER\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_GAMEOVER\n";
             gameOverMessage(payload);
             break;
         case MSG_NEWROUND:
-            std::cerr << "Got MSG_NEWROUND\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_NEWROUND\n";
             newRoundMessage(payload);
             break;
         case MSG_ENDROUND:
-            std::cerr << "Got MSG_ENDROUND\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_ENDROUND\n";
             endRoundMessage(payload);
             break;
         case MSG_ATTACKERPASSED:
-            std::cerr << "Got MSG_ATTACKERPASSED\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_ATTACKERPASSED\n";
             attackerPassedMessage(payload);
             break;
         case MSG_ATTACKINGCARD:
-            std::cerr << "Got MSG_ATTACKINGCARD\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_ATTACKINGCARD\n";
             attackingCardMessage(payload);
             break;
         case MSG_DEFENDINGCARD:
-            std::cerr << "Got MSG_DEFENDINGCARD\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_DEFENDINGCARD\n";
             defendingCardMessage(payload);
             break;
         case MSG_PILEDONCARD:
-            std::cerr << "Got MSG_PILEDONCARD\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_PILEDONCARD\n";
             piledOnCardMessage(payload);
             break;
         case MSG_PLAYEDOUT:
-            std::cerr << "Got MSG_PLAYEDOUT\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_PLAYEDOUT\n";
             playedOutMessage(payload);
             break;
         case MSG_GIVENCARDSN:
-            std::cerr << "Got MSG_GIVENCARDSN\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_GIVENCARDSN\n";
             givenCardsNMessage(payload);
             break;
         case MSG_GIVENCARDSCS:
-            std::cerr << "Got MSG_GIVENCARDSCS\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_GIVENCARDSCS\n";
             givenCardsCSMessage(payload);
             break;
         case MSG_ATTACK:
-            std::cerr << "Got MSG_ATTACK\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_ATTACK\n";
             attackMessage(payload);
             break;
         case MSG_DEFEND:
-            std::cerr << "Got MSG_DEFEND\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_DEFEND\n";
             defendMessage(payload);
             break;
         case MSG_PILEON:
-            std::cerr << "Got MSG_PILEON\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_PILEON\n";
             pileOnMessage(payload);
             break;
         case MSG_PLAYED:
-            std::cerr << "Got MSG_PLAYED\n";
-            std::cerr << "Should not have gotten this message!\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_PLAYED\n";
+            std::cerr << "DEBUG - NetworkGame: Should not have gotten this message!\n";
             break;
         case MSG_ADDCARDS:
-            std::cerr << "Got MSG_ADDCARDS\n";
+            std::cerr << "DEBUG - NetworkGame: Got MSG_ADDCARDS\n";
             addCardsMessage(payload);
             break;
         default:
@@ -419,7 +419,7 @@ void NetworkGame::attackMessage(const std::string &payload)
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
     }
     else
-        std::cerr << "ERROR: got attack message with no local player\n";
+        std::cerr << "ERROR - NetworkGame: got attack message with no local player\n";
 }
 
 void NetworkGame::defendMessage(const std::string &payload)
@@ -433,7 +433,7 @@ void NetworkGame::defendMessage(const std::string &payload)
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
     }
     else
-        std::cerr << "ERROR: got defend message with no local player\n";
+        std::cerr << "ERROR - NetworkGame: got defend message with no local player\n";
 }
 
 void NetworkGame::pileOnMessage(const std::string &payload)
@@ -447,7 +447,7 @@ void NetworkGame::pileOnMessage(const std::string &payload)
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
     }
     else
-        std::cerr << "ERROR: got pileOn message with no local player\n";
+        std::cerr << "ERROR - NetworkGame: got pileOn message with no local player\n";
 }
 
 void NetworkGame::addCardsMessage(const std::string &payload)
@@ -458,15 +458,13 @@ void NetworkGame::addCardsMessage(const std::string &payload)
         localPlayer_->addCards(cards);
     }
     else
-        std::cerr << "ERROR: got addCards message with no local player\n";
+        std::cerr << "ERROR - NetworkGame: got addCards message with no local player\n";
 }
 
 bool NetworkGame::connectTo(kissnet::tcp_socket_ptr sock)
 {
     sock_ = sock;
     connected_ = true;
-
-    std::cout << "Used passed socket as connection\n";
 
     return connected_;
 }
@@ -480,12 +478,12 @@ bool NetworkGame::connectTo(const std::string &host, const std::string &port)
     }
     catch (kissnet::socket_exception &e)
     {
-        std::cerr << "Unable to connect to " << host << ":" << port << ' '
+        std::cerr << "ERROR - NetworkGame: Unable to connect to " << host << ":" << port << ' '
             << e.what() << '\n';
         return false;
     }
 
-    std::cout << "Successfully connected\n";
+    std::cout << "DEBUG - NetworkGame: Successfully connected\n";
 
     return true;
 }
