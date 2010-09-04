@@ -105,6 +105,8 @@ Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
 
 Card NetworkPlayer::attack(std::set<int> playableRanks)
 {
+    if (hand_.empty())
+        return Card();
     for (;;)
     {
         // Send MSG_ATTACK
@@ -153,6 +155,8 @@ Card NetworkPlayer::attack(std::set<int> playableRanks)
 
 Card NetworkPlayer::pileOn(std::set<int> playableRanks)
 {
+    if (hand_.empty())
+        return Card();
     Card pCard;
     for (;;)
     {

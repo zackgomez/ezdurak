@@ -8,3 +8,5 @@ test
 dist
 ezdurak-linux
 ezdurak-cli
+clientmain
+servermain

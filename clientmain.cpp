@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "net/NetworkGame.h"
 #include "net/NetworkClient.h"
 #include "cli/CLIListener.h"
@@ -9,8 +10,15 @@ int main(int argc, char **argv)
 {
     srand(time(NULL));
 
+    if (argc != 2)
+    {
+        std::cerr << "usage: " << argv[0] << " playername\n";
+        return 1;
+    }
+    std::string name = argv[1];
+
     //PlayerPtr localPlayer(new AIPlayer("networkai"));
-    PlayerPtr localPlayer(new CLIPlayer("zack"));
+    PlayerPtr localPlayer(new CLIPlayer(name));
     
     // Find a game to play...
     std::cout << "Looking for a game\n";
