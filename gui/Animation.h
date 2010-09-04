@@ -12,13 +12,28 @@ typedef boost::shared_ptr<Animation> AnimationPtr;
 // -----------------------------------------------------------------------------
 // Base Animation Class
 // -----------------------------------------------------------------------------
+/** 
+ * Base Animation class.  All Animations have two functions: render and isDone.
+ * Render is a misnomer, just as Animation is.  render can be thought of as 
+ * "act" or "doAction".  isDone is self explanatory.  Currently, you may be 
+ * removed before render is ever called if isDone returns true.
+ */
 class Animation
 {
 public:
     // Virtual Destructor for intended base classes
     virtual ~Animation() { /* Empty */ }
 
+    /** 
+     * If this function returns true, the animation will be popped off of the
+     * animation stack and deleted.
+     * 
+     * @return true if this animation is completed.
+     */
     virtual bool isDone() const = 0;
+    /** 
+     * Called once per frame on the top most animation of the animation stack.
+     */
     virtual void render() = 0;
 };
 
@@ -26,6 +41,11 @@ public:
 // -----------------------------------------------------------------------------
 // Status Change Animations
 // -----------------------------------------------------------------------------
+/** 
+ * This animation changes the status on one or two players.  The two player
+ * functionality is strictly a convienence and can be accomplished in other 
+ * ways.
+ */
 class StatusChangeAnimation :
     public Animation
 {
@@ -50,6 +70,9 @@ private:
 // -----------------------------------------------------------------------------
 // Clear Animations - Clears a CardHolder
 // -----------------------------------------------------------------------------
+/** 
+ * This animation clears a CardHolder, removing all of the cards from it.
+ */
 class ClearAnimation :
     public Animation
 {
@@ -71,6 +94,10 @@ private:
 // -----------------------------------------------------------------------------
 // Delay Animation - Does nothing for a number of frames
 // -----------------------------------------------------------------------------
+/** 
+ * This Animation does nothing for a specified number of frames, delaying the
+ * animations after it on the Animation stack.
+ */
 class DelayAnimation :
     public Animation
 {
@@ -90,6 +117,12 @@ private:
 // -----------------------------------------------------------------------------
 // Parallel Animation - Runs one or more animations in parallel
 // -----------------------------------------------------------------------------
+/** 
+ * Runs one or more animations in parallel.  The passed animations have their 
+ * render method called once per frame, until they are 'isDone'.  When they are 
+ * complete the are removed.  When there are no animations left, the 
+ * ParallelAnimation is completed.
+ */
 class ParallelAnimation :
     public Animation
 {
@@ -111,6 +144,10 @@ private:
 // -----------------------------------------------------------------------------
 // Set Animation - Sets a boolean variable to true
 // -----------------------------------------------------------------------------
+/** 
+ * This animation sets a boolean to true.  If the variable is already true, it
+ * may not be written over again.
+ */
 class SetAnimation :
     public Animation
 {
@@ -131,6 +168,12 @@ private:
 // -----------------------------------------------------------------------------
 // Move Animation - Moves a card from one location/CardHolder to another
 // -----------------------------------------------------------------------------
+/** 
+ * This animations smoothly moves an animation from one CardHolder and location
+ * to another.  Over the space of duration frames the Card is interpolated 
+ * between the two endpoints.  On the first frame it is removed from the source
+ * CardHolder and after the last frame it is added to the target CardHolder.
+ */
 class MoveAnimation :
     public Animation
 {
@@ -164,6 +207,11 @@ private:
 // -----------------------------------------------------------------------------
 // Forward Declaration
 class PlayedCardsView;
+/** 
+ * This animation takes all of the cards from the PlayedCardsView and moves them
+ * to another CardHolder.  The Cards are interpolated from their positions in 
+ * the PlayedCardsView to the given position as in the MoveAnimation.
+ */
 class CrunchAnimation :
     public Animation
 {
