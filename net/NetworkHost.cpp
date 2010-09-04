@@ -78,7 +78,7 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
     struct sockaddr_in outaddr;
     memset(&outaddr, 0, sizeof(outaddr));
     outaddr.sin_family = AF_INET;
-    outaddr.sin_port = htons(12345);//atoi(bport_.c_str());
+    outaddr.sin_port = htons(atoi(bport_.c_str()));
     outaddr.sin_addr.s_addr = INADDR_BROADCAST;
 
     // Poll struct

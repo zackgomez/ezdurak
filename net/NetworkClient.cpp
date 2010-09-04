@@ -61,6 +61,8 @@ kissnet::tcp_socket_ptr NetworkClient::getConnection()
 
         printf("DEBUG _ NetworkClient: got message from: %s\n", addrbuf);
         printf("DEBUG - NetworkClient: got data from udp sock: %.*s\n", n, buf);
+
+        int consock = socket(AF_INET, SOCK_STREAM, 0);
     }
 
     return kissnet::tcp_socket_ptr();
