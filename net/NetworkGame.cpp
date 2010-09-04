@@ -1,5 +1,6 @@
 #include "NetworkGame.h"
 #include <iostream>
+#include <sstream>
 #include "core/Game.h"
 #include "core/GameListener.h"
 #include "NetworkProtocol.h"
@@ -104,8 +105,11 @@ void NetworkGame::run()
     // Send before the game_thread starts
     if (localPlayer_.get())
     {
-        // TODO make a unique ID, using a random number or something
-        string payload = serializeString(localPlayer_->getName() + "#NETP");
+        // Make random id
+        std::stringstream ss;
+        ss << "#NETP" << rand() % 1000;
+        localID_ = ss.str();
+        string payload = serializeString(localPlayer_->getName() + localID_);
         sock_->send(createMessage(MSG_NAME, payload));
     }
 
@@ -226,7 +230,7 @@ void NetworkGame::gameStartingMessage(const std::string &payload)
 
         PlayerPtr p;
         // Are they a localPlayer?
-        if (name.find('#') != string::npos)
+        if (name.find(localID_) != string::npos)
         {
             assert(localPlayer_.get());
             p = localPlayer_;

@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 {
 
     //PlayerPtr localPlayer(new AIPlayer("networkai"));
-    PlayerPtr localPlayer(new CLIPlayer("networkme"));
+    PlayerPtr localPlayer(new CLIPlayer("zack"));
     
     // Find a game to play...
     std::cout << "Looking for a game\n";

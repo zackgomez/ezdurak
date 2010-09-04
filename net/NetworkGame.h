@@ -56,6 +56,7 @@ private:
     SynchronizedQueue<Message> queue_;
 
     PlayerPtr localPlayer_;
+    std::string localID_;
     int deckSize_;
     int discardSize_;
 };
