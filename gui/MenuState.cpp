@@ -11,11 +11,9 @@
 
 MenuState::MenuState() :
     host_(0),
-    client_(0)
+    client_(0),
+    ready_(false)
 {
-    joinstr_ = GUIString::create("Press J to join a LAN game.");
-    hoststr_ = GUIString::create("Press H to host a LAN game.");
-    singlestr_ = GUIString::create("Press N for a single player game.");
 }
 
 GUIStatePtr MenuState::create()
@@ -30,6 +28,14 @@ MenuState::~MenuState()
 
 void MenuState::render()
 {
+    if (!ready_)
+    {
+        joinstr_ = GUIString::create("Press J to join a LAN game.");
+        hoststr_ = GUIString::create("Press H to host a LAN game.");
+        singlestr_ = GUIString::create("Press N for a single player game.");
+        ready_ = true;
+    }
+
     glClear(GL_COLOR_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);

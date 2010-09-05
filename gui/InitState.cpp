@@ -27,7 +27,7 @@ void InitState::render()
 
     if (TTF_Init())
     {
-        cout << "TTF_Init: " << TTF_GetError() << '\n';
+        cerr << "TTF_Init: " << TTF_GetError() << '\n';
         exit(2);
     }
 #ifndef MAC_OSX
@@ -37,7 +37,7 @@ void InitState::render()
 #endif
     if (!GUIString::font_)
     {
-        cout << "Unable to open font: " << TTF_GetError() << '\n';
+        cerr << "Unable to open font: " << TTF_GetError() << '\n';
         exit(3);
     }
 }
@@ -102,7 +102,7 @@ GLuint InitState::loadTexture(const string& filename)
 
     if (!tex)
     {
-        cout << "Unable to load image" << IMG_GetError() << '\n';
+        cerr << "Unable to load image" << IMG_GetError() << '\n';
         exit(1);
     }
 
@@ -113,7 +113,7 @@ GLuint InitState::loadTexture(const string& filename)
         texture_format = (tex->format->Rmask == 0x000000ff) ? GL_RGB : GL_BGR;
     else
     {
-        cout << "BPP: " << tex->format->BytesPerPixel << '\n';
+        cerr << "BPP: " << tex->format->BytesPerPixel << '\n';
         assert(false && "Image is not in the proper format.");
     }
 

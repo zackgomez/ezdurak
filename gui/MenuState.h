@@ -29,6 +29,7 @@ private:
     GUIStringPtr joinstr_;
     GUIStringPtr hoststr_;
     GUIStringPtr singlestr_;
+    bool ready_;
 
     GUIStatePtr next_;
 };

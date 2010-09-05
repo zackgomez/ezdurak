@@ -1,22 +1,8 @@
 #include "GUIApp.h"
 #include <SDL/SDL.h>
 #include <iostream>
-<<<<<<< HEAD
 #include "MenuState.h"
-
-#include "GUICard.h"
-#include "GUIPlayerView.h"
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
-=======
 #include "InitState.h"
-#include "InGameState.h"
->>>>>>> master
-
-#include "InGameState.h"
-#include "core/Game.h"
-#include "ai/AIPlayer.h"
-#include <sstream>
 
 using namespace std;
 
@@ -37,44 +23,7 @@ GUIApp::~GUIApp()
 
 void GUIApp::run()
 {
-<<<<<<< HEAD
-    initGL();
-
-    if (TTF_Init())
-    {
-        cout << "TTF_Init: " << TTF_GetError() << '\n';
-        exit(2);
-    }
-#ifndef MAC_OSX
-    GUIString::font_ = TTF_OpenFont("resources/FreeMonoBold.ttf", 16);
-#else
-    GUIString::font_ = TTF_OpenFont("../Resources/FreeMonoBold.ttf", 16);
-#endif
-    if (!GUIString::font_)
-    {
-        cout << "Unable to open font: " << TTF_GetError() << '\n';
-        exit(3);
-    }
-
-    /*
-=======
->>>>>>> master
-    GamePtr game(new Game());
-    std::stringstream ss;
-    for (int i = 0; i < 3; i++)
-    {
-	ss.str("");
-	ss << "AIPlayer" << i+1;
-	PlayerPtr p(new AIPlayer(ss.str()));
-	game->addPlayer(p);
-    }
-<<<<<<< HEAD
-    state_ = InGameState::create(game);
-    */
-    state_ = MenuState::create();
-=======
-    state_ = InitState::create(InGameState::create(game));
->>>>>>> master
+    state_ = InitState::create(MenuState::create());
 
     cont_ = true;
 
@@ -89,8 +38,6 @@ void GUIApp::run()
             GUIStatePtr next = state_->nextState();
             if (next.get())
                 state_ = next;
-            else
-                assert(false && "NULL state returned");
         }
 
         SDL_Delay(16);
