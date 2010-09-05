@@ -8,13 +8,12 @@
 #include "core/Player.h"
 #include "util/Thread.h"
 #include "util/SynchronizedQueue.h"
-#include "GUIString.h"
 #include "PlayedCardsView.h"
 #include "PileCardHolder.h"
 #include "Animation.h"
 #include "GUIPlayer.h"
+#include "core/Game.h"
 
-class Game;
 class GUIListener;
 class GUIPlayerView;
 class GUIHumanView;
@@ -27,7 +26,17 @@ class InGameState :
     public GameListener
 {
 public:
-    static GUIStatePtr create(int numPlayers);
+    /** 
+     * Creates an InGameState ready for use.  The InGameState takes responsibility
+     * for the passed Game object and will delete it when it is done.  The 
+     * passed Game object should have all the players already included except 
+     * for the GUIPlayer that the InGameState will add.
+     * 
+     * @param game The game object, ready for running save the GUIPlayer.
+     * 
+     * @return An InGameState ready for use.
+     */
+    static GUIStatePtr create(GamePtr game);
 
     /// Destructor
     virtual ~InGameState();
@@ -53,7 +62,7 @@ public:
 
 private:
     // Private constructors for create idiom
-    InGameState(int numPlayers);
+    InGameState(GamePtr game);
     InGameState(const InGameState&);
     InGameState& operator=(const InGameState &);
 
@@ -97,7 +106,7 @@ private:
     PileCardHolder discard_;
 
     // Game members
-    Game *game;
+    GamePtr game_;
     GameAgent *agent_;
     SynchronizedQueue<int> queue_;
     Thread gameThread_;

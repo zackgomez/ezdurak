@@ -5,6 +5,9 @@
 #include "Deck.h"
 #include "Player.h"
 
+class Game;
+typedef std::auto_ptr<Game> GamePtr;
+
 /**
  * This class encapsulated all the rules and data necessary for a Durak game.
  * It registers listeners and contains players.  The run method will run a

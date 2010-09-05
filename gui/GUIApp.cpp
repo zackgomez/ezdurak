@@ -7,6 +7,10 @@
 #include "GUICard.h"
 #include "GUIPlayerView.h"
 
+#include "core/Game.h"
+#include "ai/AIPlayer.h"
+#include <sstream>
+
 using namespace std;
 
 const int GUIApp::SCREENX = 800;
@@ -44,7 +48,16 @@ void GUIApp::run()
         exit(3);
     }
 
-    state_ = InGameState::create(4);
+    GamePtr game(new Game());
+    std::stringstream ss;
+    for (int i = 0; i < 3; i++)
+    {
+        ss.clear();
+        ss << "AIPlayer" << i+1;
+        PlayerPtr p(new AIPlayer(ss.str()));
+        game->addPlayer(p);
+    }
+    state_ = InGameState::create(game);
 
     cont_ = true;
 

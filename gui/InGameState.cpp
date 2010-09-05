@@ -32,34 +32,25 @@ void* game_thread_main(void *gameobj)
     return NULL;
 }
 
-GUIStatePtr InGameState::create(int numPlayers)
+GUIStatePtr InGameState::create(GamePtr game)
 {
-    GUIStatePtr ret(new InGameState(numPlayers));
+    GUIStatePtr ret(new InGameState(game));
     return ret;
 }
 
-InGameState::InGameState(int numPlayers) :
+InGameState::InGameState(GamePtr game) :
     gameOver_(false),
     validPlayerDisplays_(true),
-    humanView_(NULL)
+    humanView_(NULL),
+    game_(game)
 {
-    assert(numPlayers >= 2 && numPlayers <= 6);
-
-    game = new Game();
-    game->addListener(this);
-    agent_ = game;
+    game_->addListener(this);
+    agent_ = game_.get();
 
     guiPlayer_ = GUIPlayerPtr(new GUIPlayer("guiplayer", queue_));
-    game->addPlayer(guiPlayer_);
-    for (int i = 1; i < numPlayers; i++)
-    {
-        std::stringstream ss;
-        ss << "AIPlayer" << i;
-        std::string name = ss.str();
-        game->addPlayer(PlayerPtr(new AIPlayer(name)));
-    }
+    game_->addPlayer(guiPlayer_);
 
-    gameThread_.run(game_thread_main, game);
+    gameThread_.run(game_thread_main, game_.get());
 }
 
 InGameState::~InGameState()
@@ -67,7 +58,6 @@ InGameState::~InGameState()
     animations_.clear();
     queue_.killReader();
     gameThread_.join();
-    delete game;
 
     for (int i = 0; i < playersDisplay_.size(); i++)
         delete playersDisplay_[i];
@@ -111,9 +101,21 @@ void InGameState::processEvent(SDL_Event &e)
         assert(false && "Should not have recieved a QUIT event"); break;
     case SDL_KEYDOWN:
         if (e.key.keysym.sym == SDLK_ESCAPE)
+        {
             next_ = QuitState::create();
+        }
         else if (e.key.keysym.sym == SDLK_n)
-            next_ = InGameState::create(4);
+        {
+            GamePtr newgame(new Game());
+            for (int i = 0; i < 3; i++)
+            {
+                std::stringstream ss;
+                ss << "AIPlayer" << i+1;
+                PlayerPtr p(new AIPlayer(ss.str()));
+                newgame->addPlayer(p);
+            }
+            next_ = InGameState::create(newgame);
+        }
         break;
     case SDL_MOUSEBUTTONDOWN:
         // If Animations in progress, do nothing
