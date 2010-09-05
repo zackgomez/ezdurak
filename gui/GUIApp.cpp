@@ -52,7 +52,7 @@ void GUIApp::run()
             if (next.get())
                 state_ = next;
             else
-                cont_ = false;
+                assert(false && "NULL state returned");
         }
 
         SDL_Delay(16);
