@@ -55,7 +55,7 @@ void GUIApp::run()
     std::stringstream ss;
     for (int i = 0; i < 3; i++)
     {
-        ss.clear();
+        ss.str("");
         ss << "AIPlayer" << i+1;
         PlayerPtr p(new AIPlayer(ss.str()));
         game->addPlayer(p);
