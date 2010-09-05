@@ -17,8 +17,8 @@ int main(int argc, char **argv)
     }
     std::string name = argv[1];
 
-    //PlayerPtr localPlayer(new AIPlayer("networkai"));
-    PlayerPtr localPlayer(new CLIPlayer(name));
+    PlayerPtr localPlayer(new AIPlayer("networkai"));
+    //PlayerPtr localPlayer(new CLIPlayer(name));
     
     // Find a game to play...
     std::cout << "Looking for a game\n";

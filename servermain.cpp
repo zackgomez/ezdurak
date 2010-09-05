@@ -9,7 +9,7 @@
 int main(int argc, char **argv)
 {
     const int numplayers = 4;
-    int numcon = 2;
+    int numcon = 1;
     const std::string broadcastp = "12345";
     const std::string gamep = "54321";
 
