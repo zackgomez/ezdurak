@@ -21,7 +21,7 @@ public:
     GUIPlayerView(const Player *player);
     virtual ~GUIPlayerView();
 
-    virtual void draw();
+    virtual void draw(bool animating);
     virtual void setStatus(Status status);
 
     virtual CardHolder * getCardHolder();
@@ -34,8 +34,8 @@ protected:
     GUIStringPtr name_;
     Status status_;
 
-    virtual void drawName();
-    virtual void drawCards();
+    virtual void drawName(bool animating);
+    virtual void drawCards(bool animating);
 
     void drawEmblem(GLuint tex);
 };
