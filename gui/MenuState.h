@@ -6,12 +6,12 @@
 class NetworkHost;
 class NetworkClient;
 
-class LANLobbyState :
+class MenuState :
     public GUIState
 {
 public:
     static GUIStatePtr create();
-    virtual ~LANLobbyState();
+    virtual ~MenuState();
 
     // Methods inherited from GUIState
     virtual void render();
@@ -20,7 +20,7 @@ public:
     virtual GUIStatePtr nextState();
 
 private:
-    LANLobbyState();
+    MenuState();
 
     std::auto_ptr<NetworkHost> host_;
     std::auto_ptr<NetworkClient> client_;
@@ -28,6 +28,7 @@ private:
 
     GUIStringPtr joinstr_;
     GUIStringPtr hoststr_;
+    GUIStringPtr singlestr_;
 
     GUIStatePtr next_;
 };

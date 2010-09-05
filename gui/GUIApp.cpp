@@ -1,12 +1,12 @@
 #include "GUIApp.h"
 #include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
 #include <iostream>
+#include "MenuState.h"
+
 #include "GUICard.h"
 #include "GUIPlayerView.h"
-
-#include "LANLobbyState.h"
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 
 #include "InGameState.h"
 #include "core/Game.h"
@@ -62,7 +62,7 @@ void GUIApp::run()
     }
     state_ = InGameState::create(game);
     */
-    state_ = LANLobbyState::create();
+    state_ = MenuState::create();
 
     cont_ = true;
 
