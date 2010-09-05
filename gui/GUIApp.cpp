@@ -1,12 +1,17 @@
 #include "GUIApp.h"
 #include <SDL/SDL.h>
 #include <iostream>
+<<<<<<< HEAD
 #include "MenuState.h"
 
 #include "GUICard.h"
 #include "GUIPlayerView.h"
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
+=======
+#include "InitState.h"
+#include "InGameState.h"
+>>>>>>> master
 
 #include "InGameState.h"
 #include "core/Game.h"
@@ -32,6 +37,7 @@ GUIApp::~GUIApp()
 
 void GUIApp::run()
 {
+<<<<<<< HEAD
     initGL();
 
     if (TTF_Init())
@@ -51,18 +57,24 @@ void GUIApp::run()
     }
 
     /*
+=======
+>>>>>>> master
     GamePtr game(new Game());
     std::stringstream ss;
     for (int i = 0; i < 3; i++)
     {
-        ss.str("");
-        ss << "AIPlayer" << i+1;
-        PlayerPtr p(new AIPlayer(ss.str()));
-        game->addPlayer(p);
+	ss.str("");
+	ss << "AIPlayer" << i+1;
+	PlayerPtr p(new AIPlayer(ss.str()));
+	game->addPlayer(p);
     }
+<<<<<<< HEAD
     state_ = InGameState::create(game);
     */
     state_ = MenuState::create();
+=======
+    state_ = InitState::create(InGameState::create(game));
+>>>>>>> master
 
     cont_ = true;
 
@@ -78,7 +90,7 @@ void GUIApp::run()
             if (next.get())
                 state_ = next;
             else
-                cont_ = false;
+                assert(false && "NULL state returned");
         }
 
         SDL_Delay(16);
@@ -86,44 +98,6 @@ void GUIApp::run()
 
     TTF_Quit();
     SDL_Quit();
-}
-
-void GUIApp::initGL()
-{
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
-
-    SDL_SetVideoMode(SCREENX, SCREENY, 32, SDL_OPENGL);
-
-    SDL_WM_SetCaption("EZDurak", "EZDurak");
-
-    glEnable(GL_TEXTURE_RECTANGLE);
-#ifndef MAC_OSX
-    GUICard::cardtex = loadTexture("resources/cards.png");
-    GUIPlayerView::attackEmblem = loadTexture("resources/sword.png");
-    GUIPlayerView::defendEmblem = loadTexture("resources/shield.png");
-    GUIPlayerView::defendLostEmblem = loadTexture("resources/shieldx.png");
-#else
-    GUICard::cardtex = loadTexture("cards.png");
-    GUIPlayerView::attackEmblem = loadTexture("sword.png");
-    GUIPlayerView::defendEmblem = loadTexture("shield.png");
-    GUIPlayerView::defendLostEmblem = loadTexture("shieldx.png");
-#endif
-
-    glViewport(0, 0, SCREENX, SCREENY);
-    glMatrixMode(GL_PROJECTION);
-    glOrtho(0, SCREENX, SCREENY, 0, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glClearColor(0, 0.5, 0, 1);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // TODO Fix this
-    // Make the cards bigger
-    GUICard::CARDX *= 1.2;
-    GUICard::CARDY *= 1.2;
 }
 
 void GUIApp::processEvents()
@@ -145,38 +119,4 @@ void GUIApp::render()
     state_->render();
 
     SDL_GL_SwapBuffers();
-}
-
-GLuint GUIApp::loadTexture(const string& filename)
-{
-    SDL_Surface *tex;
-    tex = IMG_Load(filename.c_str());
-
-    if (!tex)
-    {
-        cout << "Unable to load image" << IMG_GetError() << '\n';
-        exit(1);
-    }
-
-    GLenum texture_format;
-    if ( tex->format->BytesPerPixel == 4 )
-        texture_format = (tex->format->Rmask == 0x000000ff) ? GL_RGBA : GL_BGRA;
-    else if (tex->format->BytesPerPixel == 3 )
-        texture_format = (tex->format->Rmask == 0x000000ff) ? GL_RGB : GL_BGR;
-    else
-    {
-        cout << "BPP: " << tex->format->BytesPerPixel << '\n';
-        assert(false && "Image is not in the proper format.");
-    }
-
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_RECTANGLE, texture);
-
-    glTexImage2D(GL_TEXTURE_RECTANGLE, 0, 4, tex->w, tex->h, 0,
-        texture_format, GL_UNSIGNED_BYTE, tex->pixels);
-
-    SDL_FreeSurface(tex);
-
-    return texture;
 }
