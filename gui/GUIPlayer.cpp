@@ -5,7 +5,9 @@
 GUIPlayer::GUIPlayer(const std::string &name, SynchronizedQueue<int> &q) :
     PlayerImpl(name),
     queue_(q)
-{ /* Empty */ }
+{
+    agent_ = NULL;
+}
 
 GUIPlayer::~GUIPlayer()
 { /* Empty */ }

@@ -45,3 +45,5 @@ private:
     std::string name_;
     std::string ID_;
 };
+
+typedef boost::shared_ptr<NetworkPlayer> NetworkPlayerPtr;

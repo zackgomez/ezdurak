@@ -4,23 +4,23 @@ DIRS	= gui core cli ai www net
 EXE	= ezdurak-gui ezdurak-cli clientmain servermain
 OBJS	= guimain.o climain.o clientmain.o
 OBJLIBS = libezdurakgui.a libezdurakcore.a libezdurakcli.a libezdurakai.a libezduraknet.a
-LIBS	= -L.
+LIBS	= -L. -lpthread
 GUILIBS = `sdl-config --libs` -lSDL_ttf -lSDL_image -lGL
 CXXFLAGS = -I. $(PRJCXXFLAGS)
 
 all: $(EXE)
 
-ezdurak-gui: guimain.o libezdurakcore.a libezdurakgui.a libezdurakai.a
-	g++ -o ezdurak-gui guimain.o libezdurakgui.a libezdurakcore.a -lSDL -lSDL_ttf -lSDL_image -lGL libezdurakai.a
+ezdurak-gui: guimain.o libezduraknet.a libezdurakcore.a libezdurakgui.a libezdurakai.a
+	$(LD) -o $@ $^ $(LIBS) $(GUILIBS) -lezdurakcore -lezduraknet
 
 ezdurak-cli: climain.o libezdurakcore.a libezdurakcli.a libezdurakai.a
-	$(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o -lpthread
+	$(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o
 
 clientmain: clientmain.o libezduraknet.a libezdurakcore.a libezdurakai.a libezdurakcli.a
-	$(LD) -o $@ $^ $(LIBS) -lpthread  core/PlayerImpl.o
+	$(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o
 
 servermain: servermain.o libezduraknet.a libezdurakcore.a libezdurakai.a libezdurakcli.a
-	$(LD) -o $@ $^ $(LIBS) -lpthread core/PlayerImpl.o
+	$(LD) -o $@ $^ $(LIBS) core/PlayerImpl.o
 
 libezdurakgui.a: force_look
 	$(ECHO) looking into gui : $(MAKE) $(MFLAGS)

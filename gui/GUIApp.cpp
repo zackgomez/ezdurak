@@ -3,10 +3,12 @@
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 #include <iostream>
-#include "InGameState.h"
 #include "GUICard.h"
 #include "GUIPlayerView.h"
 
+#include "LANLobbyState.h"
+
+#include "InGameState.h"
 #include "core/Game.h"
 #include "ai/AIPlayer.h"
 #include <sstream>
@@ -48,6 +50,7 @@ void GUIApp::run()
         exit(3);
     }
 
+    /*
     GamePtr game(new Game());
     std::stringstream ss;
     for (int i = 0; i < 3; i++)
@@ -58,6 +61,8 @@ void GUIApp::run()
         game->addPlayer(p);
     }
     state_ = InGameState::create(game);
+    */
+    state_ = LANLobbyState::create();
 
     cont_ = true;
 

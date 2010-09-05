@@ -9,7 +9,6 @@
 #include <boost/algorithm/string.hpp>
 
 using std::string;
-
 struct game_thread_arg
 {
     SynchronizedQueue<NetworkGame::Message> *queue;
@@ -82,13 +81,6 @@ NetworkGame::NetworkGame() :
     sock_ = kissnet::tcp_socket::create();
 }
 
-NetworkGame::NetworkGame(PlayerPtr localPlayer) :
-    localPlayer_(localPlayer)
-{
-    network_running = false;
-    sock_ = kissnet::tcp_socket::create();
-}
-
 NetworkGame::~NetworkGame()
 {
     if (connected_)
@@ -97,8 +89,15 @@ NetworkGame::~NetworkGame()
     if (network_running)
     {
         network_running = false;
+        game_thread_.kill();
         game_thread_.join();
     }
+}
+
+void NetworkGame::addPlayer(PlayerPtr player)
+{
+    assert(!localPlayer_.get());
+    localPlayer_ = player;
 }
 
 void NetworkGame::run()
@@ -230,16 +229,19 @@ void NetworkGame::gameStartingMessage(const std::string &payload)
         boost::algorithm::split(vals, nameid, boost::is_any_of("#"));
 
         // Make random id
-        std::cerr << "DEBUG - NetworkGame: payload = " << payload << '\n';
-        std::cerr << "DEBUG - NetworkGame: nameid = " << nameid << '\n';
         assert(vals.size() == 2);
         string name = vals[0];
-        string ID = vals[1];
+        string ID = "#" + vals[1];
+
+        if (localPlayer_.get())
+            std::cerr << "DEBUG - NetworkGame: localID = " << localPlayer_->getID() << '\n';
+        std::cerr << "DEBUG - NetworkGame: currentID = " << ID << '\n';
 
         PlayerPtr p;
         // Are they a localPlayer?
         if (localPlayer_.get() && localPlayer_->getID() == ID)
         {
+            std::cerr << "DEBUG - NetworkGame: FOUND LOCAL PLAYER!!!!\n";
             p = localPlayer_;
         }
         // if not, use a proxy

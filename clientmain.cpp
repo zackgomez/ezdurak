@@ -17,8 +17,8 @@ int main(int argc, char **argv)
     }
     std::string name = argv[1];
 
-    PlayerPtr localPlayer(new AIPlayer("networkai"));
-    //PlayerPtr localPlayer(new CLIPlayer(name));
+    //PlayerPtr localPlayer(new AIPlayer("networkai"));
+    PlayerPtr localPlayer(new CLIPlayer(name));
     
     // Find a game to play...
     std::cout << "Looking for a game\n";
@@ -26,7 +26,8 @@ int main(int argc, char **argv)
 
     kissnet::tcp_socket_ptr sock = gamefinder.getConnection();
 
-    NetworkGame game(localPlayer);
+    NetworkGame game;
+    game.addPlayer(localPlayer);
     CLIListener listener;
     game.addListener(&listener);
 
