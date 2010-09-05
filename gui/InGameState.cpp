@@ -25,7 +25,8 @@ using namespace std;
 
 void* game_thread_main(void *gameobj)
 {
-    srand(time(NULL)); Game *game = (Game*) gameobj;
+    srand(time(NULL));
+    Game *game = (Game*) gameobj;
     game->run();
 
     return NULL;
@@ -43,21 +44,21 @@ InGameState::InGameState(int numPlayers) :
     humanView_(NULL)
 {
     assert(numPlayers >= 2 && numPlayers <= 6);
-    std::vector<PlayerPtr> players(numPlayers);
+
+    game = new Game();
+    game->addListener(this);
+    agent_ = game;
+
     guiPlayer_ = GUIPlayerPtr(new GUIPlayer("guiplayer", queue_));
-    players[0] = guiPlayer_;
-    for (int i = 1; i < players.size(); i++)
+    game->addPlayer(guiPlayer_);
+    for (int i = 1; i < numPlayers; i++)
     {
         std::stringstream ss;
         ss << "AIPlayer" << i;
         std::string name = ss.str();
-        players[i] = PlayerPtr(new AIPlayer(name));
+        game->addPlayer(PlayerPtr(new AIPlayer(name)));
     }
-    std::random_shuffle(players.begin(), players.end());
 
-    game = new Game(players);
-    game->addListener(this);
-    agent_ = game;
     gameThread_.run(game_thread_main, game);
 }
 

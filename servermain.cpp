@@ -19,31 +19,30 @@ int main(int argc, char **argv)
     srand(time(NULL));
 
     NetworkHost nh(broadcastp, gamep);
+    Game game;
 
-    std::vector<PlayerPtr> players;
-    while (players.size() < numcon)
+    while (game.getNumPlayers() < numcon)
     {
         boost::shared_ptr<NetworkPlayer> netp(new NetworkPlayer());
-        std::cout << "Waiting for connection " << players.size() + 1
+        std::cout << "Waiting for connection " << game.getNumPlayers() + 1
             << " / " << numcon << '\n';
         kissnet::tcp_socket_ptr sock = nh.getConnection("_EZDurak");
         if (netp->getConnection(sock))
-            players.push_back(netp);
+            game.addPlayer(netp);
         else
             std::cout << "Error getting connection.. trying again\n";
     }
 
     int i = 0;
-    while (players.size() < numplayers)
+    while (game.getNumPlayers() < numplayers)
     {
         std::string name("AIPlayer");
         name.push_back('1' + i++);
         PlayerPtr p(new AIPlayer(name));
-        players.push_back(p);
+        game.addPlayer(p);
     }
 
 
-    Game game(players);
     CLIListener l;
     game.addListener(&l);
 

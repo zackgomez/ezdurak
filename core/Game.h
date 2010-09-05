@@ -14,8 +14,23 @@ class Game : public GameAgent
 {
 public:
     // Constructors
-    Game(const std::vector<PlayerPtr>& players);
+    Game();
     virtual ~Game();
+
+    /** 
+     * Adds a player to the game.  Should be called before run.
+     * 
+     * @param player The player to add.
+     */
+    virtual void addPlayer(PlayerPtr player);
+
+    /** 
+     * Gets the number of players this game currently has.  A game must have
+     * between 2 and 6 players to start.
+     * 
+     * @return The number of players
+     */
+    virtual int getNumPlayers() const;
 
     /**
      * Run the Durak game.
@@ -39,8 +54,7 @@ public:
     const std::vector<Card>& getPlayedCards() const;
 
 protected:
-    Game();
-    void setPlayers(const std::vector<PlayerPtr>& players);
+    void setPlayers();
 
     Deck deck_;
     Card trumpCard_;

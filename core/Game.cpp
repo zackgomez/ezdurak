@@ -12,18 +12,14 @@ const int Game::HAND_SIZE = 6;
 Game::Game()
 { /* Empty */ }
 
-Game::Game(const vector<PlayerPtr>& players) :
-    players_(players)
-{
-    setPlayers(players);
-}
-
 Game::~Game()
 { /* Empty */ }
 
-void Game::setPlayers(const vector<PlayerPtr>& players)
+void Game::setPlayers()
 {
     assert(players_.size() >= 2 && players_.size() <= 6);
+    // Give them a good shuffling
+    std::random_shuffle(players_.begin(), players_.end());
 
     attacker_ = players_[0];
     attackerIdx_ = 0;
@@ -31,8 +27,22 @@ void Game::setPlayers(const vector<PlayerPtr>& players)
     defenderIdx_ = 1;
 }
 
+void Game::addPlayer(PlayerPtr player)
+{
+    assert(players_.size() < 6);
+    players_.push_back(player);
+}
+
+int Game::getNumPlayers() const
+{
+    return players_.size();
+}
+
 void Game::run()
 {
+    // Set up the players
+    setPlayers();
+
     // First thing, deal out the hands
     deal();
 
