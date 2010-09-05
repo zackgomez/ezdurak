@@ -10,7 +10,7 @@
 #include "GUIApp.h"
 #include "ai/AIPlayer.h"
 #include "GameOverState.h"
-#include "QuitState.h"
+#include "MenuState.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643
@@ -102,7 +102,7 @@ void InGameState::processEvent(SDL_Event &e)
     case SDL_KEYDOWN:
         if (e.key.keysym.sym == SDLK_ESCAPE)
         {
-            next_ = QuitState::create();
+            next_ = MenuState::create();
         }
         else if (e.key.keysym.sym == SDLK_n)
         {
