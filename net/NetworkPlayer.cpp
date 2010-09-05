@@ -27,6 +27,7 @@ bool NetworkPlayer::doHandshake()
     while (!ready)
     {
         char header[3];
+        char payload[256*256];
         clisock_->recv(header, 3);
         if (header[2] == MSG_READY)
         {
@@ -35,8 +36,9 @@ bool NetworkPlayer::doHandshake()
         }
         else if (header[2] == MSG_NAME)
         {
-            int payload_size = header[0] + 256 * header[1];
-            char *payload = new char[payload_size];
+            int payload_size = (unsigned char)header[0] + 256 * (unsigned char)header[1];
+            assert(payload_size >= 0);
+            assert(payload_size <= 256*256);
             clisock_->recv(payload, payload_size);
 
             std::string nameid(payload, payload_size - 1);
@@ -45,8 +47,6 @@ bool NetworkPlayer::doHandshake()
             assert(vals.size() == 2);
             name_ = vals[0];
             ID_ = "#" + vals[1];
-
-            delete payload;
         }
         else
         {

@@ -29,6 +29,7 @@ void * game_thread(void *arg)
     }
 
     char header[3];
+    char buf[256*256];
     // Now read from the socket and push messages on to the queue
     while (network_running)
     {
@@ -48,6 +49,7 @@ void * game_thread(void *arg)
         // Calculate payload size, lsb first in header, and message type
         int payload_size = (unsigned char)header[0] + 256 * (unsigned char)header[1];
         assert (payload_size >= 0);
+        assert (payload_size <= 256*256);
         char type = header[2];
 
         NetworkGame::Message m;
@@ -56,12 +58,10 @@ void * game_thread(void *arg)
 
         if (payload_size > 0)
         {
-            char *raw_payload = new char[payload_size];
-            bytes_recieved = sock->recv(raw_payload, payload_size);
+            bytes_recieved = sock->recv(buf, payload_size);
             if (bytes_recieved != payload_size)
                 std::cerr << "Unable to read entire payload in one shot.\n";
-            m.payload = string(raw_payload, payload_size);
-            delete raw_payload;
+            m.payload = string(buf, payload_size);
         }
         else
             m.payload = "";
