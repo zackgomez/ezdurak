@@ -197,7 +197,7 @@ Card NetworkPlayer::pileOn(std::set<int> playableRanks)
 
         // Make sure the card is valid, if not, start from the top
         pCard = readCard(payloadstr);
-        if (playableRanks.find(pCard) != playableRanks.end())
+        if (playableRanks.find(pCard.getNum()) != playableRanks.end())
         {
             assert(hand_.find(pCard) != hand_.end());
             // Remove the card from the hand, return it
