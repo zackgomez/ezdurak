@@ -33,9 +33,6 @@ private:
     GUIStatePtr state_;
 
     // Helper functions
-    void initGL();
-    void processEvents();
     void render();
-
-    GLuint loadTexture(const std::string& filename);
+    void processEvents();
 };
