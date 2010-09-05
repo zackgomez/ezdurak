@@ -90,7 +90,16 @@ Card GUIPlayer::attack(std::set<int> playableRanks)
 
 Card GUIPlayer::pileOn(std::set<int> playableRanks)
 {
-    return attack(playableRanks);
+    // We only want to ask the user to pile on if they actually have any cards
+    // that they can pile on.  This will speed games up and require less passing
+    // on the GUIPlayer's part
+    for (int i = 0; i < hand_.size(); i++)
+    {
+        if (playableRanks.find(hand_[i].getNum()) != playableRanks.end())
+            return attack(playableRanks);
+    }
+
+    return Card();
 }
 
 void GUIPlayer::addCards(const std::vector<Card>& cards)
