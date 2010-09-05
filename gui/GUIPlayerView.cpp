@@ -22,10 +22,10 @@ GUIPlayerView::~GUIPlayerView()
 {
 }
 
-void GUIPlayerView::draw()
+void GUIPlayerView::draw(bool animating)
 {
-    drawCards();
-    drawName();
+    drawCards(animating);
+    drawName(animating);
 }
 
 void GUIPlayerView::setStatus(Status status)
@@ -38,7 +38,7 @@ CardHolder * GUIPlayerView::getCardHolder()
     return &cards_;
 }
 
-void GUIPlayerView::drawName()
+void GUIPlayerView::drawName(bool animating)
 {
     glPushMatrix();
     glTranslatef(0, -(GUICard::CARDY/2 + 15), 0);
@@ -62,7 +62,7 @@ void GUIPlayerView::drawName()
     glPopMatrix();
 }
 
-void GUIPlayerView::drawCards()
+void GUIPlayerView::drawCards(bool animating)
 {
     int numCards = cards_.getNumCards();
     glPushMatrix();

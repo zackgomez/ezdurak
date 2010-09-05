@@ -341,7 +341,7 @@ void InGameState::drawPlayers()
         glRotatef(testangle, 0, 0, 1);
 
         // Draw the player
-        playersDisplay_[i]->draw();
+        playersDisplay_[i]->draw(!animations_.empty());
     }
 }
 

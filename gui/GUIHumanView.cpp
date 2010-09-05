@@ -54,7 +54,7 @@ CardHolder * GUIHumanView::getCardHolder()
     return &cards_;
 }
 
-void GUIHumanView::drawCards()
+void GUIHumanView::drawCards(bool animating)
 {
     // Nothing to draw if there are no cards
     if (cards_.getNumCards() == 0)
@@ -71,7 +71,7 @@ void GUIHumanView::drawCards()
         glTranslatef(0.2*GUICard::CARDX, 0, 0);
     }
 
-    if (status_ != NONE)
+    if ((status_ == ATTACKER || status_ == DEFENDER) && !animating)
     {
         glTranslatef(GUICard::CARDX, 0, 0);
         glColor3f(0,0,0);

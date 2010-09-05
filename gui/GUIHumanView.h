@@ -24,7 +24,7 @@ public:
 
 private:
     // Inherited from GUIPlayerView
-    virtual void drawCards();
+    virtual void drawCards(bool animating);
 
     HumanCardHolder cards_;
     const GUIPlayer *player_;
