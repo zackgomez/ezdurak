@@ -75,6 +75,13 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     }
     freeaddrinfo(addr);
 
+    // bind and listen on the listen port
+    listen(lsock_, 5);
+
+    // Make sure it broadcasts on the first one
+    last_bcast_.tv_sec = 0;
+    last_bcast_.tv_usec = 0;
+
     connected_ = true;
 }
 
@@ -107,49 +114,48 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
     msg.push_back(' ');
     msg.append(bmsg);
 
-    // bind and listen on the listen port
-    listen(lsock_, 5);
-
-    // Loop until a connection is found
-    while (connected_)
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    unsigned int milliselapsed = 1000*(now.tv_sec - last_bcast_.tv_sec);
+    milliselapsed += (now.tv_usec - last_bcast_.tv_usec) / 1000;
+    if (milliselapsed > BROADCAST_DELAY)
     {
         // Broadcast a packet
         printf("DEBUG - NetworkHost: broadcasting...\n");
         if (sendto(bsock_, msg.data(), msg.size(), 0,
-                (struct sockaddr *)&outaddr, sizeof(outaddr)) == -1)
+                   (struct sockaddr *)&outaddr, sizeof(outaddr)) == -1)
         {
             perror("broadcasting: sendto");
-            break;
         }
-
-        struct timeval timeout;
-        timeout.tv_sec = 0;
-        // Broadcast delay is in ms, convert to usec
-        timeout.tv_usec = 1000 * BROADCAST_DELAY;
-        rdset = master;
-
-        select(lsock_+1, &rdset, NULL, NULL, &timeout);
-        if (FD_ISSET(lsock_, &rdset))
-        {
-            // Some socket activity...
-            printf("DEBUG - NetworkHost: socket activity\n");
-            struct sockaddr_storage inaddr;
-            socklen_t inaddrsize = sizeof(inaddr);
-            int clisock = accept(lsock_, (struct sockaddr*) &inaddr, &inaddrsize);
-            if (clisock)
-            {
-                char buf[INET_ADDRSTRLEN];
-                printf("DEBUG - NetworkHost: got connection from %s\n", inet_ntop(AF_INET,
-                            &(((struct sockaddr_in *)&inaddr)->sin_addr), buf, INET_ADDRSTRLEN));
-                return tcp_socket::create(clisock);
-            }
-            else
-            {
-                perror("accept");
-            }
-        }
-        // Repeat
+        gettimeofday(&last_bcast_, NULL);
     }
 
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 0;
+    rdset = master;
+
+    select(lsock_+1, &rdset, NULL, NULL, &timeout);
+    if (FD_ISSET(lsock_, &rdset))
+    {
+        // Some socket activity...
+        printf("DEBUG - NetworkHost: socket activity\n");
+        struct sockaddr_storage inaddr;
+        socklen_t inaddrsize = sizeof(inaddr);
+        int clisock = accept(lsock_, (struct sockaddr*) &inaddr, &inaddrsize);
+        if (clisock)
+        {
+            char buf[INET_ADDRSTRLEN];
+            printf("DEBUG - NetworkHost: got connection from %s\n", inet_ntop(AF_INET,
+                                                                              &(((struct sockaddr_in *)&inaddr)->sin_addr), buf, INET_ADDRSTRLEN));
+            return tcp_socket::create(clisock);
+        }
+        else
+        {
+            perror("accept");
+        }
+    }
+
+    // No connection found
     return tcp_socket_ptr();
 }

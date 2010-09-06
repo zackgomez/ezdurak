@@ -26,7 +26,14 @@ int main(int argc, char **argv)
         boost::shared_ptr<NetworkPlayer> netp(new NetworkPlayer());
         std::cout << "Waiting for connection " << game.getNumPlayers() + 1
             << " / " << numcon << '\n';
-        kissnet::tcp_socket_ptr sock = nh.getConnection("_EZDurak");
+
+        kissnet::tcp_socket_ptr sock;
+        while (!sock.get())
+        {
+            sock = nh.getConnection("_EZDurak");
+            usleep(1000* 250);
+        }
+
         if (netp->getConnection(sock))
             game.addPlayer(netp);
         else

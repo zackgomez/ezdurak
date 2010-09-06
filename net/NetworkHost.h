@@ -38,5 +38,7 @@ private:
     std::string bport_, lport_;
     int bsock_, lsock_;
     bool connected_;
+
+    struct timeval last_bcast_;
 };
 
