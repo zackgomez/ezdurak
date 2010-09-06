@@ -1,13 +1,24 @@
 #include "NetworkHost.h"
-#include <netdb.h>
 #include <cstring>
 #include <cstdio>
 #include <errno.h>
-#include <sys/types.h>
+
+
+#ifndef _MSC_VER
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/select.h>
+#include <sys/time.h>
 #include <sys/fcntl.h>
+#include <netdb.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <poll.h>
+#else
+#include <WinSock2.h>
+#include <ws2tcpip.h>
+#define close closesocket
+#endif
 
 using namespace kissnet;
 
@@ -24,7 +35,7 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     hints.ai_socktype = SOCK_DGRAM;
     hints.ai_flags = AI_PASSIVE;
 
-    int yes = 1;
+    char yes = 1;
     int status;
     // set up the broadcast (UDP) socket
     if ((bsock_ = socket(AF_INET, SOCK_DGRAM, 0)) == -1)

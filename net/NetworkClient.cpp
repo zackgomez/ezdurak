@@ -1,8 +1,19 @@
 #include "NetworkClient.h"
+#ifndef _MSC_VER
 #include <sys/socket.h>
-#include <netinet/in.h>
+#include <sys/types.h>
+#include <sys/select.h>
+#include <sys/time.h>
+#include <sys/fcntl.h>
+#include <netdb.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <poll.h>
+#else
+#define close closesocket
+#include <WinSock2.h>
+#include <ws2tcpip.h>
+#endif
 #include <errno.h>
 #include <cstdio>
 #include <cstring>

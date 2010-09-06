@@ -18,11 +18,11 @@ public:
 
     // Caught messages from GameListener interface
     void gameStart(GameAgent *agent);
-    void gameOver(const ConstPlayerPtr biscuit);
+    void gameOver(ConstPlayerPtr biscuit);
 
     // Ignored messages
-    void newRound(const ConstPlayerPtr, const ConstPlayerPtr);
-    void attackerPassed(const ConstPlayerPtr);
+    void newRound(ConstPlayerPtr, ConstPlayerPtr);
+    void attackerPassed(ConstPlayerPtr);
     void endRound(bool);
     void attackingCard(const Card &);
     void defendingCard(const Card &);

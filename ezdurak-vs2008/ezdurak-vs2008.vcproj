@@ -236,11 +236,43 @@
 				>
 			</File>
 			<File
+				RelativePath="..\net\kissnet.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkHost.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkListener.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkPlayer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkProtocol.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\gui\PlayedCardsView.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\core\PlayerImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\net\ProtocolTest.cpp"
 				>
 			</File>
 			<File
@@ -338,6 +370,34 @@
 				>
 			</File>
 			<File
+				RelativePath="..\net\kissnet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkClient.h"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkGame.h"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkHost.h"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkListener.h"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkPlayer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\net\NetworkProtocol.h"
+				>
+			</File>
+			<File
 				RelativePath="..\gui\PileCardHolder.h"
 				>
 			</File>
@@ -351,6 +411,10 @@
 			</File>
 			<File
 				RelativePath="..\core\PlayerImpl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\net\ProxyPlayer.h"
 				>
 			</File>
 			<File
