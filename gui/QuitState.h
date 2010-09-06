@@ -37,7 +37,7 @@ public:
         exit(0);
     }
     void processEvent(SDL_Event&) { /* Empty */}
-    bool needsTransition() const { assert(false); }
+    bool needsTransition() const { assert(false); return false; }
     GUIStatePtr nextState() { assert(false); return GUIStatePtr(); }
 
 private:

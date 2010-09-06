@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\Libraries\boost_1_41_0;&quot;D:\My Documents\Programming\ezdurak&quot;;D:\Libraries\pthread\include;&quot;D:\Libraries\glew-1.5.4\include&quot;;&quot;D:\Libraries\SDL_image-1.2.10\include&quot;;&quot;D:\Libraries\SDL-1.2.14\include&quot;;&quot;D:\Libraries\SDL_ttf-2.0.9\include&quot;"
+				AdditionalIncludeDirectories="D:\Libraries\boost_1_44_0;&quot;D:\My Documents\Programming\ezdurak&quot;;D:\Libraries\pthread\include;&quot;D:\Libraries\glew-1.5.4\include&quot;;&quot;D:\Libraries\SDL_image-1.2.10\include&quot;;&quot;D:\Libraries\SDL-1.2.14\include&quot;;&quot;D:\Libraries\SDL_ttf-2.0.9\include&quot;"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -114,7 +114,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="D:\Libraries\boost_1_41_0;&quot;D:\My Documents\Programming\ezdurak&quot;;D:\Libraries\pthread\include;&quot;D:\Libraries\glew-1.5.4\include&quot;;&quot;D:\Libraries\SDL_image-1.2.10\include&quot;;&quot;D:\Libraries\SDL-1.2.14\include&quot;;&quot;D:\Libraries\SDL_ttf-2.0.9\include&quot;"
+				AdditionalIncludeDirectories="D:\Libraries\boost_1_44_0;&quot;D:\My Documents\Programming\ezdurak&quot;;D:\Libraries\pthread\include;&quot;D:\Libraries\glew-1.5.4\include&quot;;&quot;D:\Libraries\SDL_image-1.2.10\include&quot;;&quot;D:\Libraries\SDL-1.2.14\include&quot;;&quot;D:\Libraries\SDL_ttf-2.0.9\include&quot;"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -232,6 +232,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\gui\InitState.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\gui\PlayedCardsView.cpp"
 				>
 			</File>
@@ -327,6 +331,10 @@
 			</File>
 			<File
 				RelativePath="..\gui\InGameState.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gui\InitState.h"
 				>
 			</File>
 			<File
