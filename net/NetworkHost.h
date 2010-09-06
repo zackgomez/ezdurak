@@ -25,12 +25,12 @@ public:
     static const int BROADCAST_DELAY;
 
     /** 
-     * Autodiscovers a connection with a NetworkClient and then returns the
-     * connected socket.
+     * Checks for an autodiscovered connection and returns it if found.
+     * If a connection is not found a null pointer is returned.
      * 
      * @param bmsg Additional data to send with the broadcast packets.
      * 
-     * @return A connected, autodiscovered socket.
+     * @return A connected, autodiscovered socket, or NULL if none found.
      */
     kissnet::tcp_socket_ptr getConnection(const std::string &bmsg);
 
