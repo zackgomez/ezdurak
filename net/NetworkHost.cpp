@@ -13,7 +13,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <poll.h>
+#include <sys/select.h>
 #else
 #include <WinSock2.h>
 #include <ws2tcpip.h>
@@ -35,7 +35,11 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     hints.ai_socktype = SOCK_DGRAM;
     hints.ai_flags = AI_PASSIVE;
 
+#ifndef _MSC_VER
+    int yes = 1;
+#else
     char yes = 1;
+#endif
     int status;
     // set up the broadcast (UDP) socket
     if ((bsock_ = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
@@ -92,10 +96,11 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
     outaddr.sin_port = htons(atoi(bport_.c_str()));
     outaddr.sin_addr.s_addr = INADDR_BROADCAST;
 
-    // Poll struct
-    struct pollfd pollee[1];
-    pollee[0].fd = lsock_;
-    pollee[0].events = POLLIN;
+    // Set up select
+    fd_set master, rdset;
+    FD_ZERO(&master);
+    FD_ZERO(&rdset);
+    FD_SET(lsock_, &master);
 
     // Set up broadcast message
     std::string msg = lport_;
@@ -117,14 +122,14 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
             break;
         }
 
-        // Wait for a connection, sleep for BROADCAST_DELAY ms
-        int rv = poll(pollee, 1, BROADCAST_DELAY);
-        if (rv < 0)
-        {
-            perror("poll");
-            break;
-        }
-        else if (rv > 0)
+        struct timeval timeout;
+        timeout.tv_sec = 0;
+        // Broadcast delay is in ms, convert to usec
+        timeout.tv_usec = 1000 * BROADCAST_DELAY;
+        rdset = master;
+
+        select(lsock_+1, &rdset, NULL, NULL, &timeout);
+        if (FD_ISSET(lsock_, &rdset))
         {
             // Some socket activity...
             printf("DEBUG - NetworkHost: socket activity\n");

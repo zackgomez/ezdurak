@@ -8,7 +8,6 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <poll.h>
 #else
 #define close closesocket
 #include <WinSock2.h>
