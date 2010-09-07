@@ -30,9 +30,10 @@ void MenuState::render()
 {
     if (!ready_)
     {
-        joinstr_ = GUIString::create("Press J to join a LAN game.");
-        hoststr_ = GUIString::create("Press H to host a LAN game.");
+        joinstr_   = GUIString::create("Press J to join a LAN game.");
+        hoststr_   = GUIString::create("Press H to host a LAN game.");
         singlestr_ = GUIString::create("Press N for a single player game.");
+        quitstr_   = GUIString::create("Press ESC or Q to quit.");
         statusstr_ = GUIString::create("Idle.");
         ready_ = true;
     }
@@ -108,6 +109,9 @@ void MenuState::render()
 
     glTranslatef(0, 20 + joinstr_->getHeight(), 0);
     joinstr_->draw();
+
+    glTranslatef(0, 50 + quitstr_->getHeight(), 0);
+    quitstr_->draw();
 }
 
 void MenuState::processEvent(SDL_Event &e)
