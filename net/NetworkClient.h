@@ -56,7 +56,6 @@ private:
     bool thread_running_;
 
     std::string bport_;
-    int lsock_;
 };
 
 bool operator==(const NetworkClient::Connection &lhs, const NetworkClient::Connection &rhs);

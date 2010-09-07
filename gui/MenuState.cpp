@@ -33,17 +33,72 @@ void MenuState::render()
         joinstr_ = GUIString::create("Press J to join a LAN game.");
         hoststr_ = GUIString::create("Press H to host a LAN game.");
         singlestr_ = GUIString::create("Press N for a single player game.");
+        statusstr_ = GUIString::create("Idle.");
         ready_ = true;
+    }
+
+    // Check for connections
+    kissnet::tcp_socket_ptr sock;
+    if (host_.get())
+    {
+        assert(!client_.get());
+        kissnet::tcp_socket_ptr sock = host_->getConnection("_EZDurak 4player JOIN NOW!!!");
+        if (sock.get())
+        {
+            NetworkPlayerPtr netp(new NetworkPlayer());
+            if (!netp->getConnection(sock))
+            {
+                std::cerr << "ERROR - MenuState: Error during NetworkPlayer::getConnection\n";
+                return;
+            }
+
+            game_ = GamePtr(new Game());
+            game_->addPlayer(netp);
+            PlayerPtr aip1(new AIPlayer("AIPlayer1"));
+            game_->addPlayer(aip1);
+            PlayerPtr aip2(new AIPlayer("AIPlayer2"));
+            game_->addPlayer(aip2);
+
+            next_ = InGameState::create(game_);
+        }
+    }
+
+    if (client_.get())
+    {
+        assert(!host_.get());
+        std::set<NetworkClient::Connection> conns = client_->getConnectionList();
+        if (!conns.empty())
+        {
+            kissnet::tcp_socket_ptr sock = kissnet::tcp_socket::create();;
+            NetworkClient::Connection conn = *conns.begin();
+            std::cout << "Trying " << conn.addr << " on " << conn.port << '\n';
+            sock->connect(conn.addr, conn.port);
+
+            NetworkGame *ng = new NetworkGame();
+            game_ = GamePtr(ng);
+            if (!ng->connectTo(sock))
+            {
+                std::cerr << "ERROR - MenuState: Error during NetworkGame::connectTo\n";
+                return;
+            }
+
+            next_ = InGameState::create(game_);
+        }
     }
 
     glClear(GL_COLOR_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
+    glColor3f(1,1,1);
+
+    // Draw status string
+    glLoadIdentity();
+    glTranslatef(15 + statusstr_->getWidth() / 2, 15 + statusstr_->getHeight() / 2, 0);
+    statusstr_->draw();
+
+    // Draw menu strings
     glLoadIdentity();
     glTranslatef(GUIApp::SCREENX/2, GUIApp::SCREENY/2, 0);
-
-    // Draw strings
-    glColor3f(1,1,1);
     glPushMatrix();
     glTranslatef(0, -40 - singlestr_->getHeight(), 0);
     singlestr_->draw();
@@ -74,41 +129,20 @@ void MenuState::processEvent(SDL_Event &e)
     }
     else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_h)
     {
-        game_ = GamePtr(new Game());
-        host_.reset(new NetworkHost("12345", "54321"));
+        host_.reset();
         client_.reset();
+        host_.reset(new NetworkHost("12345", "54321"));
 
-        kissnet::tcp_socket_ptr sock = host_->getConnection("_EZDurak 4player JOIN NOW!!!");
-        NetworkPlayerPtr netp(new NetworkPlayer());
-        if (!netp->getConnection(sock))
-        {
-            std::cerr << "ERROR - MenuState: Error during NetworkPlayer::getConnection\n";
-            return;
-        }
-
-        game_->addPlayer(netp);
-        PlayerPtr aip1(new AIPlayer("AIPlayer1"));
-        game_->addPlayer(aip1);
-        PlayerPtr aip2(new AIPlayer("AIPlayer2"));
-        game_->addPlayer(aip2);
-
-        next_ = InGameState::create(game_);
+        statusstr_ = GUIString::create("Hosting.");
     }
     else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_j)
     {
-        NetworkGame *ng = new NetworkGame();
-        game_ = GamePtr(ng);
         host_.reset();
+        client_.reset();
+
         client_.reset(new NetworkClient("12345"));
-
-        kissnet::tcp_socket_ptr sock = client_->getConnection();
-        if (!ng->connectTo(sock))
-        {
-            std::cerr << "ERROR - MenuState: Error during NetworkGame::connectTo\n";
-            return;
-        }
-
-        next_ = InGameState::create(game_);
+        client_->listen();
+        statusstr_ = GUIString::create("Looking for game to join.");
     }
 }
 

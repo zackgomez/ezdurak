@@ -26,9 +26,8 @@ private:
     std::auto_ptr<NetworkClient> client_;
     GamePtr game_;
 
-    GUIStringPtr joinstr_;
-    GUIStringPtr hoststr_;
-    GUIStringPtr singlestr_;
+    GUIStringPtr joinstr_, hoststr_, singlestr_;
+    GUIStringPtr statusstr_;
     bool ready_;
 
     GUIStatePtr next_;

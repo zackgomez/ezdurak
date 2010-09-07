@@ -30,22 +30,25 @@ struct listen_thread_arg {
 };
 
 NetworkClient::NetworkClient(const std::string &bport) :
-    bport_(bport)
+    bport_(bport),
+    thread_running_(false)
 {
-    thread_running_ = false;
 }
 
 NetworkClient::~NetworkClient()
 {
-    close(lsock_);
+    if (thread_running_)
+        ignore();
 }
 
 void NetworkClient::listen()
 {
     conns_.clear();
+    if (thread_running_)
+        return;
+
     thread_running_ = true;
 
-    // TODO kill if it's already running
     listen_thread_arg *arg = new listen_thread_arg();
     arg->port = &bport_;
     arg->conns = &conns_;
@@ -58,6 +61,7 @@ void NetworkClient::ignore()
 {
     thread_running_ = false;
     lthread_.join();
+    printf("DEBUG - NetworkClient: Joined lthread\n");
 }
 
 std::set<NetworkClient::Connection> NetworkClient::getConnectionList()
@@ -94,7 +98,7 @@ int getLSock(const std::string &port)
     if (bind(lsock, res->ai_addr, res->ai_addrlen) == -1)
     {
         close(lsock);
-        perror("bind:");
+        perror("bind");
         return 0;
     }
     freeaddrinfo(res);
@@ -137,6 +141,13 @@ void* listen_thread(void *arg)
         // There is data in the socket, lets get it
         int n = recvfrom(lsock, buf, MSG_SIZE, 0, (struct sockaddr *) &fromsaddr, &len);
         fromaddr = ((struct sockaddr_in *) &fromsaddr)->sin_addr;
+        if (n < 0)
+        {
+            printf("ERROR - NetworkClient/listen_thread: bad return from recvfrom\n");
+            perror("");
+            *running = false;
+            continue;
+        }
 
         // Get string representation of addr
         char addrbuf[INET_ADDRSTRLEN];
@@ -168,6 +179,9 @@ void* listen_thread(void *arg)
             printf("DEBUG - NetworkClient/listen_thread: got malformed connection, ignoring it.\n");
         }
     }
+
+    printf("DEBUG - NetworkClient/listen_thread: closing socket\n");
+    close(lsock);
 
     pthread_exit(NULL);
     return NULL;
