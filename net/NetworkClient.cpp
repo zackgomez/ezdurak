@@ -30,8 +30,8 @@ struct listen_thread_arg {
 };
 
 NetworkClient::NetworkClient(const std::string &bport) :
-    bport_(bport),
-    thread_running_(false)
+    thread_running_(false),
+    bport_(bport)
 {
 }
 

@@ -475,6 +475,7 @@ bool NetworkGame::connectTo(kissnet::tcp_socket_ptr sock)
     sock_ = sock;
     connected_ = true;
 
+
     return connected_;
 }
 
