@@ -271,8 +271,6 @@
 								<string>29B97317FDCFA39411CA2CEA</string>
 								<string>19C28FACFE9D520D11CA2CBB</string>
 								<string>1C37FBAC04509CD000000102</string>
-								<string>148526D5122367A0000D304E</string>
-								<string>148526D6122367A0000D304E</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
@@ -283,7 +281,7 @@
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 23}, {289, 725}}</string>
+							<string>{{0, 0}, {289, 725}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -318,7 +316,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>EZDurakIcon.icns</string>
+								<string>PlayerImpl.cpp</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -326,11 +324,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>EZDurakIcon.icns</string>
+										<string>PlayerImpl.cpp</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>148526E6122367DF000D304E</string>
+										<string>14A197701239A7F7008AC23C</string>
 										<key>history</key>
 										<array>
 											<string>144AD3C611EEE2E80080D7F0</string>
@@ -347,7 +345,8 @@
 											<string>14C2D848121E3B7000F6BE31</string>
 											<string>141BB44F1220EA720037D921</string>
 											<string>141BB45D1220EEB50037D921</string>
-											<string>148526D7122367A0000D304E</string>
+											<string>14A197671239A799008AC23C</string>
+											<string>14A197681239A799008AC23C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -359,14 +358,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {801, 517}}</string>
+								<string>{{0, 0}, {801, 511}}</string>
 								<key>RubberWindowFrame</key>
 								<string>2 244 1112 784 0 0 1680 1028 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>517pt</string>
+							<string>511pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -379,14 +378,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 522}, {801, 221}}</string>
+								<string>{{0, 516}, {801, 227}}</string>
 								<key>RubberWindowFrame</key>
 								<string>2 244 1112 784 0 0 1680 1028 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
 							<key>Proportion</key>
-							<string>221pt</string>
+							<string>227pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -405,9 +404,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>148526B51223666E000D304E</string>
+				<string>14A1976A1239A799008AC23C</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>148526B61223666E000D304E</string>
+				<string>14A1976B1239A799008AC23C</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -545,10 +544,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>148526E1122367A0000D304E</string>
-		<string>148526E2122367A0000D304E</string>
-		<string>1C78EAAD065D492600B07095</string>
-		<string>1CD10A99069EF8BA00B06720</string>
 		<string>144AD39A11EEE1410080D7F0</string>
 		<string>/Users/zack/programming/ezdurak/ezdurak-xcode/ezdurak-xcode.xcodeproj</string>
 	</array>
@@ -574,7 +569,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>PlayerImpl.cpp</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -591,6 +586,8 @@
 							<string>156pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -630,7 +627,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>144AD39A11EEE1410080D7F0</string>
-				<string>148526B71223666E000D304E</string>
+				<string>14A1976C1239A799008AC23C</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
