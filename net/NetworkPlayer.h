@@ -2,6 +2,7 @@
 #include "NetworkListener.h"
 #include "core/Player.h"
 #include <set>
+#include "util/Logger.h"
 
 /** 
  * A proxy Player class that forwards all the information necessary for a 
@@ -44,6 +45,8 @@ private:
     std::set<Card> hand_;
     std::string name_;
     std::string ID_;
+
+    LoggerPtr logger_;
 };
 
 typedef boost::shared_ptr<NetworkPlayer> NetworkPlayerPtr;

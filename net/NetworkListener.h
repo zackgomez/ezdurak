@@ -1,6 +1,7 @@
 #pragma once
 #include "core/GameListener.h"
 #include "kissnet.h"
+#include "util/Logger.h"
 
 /** 
  * This class forwards GameListener messages over the network.
@@ -59,5 +60,7 @@ protected:
     GameAgent *agent_;
     kissnet::tcp_socket_ptr clisock_;
     std::vector<PlayerPtr> players_;
+
+    LoggerPtr logger_;
 };
 

@@ -4,6 +4,7 @@
 #ifdef _MSC_VER
 #include "winsock2.h"
 #endif
+#include "util/Logger.h"
 /** 
  * This is the server half of the autodiscovery framework.  In conjunction with
  * NetworkClient it will autodiscover and connect two machines.
@@ -42,5 +43,7 @@ private:
     bool connected_;
 
     struct kissnet::timestruct last_bcast_;
+
+    LoggerPtr logger_;
 };
 

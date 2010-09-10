@@ -2,12 +2,15 @@
 #include <iostream>
 #include <string>
 
+class Logger;
+typedef std::auto_ptr<Logger> LoggerPtr;
+
 class Logger
 {
 public:
-    static Logger getLogger(const std::string &prefix)
+    static LoggerPtr getLogger(const std::string &prefix)
     {
-        Logger ret(prefix);
+        LoggerPtr ret(new Logger(prefix));
         return ret;
     }
 

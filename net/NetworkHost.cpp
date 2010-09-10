@@ -26,7 +26,8 @@ const int NetworkHost::BROADCAST_DELAY = 500;
 NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     bport_(bport),
     lport_(lport),
-    connected_(false)
+    connected_(false),
+    logger_(Logger::getLogger("NetworkHost"))
 {
     struct addrinfo hints, *addr;
     memset(&hints, 0, sizeof(hints));
@@ -43,7 +44,7 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     // set up the broadcast (UDP) socket
     if ((bsock_ = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
     {
-        perror("socket (udp)");
+        logger_->error() << "socket (udp): " << strerror(errno) << '\n';
         return;
     }
     setsockopt(bsock_, SOL_SOCKET, SO_BROADCAST, &yes, sizeof(yes));
@@ -54,13 +55,13 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     hints.ai_flags = AI_PASSIVE;
     if ((status = getaddrinfo(NULL, lport_.c_str(), &hints, &addr)))
     {
-        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
+        logger_->error() << "getaddrinfo: " << gai_strerror(status) << '\n';
         return;
     }
     lsock_ = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
     if (setsockopt(lsock_, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)))
     {
-        perror("setsockopt (SO_REUSEADDR)");
+        logger_->error() << "setsockopt (SO_REUSEADDR): " << strerror(errno) << '\n';
         freeaddrinfo(addr);
         return;
     }
@@ -73,7 +74,7 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
 #endif
     if (bind(lsock_, addr->ai_addr, addr->ai_addrlen))
     {
-        fprintf(stderr, "Unable to bind: %s\n", strerror(errno));
+        logger_->error() << "Unable to bind: " << strerror(errno) << '\n';
         freeaddrinfo(addr);
         return;
     }
@@ -125,11 +126,11 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
     if (milliselapsed > BROADCAST_DELAY)
     {
         // Broadcast a packet
-        printf("DEBUG - NetworkHost: broadcasting...\n");
+        logger_->debug() << "broadcasting...\n";
         if (sendto(bsock_, msg.data(), msg.size(), 0,
                    (struct sockaddr *)&outaddr, sizeof(outaddr)) == -1)
         {
-            perror("broadcasting: sendto");
+            logger_->error() << "broadcasting: sendto: " << strerror(errno) << '\n';
         }
         last_bcast_ = gettimeofday();
     }
@@ -143,20 +144,19 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
     if (FD_ISSET(lsock_, &rdset))
     {
         // Some socket activity...
-        printf("DEBUG - NetworkHost: socket activity\n");
+        logger_->debug() << "socket activity\n";
         struct sockaddr_storage inaddr;
         socklen_t inaddrsize = sizeof(inaddr);
         int clisock = accept(lsock_, (struct sockaddr*) &inaddr, &inaddrsize);
         if (clisock)
         {
             char buf[INET_ADDRSTRLEN];
-            printf("DEBUG - NetworkHost: got connection from %s\n", inet_ntop(AF_INET,
-                                                                              &(((struct sockaddr_in *)&inaddr)->sin_addr), buf, INET_ADDRSTRLEN));
+            logger_->debug() << "got connection from " << inet_ntop(AF_INET, &(((struct sockaddr_in *)&inaddr)->sin_addr), buf, INET_ADDRSTRLEN) << '\n';
             return tcp_socket::create(clisock);
         }
         else
         {
-            perror("accept");
+            logger_->error() << "accept: " << strerror(errno) << '\n';
         }
     }
 

@@ -37,7 +37,7 @@ struct timestruct gettimeofday()
     struct timeval tv;
     gettimeofday(&tv, NULL);
     ret.ts_sec = tv.tv_sec;
-    ret.ts_msec = tv.tv_usec * 1000;
+    ret.ts_msec = tv.tv_usec / 1000;
 #else
     SYSTEMTIME st;
     GetSystemTime(&st);

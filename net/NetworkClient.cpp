@@ -17,7 +17,7 @@
 #include <cstdio>
 #include <cstring>
 #include <sstream>
-#include <iostream>
+#include "util/Logger.h"
 
 int getLSock(const std::string &port);
 
@@ -31,7 +31,8 @@ struct listen_thread_arg {
 
 NetworkClient::NetworkClient(const std::string &bport) :
     thread_running_(false),
-    bport_(bport)
+    bport_(bport),
+    logger_(Logger::getLogger("NetworkClient"))
 {
 }
 
@@ -53,15 +54,14 @@ void NetworkClient::listen()
     arg->port = &bport_;
     arg->conns = &conns_;
     arg->connsMutex = &connsMutex_;
-    arg->running = &thread_running_;
-    lthread_.run(listen_thread, arg);
+    arg->running = &thread_running_; lthread_.run(listen_thread, arg);
 }
 
 void NetworkClient::ignore()
 {
     thread_running_ = false;
     lthread_.join();
-    printf("DEBUG - NetworkClient: Joined lthread\n");
+    logger_->debug() << "Joined lthread\n";
 }
 
 std::set<NetworkClient::Connection> NetworkClient::getConnectionList()
@@ -74,6 +74,7 @@ std::set<NetworkClient::Connection> NetworkClient::getConnectionList()
 
 int getLSock(const std::string &port)
 {
+    LoggerPtr logger(Logger::getLogger("getLSock"));
     int lsock;
     struct addrinfo hints, *res;
 
@@ -85,20 +86,20 @@ int getLSock(const std::string &port)
     int rv;
     if ((rv = getaddrinfo(NULL, port.c_str(), &hints, &res)) != 0)
     {
-        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+        logger->error() << "getaddrinfo: " << gai_strerror(rv) << '\n';
         return 0;
     }
 
     if ((lsock = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
     {
-        perror("socket");
+        logger->error() << "socket: " << strerror(errno) << '\n';
         return 0;
     }
 
     if (bind(lsock, res->ai_addr, res->ai_addrlen) == -1)
     {
         close(lsock);
-        perror("bind");
+        logger->error() << "bind: " << strerror(errno) << '\n';
         return 0;
     }
     freeaddrinfo(res);
@@ -108,6 +109,7 @@ int getLSock(const std::string &port)
 
 void* listen_thread(void *arg)
 {
+    LoggerPtr logger = Logger::getLogger("NetworkClient/listen_thread");
     listen_thread_arg *ltarg = (listen_thread_arg *) arg;
     const std::string *port = ltarg->port;
     std::set<NetworkClient::Connection> *conns = ltarg->conns;
@@ -143,8 +145,7 @@ void* listen_thread(void *arg)
         fromaddr = ((struct sockaddr_in *) &fromsaddr)->sin_addr;
         if (n < 0)
         {
-            printf("ERROR - NetworkClient/listen_thread: bad return from recvfrom\n");
-            perror("");
+            logger->error() << "bad return from recvfrom: " << strerror(errno) << '\n';;
             *running = false;
             continue;
         }
@@ -153,8 +154,8 @@ void* listen_thread(void *arg)
         char addrbuf[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &fromaddr, addrbuf, INET_ADDRSTRLEN);
 
-        printf("DEBUG - NetworkClient/listen_thread: got message from: %s\n", addrbuf);
-        printf("DEBUG - NetworkClient/listen_thread: got data from udp sock: %.*s\n", n, buf);
+        logger->debug() << "got message from: " << addrbuf << '\n';
+        (logger->debug() << "got data from udp socket: ").write(buf, n) << '\n';
 
         std::stringstream ss;
         ss.write(buf, n);
@@ -176,11 +177,11 @@ void* listen_thread(void *arg)
         }
         else
         {
-            printf("DEBUG - NetworkClient/listen_thread: got malformed connection, ignoring it.\n");
+            logger->debug() << "got malformed connection, ignoring it.\n";
         }
     }
 
-    printf("DEBUG - NetworkClient/listen_thread: closing socket\n");
+    logger->debug() << "closing socket\n";
     close(lsock);
 
     pthread_exit(NULL);

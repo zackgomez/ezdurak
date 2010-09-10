@@ -3,6 +3,7 @@
 #include <string>
 #include <set>
 #include "util/Thread.h"
+#include "util/Logger.h"
 
 /** 
  * This is the client part of the autodiscovery framework.  In conjunction with
@@ -58,4 +59,6 @@ private:
     bool thread_running_;
 
     std::string bport_;
+
+    LoggerPtr logger_;
 };

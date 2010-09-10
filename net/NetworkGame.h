@@ -4,6 +4,7 @@
 #include "kissnet.h"
 #include "util/Thread.h"
 #include "util/SynchronizedQueue.h"
+#include "util/Logger.h"
 
 /** 
  * A Proxy Game object.  Receives information from a NetworkListener or maybe
@@ -87,5 +88,7 @@ private:
     PlayerPtr localPlayer_;
     int deckSize_;
     int discardSize_;
+
+    LoggerPtr logger_;
 };
 
