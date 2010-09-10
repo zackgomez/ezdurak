@@ -2,6 +2,7 @@
 #include "GUIState.h"
 #include "core/Game.h"
 #include "GUIString.h"
+#include "util/Logger.h"
 
 class NetworkHost;
 class NetworkClient;
@@ -31,5 +32,7 @@ private:
     bool ready_;
 
     GUIStatePtr next_;
+
+    LoggerPtr logger_;
 };
 

@@ -28,7 +28,6 @@ void HumanCardHolder::addCard(Card c)
                 // Then that's our card
                 c = *pit;
                 break;
-                std::cout << "Adding a " << c << " to human player.\n";
             }
         }
     }

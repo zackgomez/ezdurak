@@ -12,7 +12,8 @@
 MenuState::MenuState() :
     host_(0),
     client_(0),
-    ready_(false)
+    ready_(false),
+    logger_(Logger::getLogger("MenuState"))
 {
 }
 
@@ -49,7 +50,7 @@ void MenuState::render()
             NetworkPlayerPtr netp(new NetworkPlayer());
             if (!netp->getConnection(sock))
             {
-                std::cerr << "ERROR - MenuState: Error during NetworkPlayer::getConnection\n";
+                logger_->error() << "Error during getConnection\n";
                 return;
             }
 
@@ -72,14 +73,14 @@ void MenuState::render()
         {
             kissnet::tcp_socket_ptr sock = kissnet::tcp_socket::create();;
             NetworkClient::Connection conn = *conns.begin();
-            std::cout << "Trying " << conn.addr << " on " << conn.port << '\n';
+            logger_->info() << "Trying " << conn.addr << " on " << conn.port << '\n';
             sock->connect(conn.addr, conn.port);
 
             NetworkGame *ng = new NetworkGame();
             game_ = GamePtr(ng);
             if (!ng->connectTo(sock))
             {
-                std::cerr << "ERROR - MenuState: Error during NetworkGame::connectTo\n";
+                logger_->error() << "Error during NetworkGame::connectTo\n";
                 return;
             }
 
