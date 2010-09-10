@@ -17,16 +17,44 @@ int main(int argc, char **argv)
     }
     std::string name = argv[1];
 
-    PlayerPtr localPlayer(new AIPlayer("networkai"));
-    //PlayerPtr localPlayer(new CLIPlayer(name));
+    //PlayerPtr localPlayer(new AIPlayer("networkai"));
+    PlayerPtr localPlayer(new CLIPlayer(name));
     
     // Find a game to play...
     std::cout << "Looking for a game\n";
     NetworkClient gamefinder("12345");
 
-    kissnet::tcp_socket_ptr sock = gamefinder.getConnection();
+    std::set<NetworkClient::Connection> conns;
 
-    NetworkGame game(localPlayer);
+    gamefinder.listen();
+    int tries = 0;
+    while (conns.empty())
+    {
+        conns = gamefinder.getConnectionList();
+        sleep(1);
+        if (++tries > 5)
+        {
+            std::cout << "Unable to find game after 5 tries\n";
+            exit(0);
+        }
+    }
+    gamefinder.ignore();
+
+
+    std::set<NetworkClient::Connection>::iterator it = conns.begin();
+    int i = 1;
+    for (; it != conns.end(); it++)
+    {
+        std::cout << "Connection " << i << ": " << it->addr << " on " << it->port << " : " << it->aux << '\n';
+    }
+
+    it = conns.begin();
+    kissnet::tcp_socket_ptr sock = kissnet::tcp_socket::create();
+    sock->connect(it->addr, it->port);
+
+    // Use the socket and play a game
+    NetworkGame game;
+    game.addPlayer(localPlayer);
     CLIListener listener;
     game.addListener(&listener);
 

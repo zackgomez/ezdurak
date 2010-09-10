@@ -20,13 +20,6 @@ public:
      * only relay GameListener messages.
      */
     NetworkGame();
-    /** 
-     * Creates a NetworkGame object that will relay Player interface methods to
-     * the passed localPlayer object.  Must be connected to a NetworkPlayer.
-     * 
-     * @param localPlayer The player connect to the other end.
-     */
-    NetworkGame(PlayerPtr localPlayer);
     /// Destructor
     ~NetworkGame();
 
@@ -68,6 +61,7 @@ public:
     void addCardsMessage(const std::string &payload);
 
     // Functions overriden from Game interface
+    virtual void addPlayer(PlayerPtr player);
     virtual void run();
 
     // Functions overriden from GameAgent interface

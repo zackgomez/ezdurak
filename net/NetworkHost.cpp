@@ -1,13 +1,23 @@
 #include "NetworkHost.h"
-#include <netdb.h>
 #include <cstring>
 #include <cstdio>
 #include <errno.h>
-#include <sys/types.h>
+
+#ifndef _MSC_VER
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/select.h>
+#include <sys/time.h>
 #include <sys/fcntl.h>
+#include <netdb.h>
 #include <arpa/inet.h>
-#include <poll.h>
+#include <netdb.h>
+#include <sys/select.h>
+#else
+#include <WinSock2.h>
+#include <ws2tcpip.h>
+#define close closesocket
+#endif
 
 using namespace kissnet;
 
@@ -24,7 +34,11 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     hints.ai_socktype = SOCK_DGRAM;
     hints.ai_flags = AI_PASSIVE;
 
+#ifndef _MSC_VER
     int yes = 1;
+#else
+    char yes = 1;
+#endif
     int status;
     // set up the broadcast (UDP) socket
     if ((bsock_ = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
@@ -51,7 +65,12 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
         return;
     }
     // Nonblocking listen socket
+#ifndef _MSC_VER
     fcntl(lsock_, F_SETFL, O_NONBLOCK);
+#else
+    u_long enable = 1;
+    ioctlsocket(lsock_, FIONBIO, &enable);
+#endif
     if (bind(lsock_, addr->ai_addr, addr->ai_addrlen))
     {
         fprintf(stderr, "Unable to bind: %s\n", strerror(errno));
@@ -59,6 +78,13 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
         return;
     }
     freeaddrinfo(addr);
+
+    // bind and listen on the listen port
+    listen(lsock_, 5);
+
+    // Make sure it broadcasts on the first one
+    last_bcast_.ts_sec = 0;
+    last_bcast_.ts_msec = 0;
 
     connected_ = true;
 }
@@ -81,59 +107,59 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
     outaddr.sin_port = htons(atoi(bport_.c_str()));
     outaddr.sin_addr.s_addr = INADDR_BROADCAST;
 
-    // Poll struct
-    struct pollfd pollee[1];
-    pollee[0].fd = lsock_;
-    pollee[0].events = POLLIN;
+    // Set up select
+    fd_set master, rdset;
+    FD_ZERO(&master);
+    FD_ZERO(&rdset);
+    FD_SET(lsock_, &master);
 
     // Set up broadcast message
     std::string msg = lport_;
     msg.push_back(' ');
     msg.append(bmsg);
 
-    // bind and listen on the listen port
-    listen(lsock_, 5);
-
-    // Loop until a connection is found
-    while (connected_)
+    struct timestruct now;
+    now = gettimeofday();
+    unsigned int milliselapsed = 1000*(now.ts_sec - last_bcast_.ts_sec);
+    milliselapsed += (now.ts_msec - last_bcast_.ts_msec);
+    if (milliselapsed > BROADCAST_DELAY)
     {
         // Broadcast a packet
         printf("DEBUG - NetworkHost: broadcasting...\n");
         if (sendto(bsock_, msg.data(), msg.size(), 0,
-                (struct sockaddr *)&outaddr, sizeof(outaddr)) == -1)
+                   (struct sockaddr *)&outaddr, sizeof(outaddr)) == -1)
         {
             perror("broadcasting: sendto");
-            break;
         }
-
-        // Wait for a connection, sleep for BROADCAST_DELAY ms
-        int rv = poll(pollee, 1, BROADCAST_DELAY);
-        if (rv < 0)
-        {
-            perror("poll");
-            break;
-        }
-        else if (rv > 0)
-        {
-            // Some socket activity...
-            printf("DEBUG - NetworkHost: socket activity\n");
-            struct sockaddr_storage inaddr;
-            socklen_t inaddrsize = sizeof(inaddr);
-            int clisock = accept(lsock_, (struct sockaddr*) &inaddr, &inaddrsize);
-            if (clisock)
-            {
-                char buf[INET_ADDRSTRLEN];
-                printf("DEBUG - NetworkHost: got connection from %s\n", inet_ntop(AF_INET,
-                            &(((struct sockaddr_in *)&inaddr)->sin_addr), buf, INET_ADDRSTRLEN));
-                return tcp_socket::create(clisock);
-            }
-            else
-            {
-                perror("accept");
-            }
-        }
-        // Repeat
+        last_bcast_ = gettimeofday();
     }
 
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 0;
+    rdset = master;
+
+    select(lsock_+1, &rdset, NULL, NULL, &timeout);
+    if (FD_ISSET(lsock_, &rdset))
+    {
+        // Some socket activity...
+        printf("DEBUG - NetworkHost: socket activity\n");
+        struct sockaddr_storage inaddr;
+        socklen_t inaddrsize = sizeof(inaddr);
+        int clisock = accept(lsock_, (struct sockaddr*) &inaddr, &inaddrsize);
+        if (clisock)
+        {
+            char buf[INET_ADDRSTRLEN];
+            printf("DEBUG - NetworkHost: got connection from %s\n", inet_ntop(AF_INET,
+                                                                              &(((struct sockaddr_in *)&inaddr)->sin_addr), buf, INET_ADDRSTRLEN));
+            return tcp_socket::create(clisock);
+        }
+        else
+        {
+            perror("accept");
+        }
+    }
+
+    // No connection found
     return tcp_socket_ptr();
 }

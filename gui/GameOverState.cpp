@@ -1,8 +1,8 @@
 #include "GameOverState.h"
 #include <sstream>
 #include "GUIApp.h"
-#include "InGameState.h"
 #include "QuitState.h"
+#include "MenuState.h"
 
 #include "core/Game.h"
 #include "ai/AIPlayer.h"
@@ -24,7 +24,7 @@ GameOverState::GameOverState(ConstPlayerPtr biscuit)
         ss << "The game is a tie.";
 
     biscuitStr_ = GUIString::create(ss.str());
-    instrStr_ = GUIString::create("Press any key to start a new game, ESC to quit");
+    instrStr_ = GUIString::create("Press any key to return to the menu, ESC to quit");
 }
 
 GameOverState::~GameOverState()
@@ -49,16 +49,7 @@ void GameOverState::processEvent(SDL_Event &e)
         next_ = QuitState::create();
     else if (e.type == SDL_KEYDOWN || e.type == SDL_MOUSEBUTTONDOWN)
     {
-        GamePtr game(new Game());
-        std::stringstream ss;
-        for (int i = 0; i < 3; i++)
-        {
-            ss.str("");
-            ss << "AIPlayer" << i+1;
-            PlayerPtr p(new AIPlayer(ss.str()));
-            game->addPlayer(p);
-        }
-        next_ = InGameState::create(game);
+        next_ = MenuState::create();
     }
 }
 

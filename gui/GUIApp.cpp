@@ -1,12 +1,8 @@
 #include "GUIApp.h"
 #include <SDL/SDL.h>
 #include <iostream>
+#include "MenuState.h"
 #include "InitState.h"
-#include "InGameState.h"
-
-#include "core/Game.h"
-#include "ai/AIPlayer.h"
-#include <sstream>
 
 using namespace std;
 
@@ -27,16 +23,7 @@ GUIApp::~GUIApp()
 
 void GUIApp::run()
 {
-    GamePtr game(new Game());
-    std::stringstream ss;
-    for (int i = 0; i < 3; i++)
-    {
-	ss.str("");
-	ss << "AIPlayer" << i+1;
-	PlayerPtr p(new AIPlayer(ss.str()));
-	game->addPlayer(p);
-    }
-    state_ = InitState::create(InGameState::create(game));
+    state_ = InitState::create(MenuState::create());
 
     cont_ = true;
 
@@ -51,8 +38,6 @@ void GUIApp::run()
             GUIStatePtr next = state_->nextState();
             if (next.get())
                 state_ = next;
-            else
-                assert(false && "NULL state returned");
         }
 
         SDL_Delay(16);

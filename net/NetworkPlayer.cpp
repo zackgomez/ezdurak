@@ -108,7 +108,7 @@ Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
         {
             return defCard;
         }
-        std::cerr << "DEBUG - NetworkPlayer: got a bad card!!!\n";
+        std::cerr << "DEBUG - NetworkPlayer: defend: got a bad card!!!\n";
     }
 
 }
@@ -159,7 +159,7 @@ Card NetworkPlayer::attack(std::set<int> playableRanks)
             return attCard;
         }
 
-        std::cerr << "DEBUG - NetworkPlayer: got a bad card!!!\n";
+        std::cerr << "DEBUG - NetworkPlayer: attack: got a bad card!!!\n";
     }
 }
 
@@ -209,7 +209,7 @@ Card NetworkPlayer::pileOn(std::set<int> playableRanks)
             return pCard;
         }
 
-        std::cerr << "DEBUG - NetworkPlayer: got a bad card!!!\n";
+        std::cerr << "DEBUG - NetworkPlayer: pileOn: got a bad card!!!\n";
     }
 }
 
