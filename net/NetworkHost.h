@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include "kissnet.h"
-
+#ifdef _MSC_VER
+#include "winsock2.h"
+#endif
 /** 
  * This is the server half of the autodiscovery framework.  In conjunction with
  * NetworkClient it will autodiscover and connect two machines.
@@ -39,6 +41,6 @@ private:
     int bsock_, lsock_;
     bool connected_;
 
-    struct timeval last_bcast_;
+    struct kissnet::timestruct last_bcast_;
 };
 

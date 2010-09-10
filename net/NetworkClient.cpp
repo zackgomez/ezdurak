@@ -187,9 +187,9 @@ void* listen_thread(void *arg)
     return NULL;
 }
 
-bool operator<(const NetworkClient::Connection& lhs, const NetworkClient::Connection& rhs)
+bool NetworkClient::Connection::operator<(const NetworkClient::Connection& rhs) const
 {
-    if (lhs.addr < rhs.addr)
+    if (addr < rhs.addr)
         return true;
-    return lhs.port < rhs.port;
+    return port < rhs.port;
 }

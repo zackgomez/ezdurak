@@ -6,6 +6,7 @@
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_ttf.h>
 #include "GUIApp.h"
+#include "net/kissnet.h"
 
 using namespace std;
 
@@ -40,6 +41,8 @@ void InitState::render()
         cerr << "Unable to open font: " << TTF_GetError() << '\n';
         exit(3);
     }
+
+    kissnet::init_networking();
 }
 
 void InitState::processEvent(SDL_Event &e)

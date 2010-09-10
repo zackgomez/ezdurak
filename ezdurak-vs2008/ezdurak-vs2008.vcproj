@@ -58,7 +58,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib SDL_image.lib SDL_ttf.lib glew32.lib opengl32.lib glu32.lib pthreadVC2.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_image.lib SDL_ttf.lib glew32.lib opengl32.lib glu32.lib pthreadVC2.lib ws2_32.lib"
 				OutputFile="$(OutDir)\ezdurak.exe"
 				AdditionalLibraryDirectories="&quot;D:\Libraries\glew-1.5.4\lib&quot;;D:\Libraries\pthread\lib;&quot;D:\Libraries\SDL_image-1.2.10\lib&quot;;&quot;D:\Libraries\SDL-1.2.14\lib&quot;;&quot;D:\Libraries\SDL_ttf-2.0.9\lib&quot;"
 				GenerateDebugInformation="true"
@@ -240,6 +240,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\gui\MenuState.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\net\NetworkClient.cpp"
 				>
 			</File>
@@ -269,10 +273,6 @@
 			</File>
 			<File
 				RelativePath="..\core\PlayerImpl.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\net\ProtocolTest.cpp"
 				>
 			</File>
 			<File
@@ -371,6 +371,10 @@
 			</File>
 			<File
 				RelativePath="..\net\kissnet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\gui\MenuState.h"
 				>
 			</File>
 			<File

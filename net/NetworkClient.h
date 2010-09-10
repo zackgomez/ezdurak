@@ -16,6 +16,8 @@ public:
         std::string addr;
         std::string port;
         std::string aux;
+
+        bool operator<(const Connection& lhs) const;
     };
 
     /** 
@@ -57,6 +59,3 @@ private:
 
     std::string bport_;
 };
-
-bool operator==(const NetworkClient::Connection &lhs, const NetworkClient::Connection &rhs);
-bool operator<(const NetworkClient::Connection &lhs, const NetworkClient::Connection &rhs);

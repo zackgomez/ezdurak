@@ -3,7 +3,6 @@
 #include <cstdio>
 #include <errno.h>
 
-
 #ifndef _MSC_VER
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -66,7 +65,12 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
         return;
     }
     // Nonblocking listen socket
+#ifndef _MSC_VER
     fcntl(lsock_, F_SETFL, O_NONBLOCK);
+#else
+    u_long enable = 1;
+    ioctlsocket(lsock_, FIONBIO, &enable);
+#endif
     if (bind(lsock_, addr->ai_addr, addr->ai_addrlen))
     {
         fprintf(stderr, "Unable to bind: %s\n", strerror(errno));
@@ -79,8 +83,8 @@ NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     listen(lsock_, 5);
 
     // Make sure it broadcasts on the first one
-    last_bcast_.tv_sec = 0;
-    last_bcast_.tv_usec = 0;
+    last_bcast_.ts_sec = 0;
+    last_bcast_.ts_msec = 0;
 
     connected_ = true;
 }
@@ -114,10 +118,10 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
     msg.push_back(' ');
     msg.append(bmsg);
 
-    struct timeval now;
-    gettimeofday(&now, NULL);
-    unsigned int milliselapsed = 1000*(now.tv_sec - last_bcast_.tv_sec);
-    milliselapsed += (now.tv_usec - last_bcast_.tv_usec) / 1000;
+    struct timestruct now;
+    now = gettimeofday();
+    unsigned int milliselapsed = 1000*(now.ts_sec - last_bcast_.ts_sec);
+    milliselapsed += (now.ts_msec - last_bcast_.ts_msec);
     if (milliselapsed > BROADCAST_DELAY)
     {
         // Broadcast a packet
@@ -127,7 +131,7 @@ tcp_socket_ptr NetworkHost::getConnection(const std::string &bmsg)
         {
             perror("broadcasting: sendto");
         }
-        gettimeofday(&last_bcast_, NULL);
+        last_bcast_ = gettimeofday();
     }
 
     struct timeval timeout;
