@@ -2,10 +2,8 @@
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
-#include <iostream>
 #include "core/GameAgent.h"
 
-using std::cout;
 using std::vector;
 using std::set;
 using std::string;

@@ -4,7 +4,7 @@ CXXFLAGS = $(PRJCXXFLAGS) `sdl-config --cflags` -I..
 OBJLIBS  = ../libezdurakgui.a
 OBJS = GUIApp.o GUIString.o GUIPlayer.o GUICard.o InGameState.o GameOverState.o\
        GUIPlayerView.o GUIHumanView.o HumanCardHolder.o PlayedCardsView.o\
-       Animation.o InitState.o
+       Animation.o MenuState.o InitState.o
 
 .PHONY: all
 all: $(OBJLIBS)

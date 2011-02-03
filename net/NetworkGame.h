@@ -4,6 +4,7 @@
 #include "kissnet.h"
 #include "util/Thread.h"
 #include "util/SynchronizedQueue.h"
+#include "util/Logger.h"
 
 /** 
  * A Proxy Game object.  Receives information from a NetworkListener or maybe
@@ -20,13 +21,6 @@ public:
      * only relay GameListener messages.
      */
     NetworkGame();
-    /** 
-     * Creates a NetworkGame object that will relay Player interface methods to
-     * the passed localPlayer object.  Must be connected to a NetworkPlayer.
-     * 
-     * @param localPlayer The player connect to the other end.
-     */
-    NetworkGame(PlayerPtr localPlayer);
     /// Destructor
     ~NetworkGame();
 
@@ -68,6 +62,7 @@ public:
     void addCardsMessage(const std::string &payload);
 
     // Functions overriden from Game interface
+    virtual void addPlayer(PlayerPtr player);
     virtual void run();
 
     // Functions overriden from GameAgent interface
@@ -93,5 +88,7 @@ private:
     PlayerPtr localPlayer_;
     int deckSize_;
     int discardSize_;
+
+    LoggerPtr logger_;
 };
 

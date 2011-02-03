@@ -1,6 +1,7 @@
 #pragma once
 #include "GUIState.h"
 #include "GUICard.h"
+#include "GUIPlayerView.h"
 
 /** 
  * The GUI should be put to this state when the application should exit. Cleans 

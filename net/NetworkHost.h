@@ -1,7 +1,10 @@
 #pragma once
 #include <string>
 #include "kissnet.h"
-
+#ifdef _MSC_VER
+#include "winsock2.h"
+#endif
+#include "util/Logger.h"
 /** 
  * This is the server half of the autodiscovery framework.  In conjunction with
  * NetworkClient it will autodiscover and connect two machines.
@@ -25,12 +28,12 @@ public:
     static const int BROADCAST_DELAY;
 
     /** 
-     * Autodiscovers a connection with a NetworkClient and then returns the
-     * connected socket.
+     * Checks for an autodiscovered connection and returns it if found.
+     * If a connection is not found a null pointer is returned.
      * 
      * @param bmsg Additional data to send with the broadcast packets.
      * 
-     * @return A connected, autodiscovered socket.
+     * @return A connected, autodiscovered socket, or NULL if none found.
      */
     kissnet::tcp_socket_ptr getConnection(const std::string &bmsg);
 
@@ -38,5 +41,9 @@ private:
     std::string bport_, lport_;
     int bsock_, lsock_;
     bool connected_;
+
+    struct kissnet::timestruct last_bcast_;
+
+    LoggerPtr logger_;
 };
 

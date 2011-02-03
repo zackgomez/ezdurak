@@ -8,7 +8,14 @@
 namespace kissnet
 {
 
+struct timestruct
+{
+    long ts_sec;
+    long ts_msec;
+};
+
 void init_networking();
+struct timestruct gettimeofday();
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 class socket_exception

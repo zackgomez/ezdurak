@@ -29,6 +29,23 @@ void init_networking()
         throw socket_exception("WSAStartup failed\n");
 #endif
 }
+
+struct timestruct gettimeofday()
+{
+    struct timestruct ret;
+#ifndef _MSC_VER
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    ret.ts_sec = tv.tv_sec;
+    ret.ts_msec = tv.tv_usec / 1000;
+#else
+    SYSTEMTIME st;
+    GetSystemTime(&st);
+    ret.ts_sec = st.wSecond;
+    ret.ts_msec = st.wMilliseconds;
+#endif
+    return ret;
+}
 // -----------------------------------------------------------------------------
 // Socket Exception
 // -----------------------------------------------------------------------------

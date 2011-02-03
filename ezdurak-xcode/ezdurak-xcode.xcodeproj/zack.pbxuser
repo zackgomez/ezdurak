@@ -161,8 +161,14 @@
 		};
 	};
 	144AD35211EEDF600080D7F0 /* Makefile */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.make;
+		name = Makefile;
+		path = /Users/zack/programming/ezdurak/core/Makefile;
+		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {843, 477}}";
+			sepNavIntBoundsRect = "{{0, 0}, {740, 479}}";
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRange = "{0, 449}";
 		};
@@ -487,6 +493,61 @@
 	14C2D8AF121E410F00F6BE31 /* EZDurak.dmg */ = {
 		activeExec = 0;
 	};
+	14E467EB1239AE1500EFF1B0 /* lmain.cpp */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = lmain.cpp;
+		path = /Users/zack/programming/ezdurak/net/lmain.cpp;
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {689, 169}}";
+			sepNavSelRange = "{73, 0}";
+			sepNavVisRange = "{0, 129}";
+		};
+	};
+	14E468071239AE4200EFF1B0 /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "'class NetworkClient' has no member named 'getConnection'";
+		fRef = 14E467EB1239AE1500EFF1B0 /* lmain.cpp */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 6;
+		rType = 1;
+	};
+	14E468081239AE4200EFF1B0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 14E467EB1239AE1500EFF1B0 /* lmain.cpp */;
+		name = "lmain.cpp: 7";
+		rLen = 0;
+		rLoc = 73;
+		rType = 0;
+		vrLen = 189;
+		vrLoc = 0;
+	};
+	14E4680F1239AE4400EFF1B0 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 148526BA1223668C000D304E /* EZDurakIcon.icns */;
+	};
+	14E468101239AE4400EFF1B0 /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "'class NetworkClient' has no member named 'getConnection'";
+		fRef = 14E467EB1239AE1500EFF1B0 /* lmain.cpp */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 6;
+		rType = 1;
+	};
+	14E468111239AE4400EFF1B0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 14E467EB1239AE1500EFF1B0 /* lmain.cpp */;
+		name = "lmain.cpp: 7";
+		rLen = 0;
+		rLoc = 73;
+		rType = 0;
+		vrLen = 192;
+		vrLoc = 0;
+	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeBuildConfigurationName = Debug;
 		activeExecutable = 144AD32B11EEDF450080D7F0 /* EZDurak */;
@@ -549,8 +610,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 305768314;
-			PBXWorkspaceStateSaveDate = 305768314;
+			PBXPerProjectTemplateStateSaveDate = 305769914;
+			PBXWorkspaceStateSaveDate = 305769914;
 		};
 		perUserProjectItems = {
 			141BB44F1220EA720037D921 = 141BB44F1220EA720037D921 /* PBXTextBookmark */;
@@ -566,18 +627,14 @@
 			144AD47011EEE8A70080D7F0 = 144AD47011EEE8A70080D7F0 /* PBXTextBookmark */;
 			148526D7122367A0000D304E = 148526D7122367A0000D304E /* PBXBookmark */;
 			148526E6122367DF000D304E = 148526E6122367DF000D304E /* PBXBookmark */;
-			14A197671239A799008AC23C /* PBXBookmark */ = 14A197671239A799008AC23C /* PBXBookmark */;
-			14A197681239A799008AC23C /* XCBuildMessageTextBookmark */ = 14A197681239A799008AC23C /* XCBuildMessageTextBookmark */;
-			14A197691239A799008AC23C /* PBXTextBookmark */ = 14A197691239A799008AC23C /* PBXTextBookmark */;
-			14A1976E1239A7F6008AC23C /* XCBuildMessageTextBookmark */ = 14A1976E1239A7F6008AC23C /* XCBuildMessageTextBookmark */;
-			14A1976F1239A7F6008AC23C /* PBXTextBookmark */ = 14A1976F1239A7F6008AC23C /* PBXTextBookmark */;
-			14A197701239A7F7008AC23C /* PBXTextBookmark */ = 14A197701239A7F7008AC23C /* PBXTextBookmark */;
-			14A197731239A966008AC23C /* PBXTextBookmark */ = 14A197731239A966008AC23C /* PBXTextBookmark */;
-			14A197741239A966008AC23C /* XCBuildMessageTextBookmark */ = 14A197741239A966008AC23C /* XCBuildMessageTextBookmark */;
-			14A197751239A966008AC23C /* PBXTextBookmark */ = 14A197751239A966008AC23C /* PBXTextBookmark */;
 			14C2D80A121E392C00F6BE31 = 14C2D80A121E392C00F6BE31 /* PBXTextBookmark */;
 			14C2D820121E3A1F00F6BE31 = 14C2D820121E3A1F00F6BE31 /* PBXBookmark */;
 			14C2D848121E3B7000F6BE31 = 14C2D848121E3B7000F6BE31 /* PBXTextBookmark */;
+			14E468071239AE4200EFF1B0 /* XCBuildMessageTextBookmark */ = 14E468071239AE4200EFF1B0 /* XCBuildMessageTextBookmark */;
+			14E468081239AE4200EFF1B0 /* PBXTextBookmark */ = 14E468081239AE4200EFF1B0 /* PBXTextBookmark */;
+			14E4680F1239AE4400EFF1B0 /* PBXBookmark */ = 14E4680F1239AE4400EFF1B0 /* PBXBookmark */;
+			14E468101239AE4400EFF1B0 /* XCBuildMessageTextBookmark */ = 14E468101239AE4400EFF1B0 /* XCBuildMessageTextBookmark */;
+			14E468111239AE4400EFF1B0 /* PBXTextBookmark */ = 14E468111239AE4400EFF1B0 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 144AD33B11EEDF4D0080D7F0 /* Source Control */;
 		userBuildSettings = {

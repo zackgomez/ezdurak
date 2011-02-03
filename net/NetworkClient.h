@@ -1,6 +1,9 @@
 #pragma once
 #include "kissnet.h"
 #include <string>
+#include <set>
+#include "util/Thread.h"
+#include "util/Logger.h"
 
 /** 
  * This is the client part of the autodiscovery framework.  In conjunction with
@@ -9,6 +12,15 @@
 class NetworkClient
 {
 public:
+    struct Connection
+    {
+        std::string addr;
+        std::string port;
+        std::string aux;
+
+        bool operator<(const Connection& lhs) const;
+    };
+
     /** 
      * Creates a NetworkClient object that will listen on port bport for 
      * UDP packets to autoconfigure a connection with.
@@ -21,16 +33,32 @@ public:
     ~NetworkClient();
 
     /** 
-     * Autodiscovers a connection by listening on bport.
-     * Expects a packet that contains the port, then tries to connect to the
-     * sender's address at the contained port.
-     * 
-     * @return A socket a machine with a NetworkHost
+     * Starts for available connections on the broadcast port.
      */
-    kissnet::tcp_socket_ptr getConnection();
+    void listen();
+
+    /** 
+     * Stops listening for available connections on the broadcast port.
+     */
+    void ignore();
+
+    /** 
+     * Gets a list of available connections that have been discovered.
+     * Only returns connects (re)discovered from the last call.  A connection
+     * is returned as a Connection struct that contains the port, address, and
+     * any auxiliary data.  The port is 0 if it was not found.
+     * 
+     * @return A list of connections.
+     */
+    std::set<Connection> getConnectionList();
 
 private:
-    std::string bport_;
-    int lsock_;
-};
+    std::set<Connection> conns_;
+    Thread lthread_;
+    Mutex  connsMutex_;
+    bool thread_running_;
 
+    std::string bport_;
+
+    LoggerPtr logger_;
+};

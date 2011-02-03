@@ -3,7 +3,6 @@
 #include "core/GameAgent.h"
 #include "core/PlayerImpl.h"
 #include <cassert>
-#include <iostream>
 #include <string>
 #include <boost/algorithm/string.hpp>
 
@@ -12,7 +11,8 @@ using std::string;
 NetworkPlayer::NetworkPlayer() :
     NetworkListener(),
     name_("Uninitialized NetworkPlayer"),
-    ID_("#ERROR")
+    ID_("#ERROR"),
+    logger_(Logger::getLogger("NetworkPlayer"))
 {
 }
 
@@ -32,7 +32,7 @@ bool NetworkPlayer::doHandshake()
         if (header[2] == MSG_READY)
         {
             ready = true;
-            std::cout << "Got connection and ready message!\n";
+            logger_->info() << "Got connection and ready message\n";
         }
         else if (header[2] == MSG_NAME)
         {
@@ -50,9 +50,11 @@ bool NetworkPlayer::doHandshake()
         }
         else
         {
-            std::cout << "Got unknown message during handshake\n";
+            logger_->warning() << "Got unknown message during handshake\n";
+            /*
             std::cout << "Header: "; std::cout.write(header,3);
             std::cout << '\n';
+            */
         }
     }
 
@@ -72,7 +74,7 @@ Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
         // Send MSG_DEFEND
         string message = createMessage(MSG_DEFEND, "");
         clisock_->send(message);
-        std::cerr << "DEBUG - NetworkPlayer: sent MSG_DEFEND\n";
+        logger_->debug() << "sent MSG_DEFEND\n";
 
 
         // Wait for MSG_PLAYED
@@ -108,9 +110,8 @@ Card NetworkPlayer::defend(const Card &attc, Card::cardsuit trump)
         {
             return defCard;
         }
-        std::cerr << "DEBUG - NetworkPlayer: got a bad card!!!\n";
+        logger_->error() << "defend: got a bad card\n";
     }
-
 }
 
 Card NetworkPlayer::attack(std::set<int> playableRanks)
@@ -122,7 +123,7 @@ Card NetworkPlayer::attack(std::set<int> playableRanks)
         // Send MSG_ATTACK
         string message = createMessage(MSG_ATTACK, "");
         clisock_->send(message);
-        std::cerr << "DEBUG - NetworkPlayer: sent MSG_ATTACK\n";
+        logger_->debug() << "sent MSG_ATTACK\n";
 
         // Wait for MSG_PLAYED
         // Use a 3 byte character array as a header.
@@ -159,7 +160,7 @@ Card NetworkPlayer::attack(std::set<int> playableRanks)
             return attCard;
         }
 
-        std::cerr << "DEBUG - NetworkPlayer: got a bad card!!!\n";
+        logger_->error() << "attack: got a bad card\n";
     }
 }
 
@@ -173,7 +174,7 @@ Card NetworkPlayer::pileOn(std::set<int> playableRanks)
         // Send MSG_PILEON
         string message = createMessage(MSG_PILEON, "");
         clisock_->send(message);
-        std::cerr << "DEBUG - NetworkPlayer: sent MSG_PILEON\n";
+        logger_->debug() << "send MSG_PILEON\n";
 
         // Wait for MSG_PLAYED
         // Use a 3 byte character array as a header.
@@ -209,7 +210,7 @@ Card NetworkPlayer::pileOn(std::set<int> playableRanks)
             return pCard;
         }
 
-        std::cerr << "DEBUG - NetworkPlayer: got a bad card!!!\n";
+        logger_->error() << "pileOn: got a bad card\n";
     }
 }
 
@@ -224,7 +225,7 @@ void NetworkPlayer::addCards(const std::vector<Card> &cards)
     // Send over network
     string payload = serializeCards(cards);
     string message = createMessage(MSG_ADDCARDS, payload);
-    std::cerr << "DEBUG - NetworkPlayer: sent MSG_ADDCARDS\n";
+    logger_->debug() << "send MSG_ADDCARDS\n";
     clisock_->send(message);
 }
 

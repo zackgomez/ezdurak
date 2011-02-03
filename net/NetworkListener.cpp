@@ -1,14 +1,14 @@
 #include "NetworkListener.h"
 #include "NetworkProtocol.h"
 #include "core/GameAgent.h"
-#include <iostream>
 #include "NetworkProtocol.h"
 
 using namespace kissnet;
 using std::string;
 
 NetworkListener::NetworkListener() :
-    connected_(false)
+    connected_(false),
+    logger_(Logger::getLogger("NetworkListener"))
 {
 }
 
@@ -40,7 +40,7 @@ bool NetworkListener::getConnection(const std::string &port)
     }
     catch (socket_exception &e)
     {
-        std::cerr << "Unable to getConnection: " << e.what() << '\n';
+        logger_->error() << "Unable to getConnection: " << e.what() << '\n';
         connected_ = false;
     }
 
@@ -56,14 +56,13 @@ bool NetworkListener::doHandshake()
         clisock_->recv(header, 3);
         if (header[2] == MSG_READY)
         {
-            std::cout << "Got connection and ready message!\n";
+            logger_->debug() << "Got connection and ready message\n";
             ready = true;
         }
         else
         {
-            std::cout << "Got unknown message during handshake\n";
-            std::cout << "Header: "; std::cout.write(header,3);
-            std::cout << '\n';
+            logger_->warning() << "Got unknown message during handshake\n";
+            (logger_->warning() << "Header: ").write(header, 3) << '\n';
         }
     }
 
@@ -84,8 +83,7 @@ void NetworkListener::gameStart(GameAgent *agent)
         payload.append(serializeString(nameid));
     }
     string message = createMessage(MSG_GAMESTARTING, payload);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_GAMESTARTING\n";
-    std::cerr << "DEBUG - NetworkListener: message has size " << message.size() << '\n';
+    logger_->debug() << "sending MSG_GAMESTARTING with size " << message.size() << "\n";
     clisock_->send(message);
 }
 
@@ -93,10 +91,11 @@ void NetworkListener::gameOver(ConstPlayerPtr biscuit)
 {
     string serialBiscuit = serializePlayer(biscuit, players_);
     string message = createMessage(MSG_GAMEOVER, serialBiscuit);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_GAMEOVER\n";
+    logger_->debug() << "sending MSG_GAMEOVER\n";
     clisock_->send(message);
+
     string end = createMessage(MSG_END, "");
-    std::cerr << "DEBUG - NetworkListener: sending MSG_END\n";
+    logger_->debug() << "send MSG_END\n";
     clisock_->send(end);
 }
 
@@ -105,7 +104,7 @@ void NetworkListener::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)
     string payload = serializePlayer(attacker, players_);
     payload.append(serializePlayer(defender, players_));
     string message = createMessage(MSG_NEWROUND, payload);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_NEWROUND\n";
+    logger_->debug() << "sending MSG_NEWROUND\n";
     clisock_->send(message);
 }
 
@@ -113,7 +112,7 @@ void NetworkListener::attackerPassed(ConstPlayerPtr newAttacker)
 {
     string payload = serializePlayer(newAttacker, players_);
     string message = createMessage(MSG_ATTACKERPASSED, payload);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_ATTACKERPASSED\n";
+    logger_->debug() << "sending MSG_ATTACKERPASSED\n";
     clisock_->send(message);
 }
 
@@ -121,7 +120,7 @@ void NetworkListener::attackingCard(const Card &c)
 {
     string payload = serializeCard(c);
     string message = createMessage(MSG_ATTACKINGCARD, payload);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_ATTACKINGCARD\n";
+    logger_->debug() << "sending MSG_ATTACKINGCARD\n";
     clisock_->send(message);
 }
 
@@ -129,7 +128,7 @@ void NetworkListener::defendingCard(const Card &c)
 {
     string payload = serializeCard(c);
     string message = createMessage(MSG_DEFENDINGCARD, payload);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_DEFENDINGCARD\n";
+    logger_->debug() << "sending MSG_DEFENDINGCARD\n";
     clisock_->send(message);
 }
 
@@ -137,7 +136,7 @@ void NetworkListener::piledOnCard(const Card &c)
 {
     string payload = serializeCard(c);
     string message = createMessage(MSG_PILEDONCARD, payload);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_PILEDONCARD\n";
+    logger_->debug() << "sending MSG_PILEDONCARD\n";
     clisock_->send(message);
 }
 
@@ -145,7 +144,7 @@ void NetworkListener::playedOut(ConstPlayerPtr player)
 {
     string payload = serializePlayer(player, players_);
     string message = createMessage(MSG_PLAYEDOUT, payload);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_PLAYEDOUT\n";
+    logger_->debug() << "sending MSG_PLAYEDOUT\n";
     clisock_->send(message);
 }
 
@@ -154,7 +153,7 @@ void NetworkListener::givenCards(ConstPlayerPtr player, int numCards)
    string payload = serializePlayer(player, players_);
    payload.push_back((char) numCards);
    string message = createMessage(MSG_GIVENCARDSN, payload);
-   std::cerr << "DEBUG - NetworkListener: sending MSG_GIVENCARDSN\n";
+   logger_->debug() << "sending MSG_GIVENCARDSN\n";
    clisock_->send(message);
 }
 
@@ -163,7 +162,7 @@ void NetworkListener::givenCards(ConstPlayerPtr player, const std::vector<Card>&
     string payload = serializePlayer(player, players_);
     payload.append(serializeCards(cards));
     string message = createMessage(MSG_GIVENCARDSCS, payload);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_GIVENCARDCS\n";
+    logger_->debug() << "sending MSG_GIVENCARDCS\n";
     clisock_->send(message);
 }
 
@@ -171,7 +170,7 @@ void NetworkListener::endRound(bool successfulDefend)
 {
     string payload = serializeBool(successfulDefend);
     string message = createMessage(MSG_ENDROUND, payload);
-    std::cerr << "DEBUG - NetworkListener: sending MSG_ENDROUND\n";
+    logger_->debug() << "sending MSG_ENDROUND\n";
     clisock_->send(message);
 }
 
