@@ -19,6 +19,11 @@ const CardCounter::cardset& CardCounter::discardedCards() const
     return discardedCards_;
 }
 
+CardCounter::cardset CardCounter::knownCards(ConstPlayerPtr p) const
+{
+    return playerCards_.find(p)->second;
+}
+
 void CardCounter::gameStart(GameAgent *agent)
 {
     agent_ = agent;

@@ -27,6 +27,8 @@ Card CLIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {
     cout << "Dead cards: ";
     printCardset(counter_.discardedCards());
+    cout << "\nKnown attacker cards: ";
+    printCardset(counter_.knownCards(agent_->getAttacker()));
     cout << '\n';
 
     sortHand();
@@ -80,6 +82,8 @@ Card CLIPlayer::attack(set<int> playableRanks)
 {
     cout << "Dead cards: ";
     printCardset(counter_.discardedCards());
+    cout << "\nKnown defender cards: ";
+    printCardset(counter_.knownCards(agent_->getDefender()));
     cout << '\n';
 
     sortHand();
