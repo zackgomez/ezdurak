@@ -61,9 +61,17 @@ GUIStatePtr InitState::nextState()
 
 void InitState::initGL()
 {
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER))
+    {
+        cerr << "Unable to initialize SDL\n";
+        exit(1);
+    }
 
-    SDL_SetVideoMode(GUIApp::SCREENX, GUIApp::SCREENY, 32, SDL_OPENGL);
+    if (!SDL_SetVideoMode(GUIApp::SCREENX, GUIApp::SCREENY, 32, SDL_OPENGL))
+    {
+        cerr << "Unable to set video mode\n";
+        exit(1);
+    }
 
     SDL_WM_SetCaption("EZDurak", "EZDurak");
 
