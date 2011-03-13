@@ -25,6 +25,14 @@ public:
      * @return True if the card is dead.
      */
     bool isDiscarded(const Card& c) const;
+
+    /**
+     * Returns the set of cards that are discarded.
+     *
+     * @return The set of cards discarded.
+     */
+    const cardset& discardedCards() const;
+
     /** 
      * Returns a list of the known cards a player has.  This information is
      * gathered when a player unsuccessfully defends and takes known cards.

@@ -17,8 +17,18 @@ CLIPlayer::CLIPlayer(const string& name)
 CLIPlayer::~CLIPlayer()
 {}
 
+void CLIPlayer::gameStarting(GameAgent* agent)
+{
+    PlayerImpl::gameStarting(agent);
+    agent->addListener(&counter_);
+}
+
 Card CLIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {
+    cout << "Dead cards: ";
+    printCardset(counter_.discardedCards());
+    cout << '\n';
+
     sortHand();
     for (;;)
     {
@@ -68,6 +78,10 @@ Card CLIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 
 Card CLIPlayer::attack(set<int> playableRanks)
 {
+    cout << "Dead cards: ";
+    printCardset(counter_.discardedCards());
+    cout << '\n';
+
     sortHand();
     for (;;)
     {
@@ -143,4 +157,13 @@ void CLIPlayer::sortHand()
 {
     Card::cardsuit trump = agent_->getTrumpCard().getSuit();
     sort(hand_.begin(), hand_.end(), CardComp(trump));
+}
+
+void CLIPlayer::printCardset(CardCounter::cardset cards)
+{
+    CardCounter::cardset::iterator it = cards.begin();
+    for (; it != cards.end(); it++)
+    {
+        cout << *it << ' ';
+    }
 }

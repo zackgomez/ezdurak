@@ -9,11 +9,15 @@ CardCounter::~CardCounter()
 {
 }
 
-bool CardCounter::isDiscareded(const Card& c) const
+bool CardCounter::isDiscarded(const Card& c) const
 {
     return discardedCards_.find(c) != discardedCards_.end();
 }
 
+const CardCounter::cardset& CardCounter::discardedCards() const
+{
+    return discardedCards_;
+}
 
 void CardCounter::gameStart(GameAgent *agent)
 {
@@ -71,7 +75,9 @@ void CardCounter::playedOut(ConstPlayerPtr p)
     
 void CardCounter::givenCards(ConstPlayerPtr p, int n)
 {
-    // TODO check for last card added, if so, add the trumpCard
+    // If there are no cards left,they took the trump card at the bottom
+    if (agent_->getDeckSize() == 0)
+        playerCards_[p].insert(agent_->getTrumpCard());
 }
     
 void CardCounter::givenCards(ConstPlayerPtr player, const std::vector<Card>& cs)

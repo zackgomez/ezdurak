@@ -1,5 +1,6 @@
 #pragma once
 #include "core/PlayerImpl.h"
+#include "ai/CardCounter.h"
 
 /**
  * An implementation of the Player interface, via PlayerImpl that gets input
@@ -12,6 +13,8 @@ public:
     CLIPlayer(const std::string& name);
     virtual ~CLIPlayer();
 
+    virtual void gameStarting(GameAgent *agent);
+
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump);
     virtual Card attack(std::set<int> playableRanks = std::set<int>());
     virtual Card pileOn(std::set<int> playableRanks);
@@ -23,4 +26,7 @@ private:
     void operator=(const Player&);
 
     void sortHand();
+    void printCardset(CardCounter::cardset cards);
+
+    CardCounter counter_;
 };
