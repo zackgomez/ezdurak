@@ -14,7 +14,7 @@ GUIPlayerView::GUIPlayerView(const Player *player) :
     status_(NONE)
 {
     // Get the initial hand...
-    for (int i = 0; i < player->getNumCards(); i++)
+    for (unsigned i = 0; i < player->getNumCards(); i++)
         cards_.addCard(Card());
 }
 

@@ -76,7 +76,7 @@ void NetworkListener::gameStart(GameAgent *agent)
     string payload = serializeCard(agent_->getTrumpCard());
     char size = players_.size();
     payload.push_back(size);
-    for (int i = 0; i < players_.size(); i++)
+    for (unsigned i = 0; i < players_.size(); i++)
     {
         string nameid = players_[i]->getName();
         nameid.append(players_[i]->getID());

@@ -19,7 +19,7 @@ public:
 
     std::vector<Card>& getCards() { return cards_; }
     const std::vector<Card>& getCards() const { return cards_; }
-    int getNumCards() const { return cards_.size(); }
+    unsigned getNumCards() const { return cards_.size(); }
 
     // Functions inherited from CardHolder interface
     virtual void addCard(Card c);

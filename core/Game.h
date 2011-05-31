@@ -42,7 +42,7 @@ public:
 
     // Constants
     /// The number of cards in a starting hand
-    const static int HAND_SIZE;
+    const static unsigned HAND_SIZE;
 
     // Functions inherited from GameAgent interface
     void addListener(GameListener* listener);
@@ -65,9 +65,9 @@ protected:
 
     PlayerPtr attacker_;
     PlayerPtr defender_;
-    int attackerIdx_;
-    int defenderIdx_;
-    int tricksLeft_;
+    unsigned attackerIdx_;
+    unsigned defenderIdx_;
+    unsigned tricksLeft_;
     std::vector<Card> playedCards_;
     std::set<int> playableRanks_;
     std::vector<PlayerPtr> refillOrder_;

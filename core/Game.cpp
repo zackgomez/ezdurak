@@ -7,7 +7,7 @@
 
 using namespace std;
 
-const int Game::HAND_SIZE = 6;
+const unsigned Game::HAND_SIZE = 6;
 
 Game::Game()
 { /* Empty */ }
@@ -105,12 +105,12 @@ void Game::deal()
         trumpCard_ = deck_.peekLast();
 
         // Deal the hands
-        for (int i = 0; i < players_.size(); i++)
+        for (unsigned i = 0; i < players_.size(); i++)
             hands[i] = deck_.deal(HAND_SIZE);
     } while (!validateHands(hands));
 
     // Give each player their hand
-    for (int i = 0; i < players_.size(); i++)
+    for (unsigned i = 0; i < players_.size(); i++)
         players_[i]->addCards(hands[i]);
 }
 
@@ -120,13 +120,13 @@ bool Game::validateHands(const vector<vector<Card> >& hands) const
     assert(hands.size() == players_.size());
 
     // Loop over each hand and see if its no good
-    for (int i = 0; i < hands.size(); i++)
+    for (unsigned i = 0; i < hands.size(); i++)
     {
         assert(hands[i].size() == HAND_SIZE);
-        int red = 0, black = 0;
-        int ccnt = 0, scnt = 0, hcnt = 0, dcnt = 0;
+        unsigned red = 0, black = 0;
+        unsigned ccnt = 0, scnt = 0, hcnt = 0, dcnt = 0;
         // Loop over each card in the hand and update the count variables
-        for (int j = 0; j < hands[i].size(); j++)
+        for (unsigned j = 0; j < hands[i].size(); j++)
         {
             Card::cardsuit s = hands[i][j].getSuit();
             red   += (s == Card::hearts || s == Card::diamonds) ? 1 : 0;
@@ -274,7 +274,7 @@ void Game::pileOn()
 
 void Game::refill()
 {
-    for (int i = 0; i < refillOrder_.size(); i++)
+    for (unsigned i = 0; i < refillOrder_.size(); i++)
     {
         // You refill to HAND_SIZE, but only if there are enough cards.
         int neededCards = min(HAND_SIZE - refillOrder_[i]->getNumCards(),
@@ -292,7 +292,7 @@ void Game::refill()
 
 void Game::removeFinishedPlayers()
 {
-    int i = 0;
+    unsigned i = 0;
     while (i < players_.size())
     {
         if (players_[i]->getNumCards() == 0)
@@ -371,7 +371,7 @@ int Game::getDeckSize() const
 int Game::getDiscardSize() const
 {
     int aliveCards = deck_.getNumCards();
-    for (int i = 0; i < players_.size(); i++)
+    for (unsigned i = 0; i < players_.size(); i++)
     {
         aliveCards += players_[i]->getNumCards();
     }

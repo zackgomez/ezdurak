@@ -43,7 +43,7 @@ void HumanCardHolder::addCard(Card c)
 
 void HumanCardHolder::addCards(const std::vector<Card>& cs)
 {
-    for (int i = 0; i < cs.size(); i++)
+    for (unsigned i = 0; i < cs.size(); i++)
         addCard(cs[i]);
 }
 

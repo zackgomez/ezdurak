@@ -217,7 +217,7 @@ Card NetworkPlayer::pileOn(std::set<int> playableRanks)
 void NetworkPlayer::addCards(const std::vector<Card> &cards)
 {
     // Add Cards
-    for (int i = 0; i < cards.size(); i++)
+    for (unsigned i = 0; i < cards.size(); i++)
     {
         hand_.insert(cards[i]);
     }
@@ -229,7 +229,7 @@ void NetworkPlayer::addCards(const std::vector<Card> &cards)
     clisock_->send(message);
 }
 
-int NetworkPlayer::getNumCards() const
+unsigned NetworkPlayer::getNumCards() const
 {
     return hand_.size();
 }

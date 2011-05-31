@@ -36,7 +36,7 @@ Card CLIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
         }
 
         // Did they enter a valid index?
-        if (cnum < 0 || cnum > hand_.size())
+        if (cnum < 0 || cnum > (int)hand_.size())
         {
             cout << "Enter a number between 0 and " << hand_.size() << '\n';
             continue;
@@ -85,7 +85,7 @@ Card CLIPlayer::attack(set<int> playableRanks)
         }
 
         // Did they enter a valid index?
-        if (cnum < 0 || cnum > hand_.size())
+        if (cnum < 0 || cnum > (int)hand_.size())
         {
             cout << "Enter a number between 0 and " << hand_.size() << '\n';
             continue;
@@ -132,7 +132,7 @@ void CLIPlayer::addCards(const std::vector<Card>& cards)
     cout << name_ << ":\n";
     cout << "Added cards:\n";
 
-    for (int i = 0; i < cards.size(); i++)
+    for (unsigned i = 0; i < cards.size(); i++)
         cout << cards[i] << ' ';
     cout << '\n';
 

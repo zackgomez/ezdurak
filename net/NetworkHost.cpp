@@ -21,7 +21,7 @@
 
 using namespace kissnet;
 
-const int NetworkHost::BROADCAST_DELAY = 500;
+const unsigned NetworkHost::BROADCAST_DELAY = 500;
 
 NetworkHost::NetworkHost(const std::string &bport, const std::string &lport) :
     bport_(bport),

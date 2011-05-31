@@ -85,7 +85,7 @@ Card AIPlayer::pileOn(set<int> playableRanks)
 
 void AIPlayer::removeCard(const Card& card)
 {
-    for (int i = 0; i < hand_.size(); i++)
+    for (unsigned i = 0; i < hand_.size(); i++)
     {
         if (hand_[i] == card)
         {
@@ -104,7 +104,7 @@ vector<Card> AIPlayer::playableCards(set<int> playableRanks) const
         return hand_;
 
     vector<Card> playable;
-    for (int i = 0; i < hand_.size(); i++)
+    for (unsigned i = 0; i < hand_.size(); i++)
     {
         if (playableRanks.find(hand_[i].getNum()) != playableRanks.end())
             playable.push_back(hand_[i]);
@@ -118,7 +118,7 @@ vector<Card> AIPlayer::defendableCards(const Card& attackingCard,
 {
     vector<Card> playable;
 
-    for (int i = 0; i < hand_.size(); i++)
+    for (unsigned i = 0; i < hand_.size(); i++)
     {
         if (hand_[i].beats(attackingCard, trump))
             playable.push_back(hand_[i]);
@@ -139,7 +139,7 @@ bool AIPlayer::isPartner(ConstPlayerPtr p) const
 
     int thisIdx = -1;
     int pIdx = -1;
-    for (int i = 0; i < players.size(); i++)
+    for (unsigned i = 0; i < players.size(); i++)
     {
         if (players[i].get() == this)
             thisIdx = i;
@@ -147,5 +147,5 @@ bool AIPlayer::isPartner(ConstPlayerPtr p) const
             pIdx = i;
     }
 
-    return ((pIdx + 2) % players.size()) == thisIdx;
+    return ((pIdx + 2) % (int)players.size()) == thisIdx;
 }

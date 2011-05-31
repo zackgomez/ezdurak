@@ -52,7 +52,7 @@ public:
         numCards_ += cards.size();
     }
 
-    virtual int getNumCards() const
+    virtual unsigned getNumCards() const
     {
         return numCards_;
     }
@@ -70,6 +70,6 @@ public:
 protected:
     std::string name_;
     std::string ID_;
-    int numCards_;
+    unsigned numCards_;
 };
 

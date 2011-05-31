@@ -27,13 +27,13 @@ Card Deck::deal()
     return ret;
 }
 
-std::vector<Card> Deck::deal(int numCards)
+std::vector<Card> Deck::deal(unsigned numCards)
 {
     assert(numCards > 0);
     assert(cards_.size() >= numCards);
 
     std::vector<Card> hand(numCards);
-    for (int i = 0; i < numCards; i++)
+    for (unsigned i = 0; i < numCards; i++)
     {
         hand[i] = cards_.back();
         cards_.pop_back();
@@ -54,7 +54,7 @@ void Deck::shuffle()
     random_shuffle(cards_.begin(), cards_.end());
 }
 
-int Deck::getNumCards() const
+unsigned Deck::getNumCards() const
 {
     return cards_.size();
 }

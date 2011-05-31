@@ -59,7 +59,7 @@ InGameState::~InGameState()
     queue_.killReader();
     gameThread_.join();
 
-    for (int i = 0; i < playersDisplay_.size(); i++)
+    for (unsigned i = 0; i < playersDisplay_.size(); i++)
         delete playersDisplay_[i];
 }
 
@@ -331,7 +331,7 @@ void InGameState::drawPiles()
 void InGameState::drawPlayers()
 {
     updatePlayers();
-    for (int i = 0; i < players_.size(); i++)
+    for (unsigned i = 0; i < players_.size(); i++)
     {
         float testx, testy, testangle;
         getPlayerPosition(i, testx, testy, testangle);
@@ -375,17 +375,17 @@ void InGameState::updatePlayers()
         // If animations are in progress, do nothing
         assert(animations_.empty());
         // Remove old displays
-        for (int i = 0; i < playersDisplay_.size(); i++)
+        for (unsigned i = 0; i < playersDisplay_.size(); i++)
             delete playersDisplay_[i];
         playersDisplay_.resize(players_.size());
 
         humanView_ = new GUIHumanView((GUIPlayer *) players_[0].get());
         playersDisplay_[0] = humanView_;
-        for (int i = 1; i < players_.size(); i++)
+        for (unsigned i = 1; i < players_.size(); i++)
             playersDisplay_[i] = new GUIPlayerView(players_[i].get());
 
         // Create the map
-        for (int i = 0; i < players_.size(); i++)
+        for (unsigned i = 0; i < players_.size(); i++)
             playerDisplayMap_[players_[i]] = playersDisplay_[i];
         // We have created the players, signal to the other thread
         validPlayerDisplays_ = true;
@@ -409,6 +409,6 @@ void InGameState::setPlayers(const vector<PlayerPtr>& players)
         }
     }
 
-    for (int i = 0; i < players_.size(); i++)
+    for (unsigned i = 0; i < players_.size(); i++)
         playerPositionMap_[players_[i]] = i;
 }

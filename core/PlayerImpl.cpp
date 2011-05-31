@@ -33,7 +33,7 @@ void PlayerImpl::addCards(const std::vector<Card>& cards)
     hand_.insert(hand_.end(), cards.begin(), cards.end());
 }
 
-int PlayerImpl::getNumCards() const
+unsigned PlayerImpl::getNumCards() const
 {
     return hand_.size();
 }
@@ -52,7 +52,7 @@ void PlayerImpl::print() const
 {
     std::cout << name_ << ":\n";
     // Print numbers
-    for (int i = 0; i < hand_.size(); i++)
+    for (unsigned i = 0; i < hand_.size(); i++)
     {
         std::cout << ' ' << i + 1;
         if (i + 1 < 10)
@@ -63,7 +63,7 @@ void PlayerImpl::print() const
     std::cout << '\n';
 
     // Print cards
-    for (int i = 0; i < hand_.size(); i++)
+    for (unsigned i = 0; i < hand_.size(); i++)
         std::cout << hand_[i] << ' ';
     std::cout << '\n';
 }

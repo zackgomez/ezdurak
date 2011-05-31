@@ -40,7 +40,7 @@ public:
     virtual Card pileOn(std::set<int> playableRanks) = 0;
 
     virtual void addCards(const std::vector<Card>& cards);
-    virtual int getNumCards() const;
+    virtual unsigned getNumCards() const;
     virtual std::string getName() const;
     virtual std::string getID() const;
 

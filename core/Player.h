@@ -67,7 +67,7 @@ public:
      * This function must return the number of cards in the players hand.
      * @return The number of cards in the players hand.
      */
-    virtual int getNumCards() const = 0;
+    virtual unsigned getNumCards() const = 0;
 
     /**
      * This function should return this players name.  It may not contain the

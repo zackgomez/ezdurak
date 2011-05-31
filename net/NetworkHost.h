@@ -25,7 +25,7 @@ public:
     /** 
      * The delay between broadcast packets.
      */
-    static const int BROADCAST_DELAY;
+    static const unsigned BROADCAST_DELAY;
 
     /** 
      * Checks for an autodiscovered connection and returns it if found.

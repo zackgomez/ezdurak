@@ -56,13 +56,13 @@ string serializeCards(const vector<Card> &cs)
 
 string serializePlayer(ConstPlayerPtr p, const vector<PlayerPtr> &ps)
 {
-    char i;
+    unsigned char i;
     for (i = 0; i < ps.size(); i++)
         if (ps[i] == p)
             break;
     assert (i != ps.size() && "Unable to find player");
 
-    return string(&i, 1);
+    return string((char *) &i, 1);
 }
 
 string serializeString(const std::string &s)
@@ -111,7 +111,7 @@ vector<Card> readCards(const string &s)
 
 PlayerPtr readPlayer(const string &s, const vector<PlayerPtr> &ps)
 {
-    int i = s[0];
+    unsigned i = s[0];
     assert(i < ps.size());
 
     return ps[i];

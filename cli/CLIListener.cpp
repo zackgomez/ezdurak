@@ -22,7 +22,7 @@ void CLIListener::gameStart(GameAgent *agent)
     cout << "Game is starting.\n";
     cout << "Players are seated like:\n";
     const vector<PlayerPtr> players = agent_->getPlayers();
-    for (int i = 0; i < players.size(); i++)
+    for (unsigned i = 0; i < players.size(); i++)
         cout << players[i]->getName() << " ";
     cout << '\n';
     cout << "Trump is " << agent_->getTrumpCard() << '\n';
@@ -96,7 +96,7 @@ void CLIListener::givenCards(const ConstPlayerPtr player, int numCards)
 void CLIListener::givenCards(const ConstPlayerPtr player, const std::vector<Card>& cards)
 {
     cout << player->getName() << " has been given the following cards:\n";
-    for (int i = 0; i < cards.size(); i++)
+    for (unsigned i = 0; i < cards.size(); i++)
         cout << cards[i] << ' ';
     cout << '\n';
 }

@@ -65,7 +65,7 @@ AnimationPtr PlayedCardsView::getAnimation(const std::vector<Card> &cs, CardHold
 {
     std::list<AnimationPtr> anims;
 
-    for (int i = 0; i < cs.size(); i++)
+    for (unsigned i = 0; i < cs.size(); i++)
         anims.push_back(getAnimation(cs[i], target, dur, x1, y1));
 
     return ParallelAnimation::create(anims);
@@ -78,11 +78,11 @@ AnimationPtr PlayedCardsView::getAnimation(CardHolder *target, int dur,
 
     // Add the attacking cards
     const std::vector<Card> &cards = attackingCards_.getCards();
-    for (int i = 0; i  < cards.size(); i++)
+    for (unsigned i = 0; i  < cards.size(); i++)
         anims.push_back(getAnimation(cards[i], target, dur, x1, x2));
     // And the defending cards
     const std::vector<Card> &dcards = defendingCards_.getCards();
-    for (int i = 0; i  < dcards.size(); i++)
+    for (unsigned i = 0; i  < dcards.size(); i++)
         anims.push_back(getAnimation(dcards[i], target, dur, x1, x2));
 
     // Create and return the parallel animation
