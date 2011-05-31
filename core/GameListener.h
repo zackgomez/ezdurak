@@ -20,6 +20,8 @@ public:
      * This function is called after the Game is completely initialized and 
      * the first attacker is just about to start.  It would be a good time to
      * get starting information from the game and do some initialization.
+     * NOTE: You can add other GameListeners to the passed GameAgent object
+     * and they will have their gameStart method called.
      */
     virtual void gameStart(GameAgent *agent) = 0;
 

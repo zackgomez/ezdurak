@@ -26,7 +26,6 @@ private:
     void operator=(const Player&);
 
     void sortHand();
-    void printCardset(CardCounter::cardset cards);
 
     CardCounter counter_;
 };

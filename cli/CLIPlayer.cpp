@@ -162,12 +162,3 @@ void CLIPlayer::sortHand()
     Card::cardsuit trump = agent_->getTrumpCard().getSuit();
     sort(hand_.begin(), hand_.end(), CardComp(trump));
 }
-
-void CLIPlayer::printCardset(CardCounter::cardset cards)
-{
-    CardCounter::cardset::iterator it = cards.begin();
-    for (; it != cards.end(); it++)
-    {
-        cout << *it << ' ';
-    }
-}

@@ -1,6 +1,7 @@
 #pragma once
 #include "util/SynchronizedQueue.h"
 #include "core/PlayerImpl.h"
+#include "ai/CardCounter.h"
 
 /** 
  * This is an implemenation of the Player interface for use in the GUI.  Has
@@ -27,7 +28,8 @@ private:
     void sortHand();
     SynchronizedQueue<int> &queue_;
 
-
+    /// NOTE:2011-05-30:zack: This is for CardCounter testing only
+    CardCounter counter_;
 };
 
 typedef boost::shared_ptr<GUIPlayer> GUIPlayerPtr;

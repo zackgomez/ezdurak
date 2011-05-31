@@ -61,16 +61,19 @@ void CardCounter::endRound(bool successful)
 void CardCounter::attackingCard(const Card &c)
 {
     playerCards_[attacker_].erase(c);
+    playedCards_.insert(c);
 }
     
 void CardCounter::defendingCard(const Card &c)
 {
     playerCards_[defender_].erase(c);
+    playedCards_.insert(c);
 }
     
 void CardCounter::piledOnCard(const Card &c)
 {
     playerCards_[attacker_].erase(c);
+    playedCards_.insert(c);
 }
     
 void CardCounter::playedOut(ConstPlayerPtr p)
@@ -87,5 +90,18 @@ void CardCounter::givenCards(ConstPlayerPtr p, int n)
     
 void CardCounter::givenCards(ConstPlayerPtr player, const std::vector<Card>& cs)
 {
+    assert(cs.size() == playedCards_.size());
     playerCards_[player].insert(cs.begin(), cs.end());
+}
+
+
+
+
+void printCardset(CardCounter::cardset cards, std::ostream& os)
+{
+    CardCounter::cardset::iterator it = cards.begin();
+    for (; it != cards.end(); it++)
+    {
+        os << *it << ' ';
+    }
 }

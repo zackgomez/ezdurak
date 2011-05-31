@@ -31,11 +31,19 @@ void GUIPlayer::gameStarting(GameAgent *agent)
 {
     PlayerImpl::gameStarting(agent);
     sortHand();
+    agent->addListener(&counter_);
 }
 
 Card GUIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 {
     queue_.clear();
+
+    // Print out some CardCounter info
+    std::cout << "Dead cards: ";
+    printCardset(counter_.discardedCards());
+    std::cout << "\nKnown attacker cards: ";
+    printCardset(counter_.knownCards(agent_->getAttacker()));
+    std::cout << '\n';
 
     int cnum;
     Card attempt;
@@ -61,6 +69,13 @@ Card GUIPlayer::attack(std::set<int> playableRanks)
     // If we have no cards... auto pass
     if (hand_.size() == 0)
         return Card();
+
+    // Print out some CardCounter info
+    std::cout << "Dead cards: ";
+    printCardset(counter_.discardedCards());
+    std::cout << "\nKnown defender cards: ";
+    printCardset(counter_.knownCards(agent_->getDefender()));
+    std::cout << '\n';
 
     queue_.clear();
 

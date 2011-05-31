@@ -66,3 +66,5 @@ private:
     GameAgent* agent_;
 };
 
+/** Helper function to print out the cardset data type */
+void printCardset(CardCounter::cardset cards, std::ostream& os = std::cout);
