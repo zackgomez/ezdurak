@@ -9,7 +9,7 @@ CardCounter::~CardCounter()
 {
 }
 
-bool CardCounter::isDiscareded(const Card& c) const
+bool CardCounter::isDiscarded(const Card& c) const
 {
     return discardedCards_.find(c) != discardedCards_.end();
 }
