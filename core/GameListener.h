@@ -66,6 +66,15 @@ public:
     virtual void piledOnCard(const Card &c) = 0;
 
     /**
+     * Called when a defender deflects a card.
+     * @param c The card the defender deflected with.
+     * @param newAttacker The new attacker after the deflection.
+     * @param newDefender The new defender after the deflection.
+     */
+    virtual void deflectedCard(const Card &c, ConstPlayerPtr newAttacker,
+            ConstPlayerPtr newDefender) = 0;
+
+    /**
      * Called after the players are given cards if a player has no cards 
      * remaining and has "gone out" of the game.
      * @param player The player that has gone out.

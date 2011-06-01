@@ -45,6 +45,17 @@ public:
     virtual Card attack(std::set<int> playableRanks) = 0;
 
     /**
+     * When the deflection variant is played, this function will be called if
+     * there is a chance to deflect.  A defender wishing to deflect should
+     * return a card of the appropriate rank to defend, or Card() if they do
+     * not wish to deflect.  If they do not deflect, they will then have to
+     * defend.
+     * @param attackingCard One of the cards to deflect
+     * @return A card of the same rank as attackingCard, or Card()
+     */
+    virtual Card deflect(const Card& attackingCard) = 0;
+
+    /**
      * After a defender has given up, attackers may continue to give him cards.
      * This method is called when an attacker has a chance to pileOn cards to a
      * defender after he has given up.  Card() should be returned if the

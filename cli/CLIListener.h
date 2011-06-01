@@ -20,6 +20,8 @@ public:
     void attackingCard(const Card &c);
     void defendingCard(const Card &c);
     void piledOnCard(const Card &c);
+    void deflectedCard(const Card &c, ConstPlayerPtr newAttacker,
+            ConstPlayerPtr newDefender);
     void playedOut(ConstPlayerPtr player);
     void givenCards(ConstPlayerPtr player, int numCards);
     void givenCards(ConstPlayerPtr player, const std::vector<Card>& cards);

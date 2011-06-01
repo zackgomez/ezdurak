@@ -127,6 +127,55 @@ Card CLIPlayer::pileOn(std::set<int> playableRanks)
     return attack(playableRanks);
 }
 
+Card CLIPlayer::deflect(const Card& attC, ConstPlayerPtr newA, ConstPlayerPtr newD)
+{
+    sortHand();
+    for (;;)
+    {
+        cout << "Deflect?\n";
+        print();
+        cout << "Enter card number, 0 to not deflect: ";
+        int cnum;
+        cin >> cnum;
+
+        if (!cin)
+        {
+            cin.clear();
+            cin.ignore(100, '\n');
+            continue;
+        }
+
+        // Did they enter a valid index?
+        if (cnum < 0 || cnum > (int)hand_.size())
+        {
+            cout << "Enter a number between 0 and " << hand_.size() << '\n';
+            continue;
+        }
+
+        // Did they elect to not deflect?
+        if (cnum == 0)
+            return Card();
+
+        // Map 1..n to 0..n-1
+        cnum--;
+        // Translate index to card
+        Card attempt = hand_[cnum];
+
+        // Validate attempt
+        if (attempt.getNum() != attC.getNum())
+        {
+            cout << "INVALID CARD\n";
+            continue;
+        }
+
+        // Remove it from their hand
+        std::swap(hand_[cnum], hand_[hand_.size()-1]);
+        hand_.pop_back();
+
+        return attempt;
+    }
+}
+
 void CLIPlayer::addCards(const std::vector<Card>& cards)
 {
     cout << name_ << ":\n";

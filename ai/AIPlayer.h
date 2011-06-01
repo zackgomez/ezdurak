@@ -25,6 +25,8 @@ public:
     virtual void gameStarting(GameAgent *agent);
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump);
     virtual Card attack(std::set<int> playableRanks = std::set<int>());
+    virtual Card deflect(const Card& attackingCard, ConstPlayerPtr newAttacker,
+            constPlayerPtr newDefender);
     virtual Card pileOn(std::set<int> playableRanks);
 
 protected:

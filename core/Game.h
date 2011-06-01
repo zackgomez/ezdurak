@@ -68,6 +68,7 @@ protected:
     unsigned attackerIdx_;
     unsigned defenderIdx_;
     unsigned tricksLeft_;
+    bool deflectable_; //< True when a defender can deflect
     std::vector<Card> playedCards_;
     std::set<int> playableRanks_;
     std::vector<PlayerPtr> refillOrder_;
@@ -97,6 +98,15 @@ private:
      * @return The played card or Card() if all attackers passed.
      */
     Card getAttackingCard(bool pileOn = false);
+    /**
+     * Gets a card from the current defender with the passed in attacking card.
+     * Fills in the necessary state variables and returns true/false signifying
+     * a successful defend or not.
+     * @param attC The card the defender must beat.
+     * @return True if the defender successfully beats the card, False if they
+     * give up.
+     */
+    bool getDefendingCard(const Card& attC);
     /** Moves to the next attacker, making sure to skip the current defender. */
     void nextAttacker();
     /**

@@ -37,6 +37,7 @@ public:
 
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump) = 0;
     virtual Card attack(std::set<int> playableRanks) = 0;
+    virtual Card deflect(const Card& attackingCard) = 0;
     virtual Card pileOn(std::set<int> playableRanks) = 0;
 
     virtual void addCards(const std::vector<Card>& cards);

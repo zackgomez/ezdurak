@@ -83,6 +83,16 @@ void CLIListener::piledOnCard(const Card &c)
     cout << c << " was piled on\n";
 }
 
+void CLIListener::deflectedCard(const Card &c, ConstPlayerPtr newAttacker,
+        ConstPlayerPtr newDefender)
+{
+    cout << defender_->getName() << " deflected with " << c << '\n';
+    attacker_ = newAttacker;
+    defender_ = newDefender;
+    cout << "Attacker: " << attacker_->getName() << "\nDefender: " <<
+        defender_->getName() << '\n';
+}
+
 void CLIListener::playedOut(const ConstPlayerPtr player)
 {
     cout << player->getName() << " has gone out!\n";

@@ -61,6 +61,7 @@ void Game::run()
         playedCards_.clear();
         playableRanks_.clear();
         refillOrder_.clear();
+        deflectable_ = true;
         // Broadcast start of a round
         for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
             (*lit_)->newRound(attacker_, defender_);
@@ -179,19 +180,35 @@ bool Game::doRound()
             == refillOrder_.end())
             refillOrder_.push_back(attacker_);
 
-        // Get the card from the defender
-        Card defC = defender_->defend(attC, trumpCard_.getSuit());
-        // If the defender gives up
-        if (!defC)
-            // Then they lose!
-            return false;
+        // Check for deflection
+        if (deflectable_)
+        {
+            Card deflC = defender_->deflect(attC);
+            if (deflC)
+            {
+                playedCards_.push_back(deflC);
+                playableRanks_.insert(deflC.getNum()); // Should do nothing
+                --tricksLeft_; // Takes away
+                nextDefender(true); // defender is now attacker
+                // Broadcast
+                for (lit_ = listeners_.begin(); lit_!=listeners_.end(); lit_++)
+                    (*lit_)->deflectedCard(deflC, attacker_, defender_);
+                // Get next attacking card
+                continue;
+            }
+            // Chose to not deflect, no more deflection allowed
+            deflectable_ = false;
+            // No deflection, current defender must defend all played cards
+            std::vector<Card> deflectedCards(playedCards_);
+            // Make the current defender defend 
+            for (unsigned i = 0; i < deflectedCards.size(); i++)
+                if (!getDefendingCard(deflectedCards[i]))
+                    return false;
+        }
 
-        // Record the card
-        playedCards_.push_back(defC);
-        playableRanks_.insert(defC.getNum());
-        // Broadcast the card
-        for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-            (*lit_)->defendingCard(defC);
+        // Defend
+        if (!getDefendingCard(attC))
+            return false;
     }
 
     // If there are no tricks left to play, then the defender has won!
@@ -225,6 +242,25 @@ Card Game::getAttackingCard(bool pileOn)
     } while (attacker_ != initialAttacker);
 
     return Card();
+}
+
+bool Game::getDefendingCard(const Card& attC)
+{
+    // Get the card from the defender
+    Card defC = defender_->defend(attC, trumpCard_.getSuit());
+    // If the defender gives up
+    if (!defC)
+        // Then they lose!
+        return false;
+
+    // Record the card
+    playedCards_.push_back(defC);
+    playableRanks_.insert(defC.getNum());
+    // Broadcast the card
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->defendingCard(defC);
+    // Successful defend
+    return true;
 }
 
 void Game::nextAttacker()

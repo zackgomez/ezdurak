@@ -45,6 +45,9 @@ void ScoreKeeper::attackingCard(const Card &)
 void ScoreKeeper::defendingCard(const Card &)
 { /* Empty */ }
 
+void ScoreKeeper::deflectedCard(const Card &, ConstPlayerPtr, ConstPlayerPtr)
+{ /* Empty */ }
+
 void ScoreKeeper::piledOnCard(const Card &)
 { /* Empty */ }
 

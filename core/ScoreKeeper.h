@@ -26,6 +26,7 @@ public:
     void endRound(bool);
     void attackingCard(const Card &);
     void defendingCard(const Card &);
+    void deflectedCard(const Card &, ConstPlayerPtr, ConstPlayerPtr);
     void piledOnCard(const Card &);
     void playedOut(ConstPlayerPtr);
     void givenCards(ConstPlayerPtr, int);
