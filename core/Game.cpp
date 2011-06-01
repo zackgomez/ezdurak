@@ -57,8 +57,8 @@ void Game::run()
     while (players_.size() > 1)
     {
         // Reset variables
-        tricksLeft_ = min(defender_->getNumCards(), HAND_SIZE);
-        playedCards_.clear();
+        attackingCards_.clear();
+        defendingCards_.clear();
         playableRanks_.clear();
         refillOrder_.clear();
         deflectable_ = true;
@@ -154,12 +154,50 @@ bool Game::validateHands(const vector<vector<Card> >& hands) const
 // a playable card, and that defC beats attC.
 bool Game::doRound()
 {
-    assert(tricksLeft_ > 0); // Sanity Check, defender must have at least 1 card
+    assert(defender_->getNumCards() > 0); // Sanity Check, defender must have at least 1 card
 
-    // Loop invariant: There are still attacking cards to be played
-    while (tricksLeft_ > 0)
+    // Loop invariant: The defender has more cards, there have been less than 6
+    // cards attacked with, and the defender has not defended all cards
+    while (defender_->getNumCards() > 0 && attackingCards_.size() < 6 &&
+            defendingCards_.size() <= attackingCards_.size())
     {
-        // Get the next attacking card from any attacker
+        // First, defend any undefended cards (perhaps from a deflection)
+        while (defendingCards_.size() < attackingCards_.size())
+        {
+            // Get next card to defend
+            Card attC = attackingCards_[defendingCards_.size()];
+            // Check for deflection
+            // TODO:2011-06-01:zack: check to make sure that player that would be deflected to
+            // has enough cards to defend
+            if (deflectable_)
+            {
+                Card deflC = defender_->deflect(attC);
+                if (deflC)
+                {
+                    attackingCards_.push_back(deflC);
+                    playableRanks_.insert(deflC.getNum()); // Should do nothing
+                    // And the defender is now on the refill order
+                    addToRefill(defender_);
+                    nextDefender(true); // defender is now attacker
+                    // Broadcast
+                    for (lit_ = listeners_.begin(); lit_!=listeners_.end(); lit_++)
+                        (*lit_)->deflectedCard(deflC, attacker_, defender_);
+                }
+                else
+                    // No deflection, no more deflection
+                    deflectable_ = false;
+            }
+            // No deflection, just have them defend
+            if (!deflectable_ && !getDefendingCard(attC))
+                return false;
+        }
+
+        // Check to see if all cards are defended
+        if (defender_->getNumCards() == 0 || defendingCards_.size() == 6)
+            // If so, successful defend
+            break;
+
+        // All cards are defended, get next attacking card
         Card attC = getAttackingCard();
         // Did they all pass?
         if (!attC)
@@ -167,48 +205,14 @@ bool Game::doRound()
             break;
         
         // Record the card
-        playedCards_.push_back(attC);
-        playableRanks_.insert(attC.getNum());
-        --tricksLeft_;
+        attackingCards_.push_back(attC);
+        playableRanks_.insert(attC.getNum()); // Should do nothing
         // Broadcast the card
         for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
             (*lit_)->attackingCard(attC);
 
-        // Now record the player in the refill order, if they're already there
-        // don't readd them
-        if (find(refillOrder_.begin(), refillOrder_.end(), attacker_)
-            == refillOrder_.end())
-            refillOrder_.push_back(attacker_);
-
-        // Check for deflection
-        if (deflectable_)
-        {
-            Card deflC = defender_->deflect(attC);
-            if (deflC)
-            {
-                playedCards_.push_back(deflC);
-                playableRanks_.insert(deflC.getNum()); // Should do nothing
-                --tricksLeft_; // Takes away
-                nextDefender(true); // defender is now attacker
-                // Broadcast
-                for (lit_ = listeners_.begin(); lit_!=listeners_.end(); lit_++)
-                    (*lit_)->deflectedCard(deflC, attacker_, defender_);
-                // Get next attacking card
-                continue;
-            }
-            // Chose to not deflect, no more deflection allowed
-            deflectable_ = false;
-            // No deflection, current defender must defend all played cards
-            std::vector<Card> deflectedCards(playedCards_);
-            // Make the current defender defend 
-            for (unsigned i = 0; i < deflectedCards.size(); i++)
-                if (!getDefendingCard(deflectedCards[i]))
-                    return false;
-        }
-
-        // Defend
-        if (!getDefendingCard(attC))
-            return false;
+        // Now record the player in the refill order
+        addToRefill(attacker_);
     }
 
     // If there are no tricks left to play, then the defender has won!
@@ -254,7 +258,7 @@ bool Game::getDefendingCard(const Card& attC)
         return false;
 
     // Record the card
-    playedCards_.push_back(defC);
+    defendingCards_.push_back(defC);
     playableRanks_.insert(defC.getNum());
     // Broadcast the card
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
@@ -274,18 +278,29 @@ void Game::nextAttacker()
     } while (attacker_ == defender_);
 }
 
+void Game::addToRefill(PlayerPtr p)
+{
+    // Only add if they are not already present
+    if (find(refillOrder_.begin(), refillOrder_.end(), p)
+            == refillOrder_.end())
+        refillOrder_.push_back(p);
+}
+
 void Game::pileOn()
 {
-    // loop invariant: there are cards left to play
-    while (tricksLeft_ > 0)
+    // This is the maximum number of cards that can be played against this
+    // defender.  I.E. the max size of the attackingCards_ array
+    unsigned maxCards = min((long unsigned) 6,
+            defender_->getNumCards() + defendingCards_.size());
+    // Loop invariant: cards can be piledOn
+    while (attackingCards_.size() < maxCards)
     {
         Card attC = getAttackingCard(true);
         // Did the play a card?
         if (attC)
         {
             // Record it
-            playedCards_.push_back(attC);
-            --tricksLeft_;
+            attackingCards_.push_back(attC);
             // Now record the player in the refill order, if they're already there
             // don't readd them
             if (find(refillOrder_.begin(), refillOrder_.end(), attacker_)
@@ -301,11 +316,14 @@ void Game::pileOn()
             break;
     }
 
+    std::vector<Card> playedCards(attackingCards_);
+    playedCards.insert(playedCards.end(),
+            defendingCards_.begin(), defendingCards_.end());
     // Finally, the defender has to take all of the played cards.
-    defender_->addCards(playedCards_);
+    defender_->addCards(playedCards);
     // Broadcast the event
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-        (*lit_)->givenCards(defender_, playedCards_);
+        (*lit_)->givenCards(defender_, playedCards);
 }
 
 void Game::refill()
@@ -394,17 +412,18 @@ Card Game::getTrumpCard() const
     return trumpCard_;
 }
 
-int Game::getTricksLeft() const
+unsigned Game::getAttacksLeft() const
 {
-    return tricksLeft_;
+    return max(6ul, defender_->getNumCards() + defendingCards_.size()) -
+        attackingCards_.size();
 }
 
-int Game::getDeckSize() const
+unsigned Game::getDeckSize() const
 { 
     return deck_.getNumCards();
 }
 
-int Game::getDiscardSize() const
+unsigned Game::getDiscardSize() const
 {
     int aliveCards = deck_.getNumCards();
     for (unsigned i = 0; i < players_.size(); i++)
@@ -430,7 +449,12 @@ const vector<PlayerPtr> Game::getPlayers() const
     return players_;
 }
 
-const vector<Card>& Game::getPlayedCards() const
+const vector<Card>& Game::getAttackingCards() const
 {
-    return playedCards_;
+    return attackingCards_;
+}
+
+const vector<Card>& Game::getDefendingCards() const
+{
+    return defendingCards_;
 }

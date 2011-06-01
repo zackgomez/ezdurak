@@ -66,8 +66,8 @@ public:
     virtual void run();
 
     // Functions overriden from GameAgent interface
-    virtual int getDeckSize() const;
-    virtual int getDiscardSize() const;
+    virtual unsigned getDeckSize() const;
+    virtual unsigned getDiscardSize() const;
 
     // Types
     struct Message

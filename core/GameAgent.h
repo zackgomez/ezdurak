@@ -29,18 +29,18 @@ public:
     /**
      * Returns the number of cards left in the deck.
      */
-    virtual int getDeckSize() const = 0;
+    virtual unsigned getDeckSize() const = 0;
 
     /**
      * Returns the number of cards that are not in the deck or in a player's 
      * hand.  I.e. "Dead cards".
      */
-    virtual int getDiscardSize() const = 0;
+    virtual unsigned getDiscardSize() const = 0;
 
     /**
-     * Returns the number of tricks left to play on the current defender.
+     * Returns the number of attacking cards left to play in this round.
      */
-    virtual int getTricksLeft() const = 0;
+    virtual unsigned getAttacksLeft() const = 0;
 
     /** 
      * Returns the current attacker.
@@ -64,6 +64,12 @@ public:
      * This is reset each round sometime after the defenderWon/Lost message
      * is sent.
      */
-    virtual const std::vector<Card>& getPlayedCards() const = 0;
+    virtual const std::vector<Card>& getAttackingCards() const = 0;
+
+    /**
+     * Returns the cards used to defend, in order of defending.  It is updated
+     * at the same time as the getAttackingCards method.
+     */
+    virtual const std::vector<Card>& getDefendingCards() const = 0;
 };
 

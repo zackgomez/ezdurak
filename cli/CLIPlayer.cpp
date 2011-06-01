@@ -127,7 +127,7 @@ Card CLIPlayer::pileOn(std::set<int> playableRanks)
     return attack(playableRanks);
 }
 
-Card CLIPlayer::deflect(const Card& attC, ConstPlayerPtr newA, ConstPlayerPtr newD)
+Card CLIPlayer::deflect(const Card& attC)
 {
     sortHand();
     for (;;)

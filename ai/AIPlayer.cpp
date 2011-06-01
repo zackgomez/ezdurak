@@ -62,6 +62,29 @@ Card AIPlayer::attack(set<int> playableRanks)
     return attC;
 }
 
+Card AIPlayer::deflect(const Card &attC)
+{
+    // Try to deflect always, don't use trump
+    set<int> playableRank;
+    playableRank.insert(attC.getNum());
+
+    // Get cards of that rank, and sort them
+    vector<Card> playable = playableCards(playableRank);
+    // If we have no cards, can't pile on
+    if (playable.size() == 0)
+        return Card();
+    orderCards(playable);
+
+    // Don't want to pass trump
+    Card deflC = playable[0];
+    if (deflC.getSuit() == agent_->getTrumpCard().getSuit())
+        return Card();
+
+    // Sweet, let's deflect
+    removeCard(deflC);
+    return deflC;
+}
+
 Card AIPlayer::pileOn(set<int> playableRanks)
 {
     vector<Card> playable = playableCards(playableRanks);

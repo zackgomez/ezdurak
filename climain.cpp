@@ -23,7 +23,9 @@ int main(int argc, char** argv)
     {
         Game game;
 
-        for (int i = 0; i < numPlayers; i++)
+        PlayerPtr player(new CLIPlayer("HumanPlayer"));
+        game.addPlayer(player);
+        for (int i = 1; i < numPlayers; i++)
         {
             std::stringstream ss;
             ss << "AIPlayer" << i;
@@ -34,7 +36,7 @@ int main(int argc, char** argv)
         }
 
         CLIListener listener;
-	game.addListener(&sk);
+        game.addListener(&sk);
         game.addListener(&listener);
 
         game.run();

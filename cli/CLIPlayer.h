@@ -15,8 +15,7 @@ public:
     virtual Card defend(const Card& attackingCard, Card::cardsuit trump);
     virtual Card attack(std::set<int> playableRanks = std::set<int>());
     virtual Card pileOn(std::set<int> playableRanks);
-    virtual Card deflect(const Card& attackingCard, ConstPlayerPtr newAttacker,
-            ConstPlayerPtr newDefender);
+    virtual Card deflect(const Card& attackingCard);
 
     virtual void addCards(const std::vector<Card>& cards);
 

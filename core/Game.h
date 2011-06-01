@@ -48,13 +48,14 @@ public:
     void addListener(GameListener* listener);
     void removeListener(GameListener* listener);
     Card getTrumpCard() const;
-    int getTricksLeft() const;
-    int getDeckSize() const;
-    int getDiscardSize() const;
+    unsigned getAttacksLeft() const;
+    unsigned getDeckSize() const;
+    unsigned getDiscardSize() const;
     ConstPlayerPtr getAttacker() const;
     ConstPlayerPtr getDefender() const;
     const std::vector<PlayerPtr> getPlayers() const;
-    const std::vector<Card>& getPlayedCards() const;
+    const std::vector<Card>& getAttackingCards() const;
+    const std::vector<Card>& getDefendingCards() const;
 
 protected:
     void setPlayers();
@@ -67,9 +68,9 @@ protected:
     PlayerPtr defender_;
     unsigned attackerIdx_;
     unsigned defenderIdx_;
-    unsigned tricksLeft_;
     bool deflectable_; //< True when a defender can deflect
-    std::vector<Card> playedCards_;
+    std::vector<Card> attackingCards_;
+    std::vector<Card> defendingCards_;
     std::set<int> playableRanks_;
     std::vector<PlayerPtr> refillOrder_;
 
@@ -109,6 +110,10 @@ private:
     bool getDefendingCard(const Card& attC);
     /** Moves to the next attacker, making sure to skip the current defender. */
     void nextAttacker();
+    /** Adds the player to the refill order at the end if they are not already
+     * there.
+     */
+    void addToRefill(PlayerPtr p);
     /**
      * Continues to put cards on playableCards until the attackers all pass or
      * the maximum number of tricks is reached.  It then gives all of the cards
