@@ -214,6 +214,53 @@ Card NetworkPlayer::pileOn(std::set<int> playableRanks)
     }
 }
 
+Card NetworkPlayer::deflect(const Card &attC)
+{
+    Card deflCard;
+    for (;;)
+    {
+        // Send MSG_DEFLECT
+        string message = createMessage(MSG_DEFLECT, "");
+        clisock_->send(message);
+        logger_->debug() << "sent MSG_DEFLECT\n";
+
+
+        // Wait for MSG_PLAYED
+        // Use a 3 byte character array as a header.
+        char header[3];
+        // Then read in the header from the socket, the socket is from NetworkListener
+        int bytes_received = clisock_->recv(header, 3); // buffer, length
+        // Make sure that bytes_recieved is 3
+        assert (bytes_received == 3);
+        // Make sure that size is 2 (the size of a serialized card)
+        int size = header[0] + header[1] * 256;
+        assert(size == 2);
+        // Make sure that type is MSG_PLAYED
+        char type = header[2];
+        assert(type == MSG_PLAYED);
+        // Read the rest of the data
+        char payload[2];
+        bytes_received = clisock_->recv(payload, 2);
+        // Check bytes_received = 2
+        assert(bytes_received == 2);
+        string payloadstr(payload, 2);
+
+        // Make sure the card is valid, if not, start from the top
+        deflCard = readCard(payloadstr);
+        if (deflCard.getNum() == attC.getNum())
+        {
+            assert (hand_.find(deflCard) != hand_.end());
+            // Remove the card from the hand, return it
+            hand_.erase(hand_.find(deflCard));
+            return deflCard;
+        }
+        // Also return it if it's a Card()
+        if (!deflCard)
+            return deflCard;
+        logger_->error() << "defend: got a bad card\n";
+    }
+}
+
 void NetworkPlayer::addCards(const std::vector<Card> &cards)
 {
     // Add Cards

@@ -239,6 +239,31 @@ void InGameState::defendingCard(const Card &c)
                                                 25, x0, y0, x1, y1));
 }
 
+void InGameState::deflectedCard(const Card &c, ConstPlayerPtr newAttacker,
+        ConstPlayerPtr newDefender)
+{
+    Lock l(guiLock_);
+    assert(players_.size() == playersDisplay_.size());
+
+    // Deflection animation
+    float x0, y0, angle, x1, y1;
+    getPlayerPosition(playerPositionMap_[defender_], x0, y0, angle);
+    playedCards_.getNextCardLocation(true, x1, y1); // As attacker
+    animations_.push_back(MoveAnimation::create(c, playerDisplayMap_[defender_]->getCardHolder(), playedCards_.getAttackingHolder(),
+                                                25, x0, y0, x1, y1));
+
+    // Update attacker and defender
+    animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[attacker_], GUIPlayerView::NONE,
+                                                        playerDisplayMap_[defender_], GUIPlayerView::NONE));
+    animations_.push_back(StatusChangeAnimation::create(playerDisplayMap_[newAttacker], GUIPlayerView::ATTACKER,
+                                                        playerDisplayMap_[newDefender], GUIPlayerView::DEFENDER));
+    animations_.push_back(DelayAnimation::create(20));
+    attacker_ = newAttacker;
+    defender_ = newDefender;
+
+    // TODO:2011-06-01:zack: Some sort of other animation signifying deflection
+}
+
 void InGameState::piledOnCard(const Card &c)
 {
     // Lock

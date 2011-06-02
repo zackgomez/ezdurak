@@ -31,6 +31,7 @@ public:
     virtual Card defend(const Card &attC, Card::cardsuit trump);
     virtual Card attack(std::set<int> playableRanks);
     virtual Card pileOn(std::set<int> playableRanks);
+    virtual Card deflect(const Card &attC);
     virtual void addCards(const std::vector<Card>& cards);
     virtual unsigned getNumCards() const;
     virtual std::string getName() const;

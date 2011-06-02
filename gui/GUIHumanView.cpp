@@ -10,7 +10,8 @@ GUIHumanView::GUIHumanView(const GUIPlayer *player) :
     player_(player),
     queue_(player_->getQueue()),
     passString_(GUIString::create("PASS")),
-    giveUpString_(GUIString::create("GIVE UP"))
+    giveUpString_(GUIString::create("GIVE UP")),
+    dontDeflectString_(GUIString::create("DONT DEFLECT"))
 {
 }
 
@@ -71,16 +72,21 @@ void GUIHumanView::drawCards(bool animating)
         glTranslatef(0.2*GUICard::CARDX, 0, 0);
     }
 
-    if ((status_ == ATTACKER || status_ == DEFENDER) && !animating)
+    GUIPlayer::Action action = player_->getAction();
+    if (action != GUIPlayer::NONE && !animating)
     {
         glTranslatef(GUICard::CARDX, 0, 0);
         glColor3f(0,0,0);
         GUICard::drawCardBack();
         glColor3f(1,1,1);
-        if (status_ == ATTACKER)
+        if (action == GUIPlayer::ATTACK)
             passString_->draw();
-        else
+        else if (action == GUIPlayer::DEFEND)
             giveUpString_->draw();
+        else if (action == GUIPlayer::DEFLECT)
+            dontDeflectString_->draw();
+        else
+            assert(false && "Unknown action");
     }
 
     glPopMatrix();

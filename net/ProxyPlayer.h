@@ -47,6 +47,12 @@ public:
         return Card();
     }
 
+    virtual Card deflect(const Card& attC)
+    {
+        assert(false && "This method not implemented");
+        return Card();
+    }
+
     virtual void addCards(const std::vector<Card> &cards)
     {
         numCards_ += cards.size();

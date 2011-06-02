@@ -43,6 +43,8 @@ public:
     void attackerPassed(ConstPlayerPtr);
     void attackingCard(const Card &c);
     void defendingCard(const Card &c);
+    void deflectedCard(const Card &c, ConstPlayerPtr newAttacker,
+            ConstPlayerPtr newDefender);
     void piledOnCard(const Card &c);
     void playedOut(ConstPlayerPtr player);
     void givenCards(ConstPlayerPtr player, int numCards);

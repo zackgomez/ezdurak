@@ -22,12 +22,14 @@ enum network_message_t
     MSG_PLAYEDOUT      = 18,
     MSG_GIVENCARDSN    = 19,
     MSG_GIVENCARDSCS   = 20,
+    MSG_DEFLECTEDCARD  = 21,
     // Player Messages
     MSG_ATTACK   = 100,
     MSG_DEFEND   = 101,
     MSG_PILEON   = 102,
     MSG_PLAYED   = 103,
     MSG_ADDCARDS = 104,
+    MSG_DEFLECT  = 105,
 };
 
 /** 
@@ -90,7 +92,7 @@ std::string serializeBool(bool b);
  * 
  * @return The card
  */
-Card              readCard(const std::string& in);
+Card readCard(const std::string& in);
 /** 
  * Deserializes a list of cards
  * 
@@ -107,7 +109,7 @@ std::vector<Card> readCards(const std::string& in);
  * 
  * @return The player
  */
-PlayerPtr         readPlayer(const std::string& in, const std::vector<PlayerPtr>& ps);
+PlayerPtr readPlayer(const std::string& in, const std::vector<PlayerPtr>& ps);
 /** 
  * Deserializes a string
  * 
@@ -115,7 +117,7 @@ PlayerPtr         readPlayer(const std::string& in, const std::vector<PlayerPtr>
  * 
  * @return  The string
  */
-std::string       readString(const std::string& in);
+std::string readString(const std::string& in);
 /** 
  * Deserializes a boolean
  * 
@@ -123,5 +125,5 @@ std::string       readString(const std::string& in);
  * 
  * @return The boolean
  */
-bool              readBool(const std::string& in);
+bool readBool(const std::string& in);
 

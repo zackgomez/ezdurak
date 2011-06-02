@@ -166,9 +166,14 @@ bool Game::doRound()
         {
             // Get next card to defend
             Card attC = attackingCards_[defendingCards_.size()];
+
+            // If the player that would be deflected to doesn't have enough
+            // cards to defend the undefended cards, no deflection allowed.
+            unsigned nextPlayerIdx = (defenderIdx_ + 1) % players_.size();
+            PlayerPtr nextPlayer = players_[nextPlayerIdx];
+            if (nextPlayer->getNumCards() < attackingCards_.size())
+                deflectable_ = false;
             // Check for deflection
-            // TODO:2011-06-01:zack: check to make sure that player that would be deflected to
-            // has enough cards to defend
             if (deflectable_)
             {
                 Card deflC = defender_->deflect(attC);

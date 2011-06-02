@@ -33,4 +33,5 @@ private:
 
     GUIStringPtr passString_;
     GUIStringPtr giveUpString_;
+    GUIStringPtr dontDeflectString_;
 };

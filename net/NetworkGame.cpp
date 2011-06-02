@@ -164,6 +164,12 @@ void NetworkGame::run()
             logger_->debug() << "Got MSG_DEFENDINGCARD\n";
             defendingCardMessage(payload);
             break;
+            /*
+        case MSG_DEFLECTINGCARD:
+            logger_->debug() << "Got MSG_DEFLECTINGCARD\n";
+            defendingCardMessage(payload);
+            break;
+            */
         case MSG_PILEDONCARD:
             logger_->debug() << "Got MSG_PILEDONCARD\n";
             piledOnCardMessage(payload);
@@ -277,9 +283,9 @@ void NetworkGame::newRoundMessage(const std::string &payload)
     string s = ""; s.push_back(payload[1]);
     defender_ = readPlayer(s, players_);
     // Reset variables
-    playedCards_.clear();
+    attackingCards_.clear();
+    defendingCards_.clear();
     playableRanks_.clear();
-    tricksLeft_ = std::min(defender_->getNumCards(), Game::HAND_SIZE);
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->newRound(attacker_, defender_);
@@ -291,7 +297,10 @@ void NetworkGame::endRoundMessage(const std::string &payload)
     bool successfulDefend = readBool(payload);
     // On successful defend, add to discard size
     if (successfulDefend)
-        discardSize_ += playedCards_.size();
+    {
+        discardSize_ += attackingCards_.size();
+        discardSize_ += defendingCards_.size();
+    }
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->endRound(successfulDefend);
@@ -319,10 +328,8 @@ void NetworkGame::attackingCardMessage(const std::string &payload)
         pp->removeCards(1);
     }
     // Add to played cards & playableRanks
-    playedCards_.push_back(c);
+    attackingCards_.push_back(c);
     playableRanks_.insert(c.getNum());
-    // update tricksLeft
-    tricksLeft_--;
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->attackingCard(c);
@@ -342,7 +349,7 @@ void NetworkGame::defendingCardMessage(const std::string &payload)
         pp->removeCards(1);
     }
     // Add to played cards & playableRanks
-    playedCards_.push_back(c);
+    defendingCards_.push_back(c);
     playableRanks_.insert(c.getNum());
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
@@ -361,10 +368,8 @@ void NetworkGame::piledOnCardMessage(const std::string &payload)
         pp->removeCards(1);
     }
     // Add to played cards & playableRanks
-    playedCards_.push_back(c);
+    attackingCards_.push_back(c);
     playableRanks_.insert(c.getNum());
-    // update tricksLeft
-    tricksLeft_--;
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->piledOnCard(c);
@@ -383,7 +388,7 @@ void NetworkGame::givenCardsNMessage(const std::string &payload)
 {
     assert(payload.size() == 2);
     PlayerPtr p = readPlayer(payload, players_);
-    int n = payload[1];
+    unsigned char n = payload[1];
     // Remove cards n from the deck
     assert(deckSize_ >= n);
     deckSize_ -= n;
@@ -435,7 +440,7 @@ void NetworkGame::defendMessage(const std::string &payload)
     {
         assert(localPlayer_->getNumCards() > 0);
         // Get the card from the player and send it across the wire
-        Card c = localPlayer_->defend(playedCards_.back(), trumpCard_.getSuit());
+        Card c = localPlayer_->defend(defendingCards_.back(), trumpCard_.getSuit());
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
     }
     else
@@ -494,12 +499,12 @@ bool NetworkGame::connectTo(const std::string &host, const std::string &port)
     return true;
 }
 
-int NetworkGame::getDeckSize() const
+unsigned NetworkGame::getDeckSize() const
 {
     return deckSize_;
 }
 
-int NetworkGame::getDiscardSize() const
+unsigned NetworkGame::getDiscardSize() const
 {
     return discardSize_;
 }

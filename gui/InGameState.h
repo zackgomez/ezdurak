@@ -56,6 +56,8 @@ public:
     virtual void attackingCard(const Card &c);
     virtual void defendingCard(const Card &c);
     virtual void piledOnCard(const Card &c);
+    virtual void deflectedCard(const Card &c, ConstPlayerPtr newAttacker, 
+            ConstPlayerPtr newDefender);
     virtual void playedOut(ConstPlayerPtr player);
     virtual void givenCards(ConstPlayerPtr player, int numCard);
     virtual void givenCards(ConstPlayerPtr player, const std::vector<Card>& cards);

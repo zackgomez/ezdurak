@@ -132,6 +132,17 @@ void NetworkListener::defendingCard(const Card &c)
     clisock_->send(message);
 }
 
+void NetworkListener::deflectedCard(const Card &c, ConstPlayerPtr newAttacker,
+        ConstPlayerPtr newDefender)
+{
+    string payload = serializeCard(c);
+    payload += serializePlayer(newAttacker, players_);
+    payload += serializePlayer(newDefender, players_);
+    string message = createMessage(MSG_DEFLECTEDCARD, payload);
+    logger_->debug() << "sending MSG_DEFLECTEDCARD\n";
+    clisock_->send(message);
+}
+
 void NetworkListener::piledOnCard(const Card &c)
 {
     string payload = serializeCard(c);

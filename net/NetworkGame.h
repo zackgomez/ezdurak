@@ -52,6 +52,7 @@ public:
     void attackerPassedMessage(const std::string &payload);
     void attackingCardMessage(const std::string &payload);
     void defendingCardMessage(const std::string &payload);
+    void deflectingCardMessage(const std::string &payload);
     void piledOnCardMessage(const std::string &payload);
     void playedOutMessage(const std::string &payload);
     void givenCardsNMessage(const std::string &payload);
@@ -86,8 +87,8 @@ private:
     SynchronizedQueue<Message> queue_;
 
     PlayerPtr localPlayer_;
-    int deckSize_;
-    int discardSize_;
+    unsigned deckSize_;
+    unsigned discardSize_;
 
     LoggerPtr logger_;
 };

@@ -68,6 +68,10 @@ Card CLIPlayer::defend(const Card& attackingCard, Card::cardsuit trump)
 
 Card CLIPlayer::attack(set<int> playableRanks)
 {
+    // Auto pass if they have no cards
+    if (hand_.size() == 0)
+        return Card();
+
     sortHand();
     for (;;)
     {
