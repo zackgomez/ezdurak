@@ -60,6 +60,7 @@ public:
     void attackMessage(const std::string &payload);
     void defendMessage(const std::string &payload);
     void pileOnMessage(const std::string &payload);
+    void deflectMessage(const std::string &payload);
     void addCardsMessage(const std::string &payload);
 
     // Functions overriden from Game interface

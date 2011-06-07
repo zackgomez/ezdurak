@@ -164,12 +164,10 @@ void NetworkGame::run()
             logger_->debug() << "Got MSG_DEFENDINGCARD\n";
             defendingCardMessage(payload);
             break;
-            /*
-        case MSG_DEFLECTINGCARD:
+        case MSG_DEFLECTEDCARD:
             logger_->debug() << "Got MSG_DEFLECTINGCARD\n";
-            defendingCardMessage(payload);
+            deflectingCardMessage(payload);
             break;
-            */
         case MSG_PILEDONCARD:
             logger_->debug() << "Got MSG_PILEDONCARD\n";
             piledOnCardMessage(payload);
@@ -197,6 +195,10 @@ void NetworkGame::run()
         case MSG_PILEON:
             logger_->debug() << "Got MSG_PILEON\n";
             pileOnMessage(payload);
+            break;
+        case MSG_DEFLECT:
+            logger_->debug() << "Got MSG_DEFLECT\n";
+            deflectMessage(payload);
             break;
         case MSG_PLAYED:
             logger_->debug() << "Got MSG_PLAYED\n";
@@ -337,7 +339,6 @@ void NetworkGame::attackingCardMessage(const std::string &payload)
 
 void NetworkGame::defendingCardMessage(const std::string &payload)
 {
-    assert(payload.size() == 2);
     // Broadcast
     assert(payload.size() == 2);
     Card c = readCard(payload);
@@ -354,6 +355,37 @@ void NetworkGame::defendingCardMessage(const std::string &payload)
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
         (*lit_)->defendingCard(c);
+}
+
+void NetworkGame::deflectingCardMessage(const std::string &payload)
+{
+    // parse message
+    assert(payload.size() == 4);
+    Card c = readCard(payload);
+    string s = ""; s.push_back(payload[2]);
+    PlayerPtr newAttacker = readPlayer(s, players_);
+    s = ""; s.push_back(payload[3]);
+    PlayerPtr newDefender = readPlayer(s, players_);
+
+    // Remove card from atacker_, but only if it's a proxy, otherwise
+    // it has already been removed
+    if (attacker_ != localPlayer_)
+    {
+        ProxyPlayer *pp = (ProxyPlayer *) attacker_.get();
+        pp->removeCards(1);
+    }
+
+    // Add to played cards & playableRanks
+    attackingCards_.push_back(c);
+    playableRanks_.insert(c.getNum());
+
+    // Broadcast
+    for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
+        (*lit_)->deflectedCard(c, newAttacker, newDefender);
+
+    // Update variables
+    attacker_ = newAttacker;
+    defender_ = newDefender;
 }
 
 void NetworkGame::piledOnCardMessage(const std::string &payload)
@@ -440,7 +472,7 @@ void NetworkGame::defendMessage(const std::string &payload)
     {
         assert(localPlayer_->getNumCards() > 0);
         // Get the card from the player and send it across the wire
-        Card c = localPlayer_->defend(defendingCards_.back(), trumpCard_.getSuit());
+        Card c = localPlayer_->defend(attackingCards_.back(), trumpCard_.getSuit());
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
     }
     else
@@ -459,6 +491,21 @@ void NetworkGame::pileOnMessage(const std::string &payload)
     }
     else
         logger_->error() << "got pileOn message with no local player\n";
+}
+
+void NetworkGame::deflectMessage(const std::string &payload)
+{
+    assert(payload.size() == 0);
+    assert(attackingCards_.size() > 0);
+    if (localPlayer_.get())
+    {
+        assert(localPlayer_->getNumCards() > 0);
+        // Get the card from the player and send it across the wire
+        Card c = localPlayer_->deflect(attackingCards_.back());
+        sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
+    }
+    else
+        logger_->error() << "got deflect message with no local player\n";
 }
 
 void NetworkGame::addCardsMessage(const std::string &payload)
