@@ -1,4 +1,6 @@
 NETWORKING
 ----------
  * Seems to be a bug in refill after a deflection has occured.
-   Tested with clientmain
+   Tested with clientmain - Bug occured
+   Tested with ezdurak-gui and did not see bug.
+
