@@ -471,8 +471,11 @@ void NetworkGame::defendMessage(const std::string &payload)
     if (localPlayer_.get())
     {
         assert(localPlayer_->getNumCards() > 0);
+        // Attacking card is first undefended card
+        assert(attackingCards_.size() > defendingCards_.size());
+        Card attC = attackingCards_[defendingCards_.size()];
         // Get the card from the player and send it across the wire
-        Card c = localPlayer_->defend(attackingCards_.back(), trumpCard_.getSuit());
+        Card c = localPlayer_->defend(attC, trumpCard_.getSuit());
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
     }
     else
@@ -500,8 +503,11 @@ void NetworkGame::deflectMessage(const std::string &payload)
     if (localPlayer_.get())
     {
         assert(localPlayer_->getNumCards() > 0);
+        // Attacking card is first undefended card
+        assert(attackingCards_.size() > defendingCards_.size());
+        Card attC = attackingCards_[defendingCards_.size()];
         // Get the card from the player and send it across the wire
-        Card c = localPlayer_->deflect(attackingCards_.back());
+        Card c = localPlayer_->deflect(attC);
         sock_->send(createMessage(MSG_PLAYED, serializeCard(c)));
     }
     else

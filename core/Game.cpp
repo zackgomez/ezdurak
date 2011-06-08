@@ -158,7 +158,7 @@ bool Game::doRound()
 
     // Loop invariant: The defender has more cards, there have been less than 6
     // cards attacked with, and the defender has not defended all cards
-    while (defender_->getNumCards() > 0 && attackingCards_.size() < 6 &&
+    while ((defender_->getNumCards() > 0 && attackingCards_.size() < 6) ||
             defendingCards_.size() <= attackingCards_.size())
     {
         // First, defend any undefended cards (perhaps from a deflection)
@@ -336,8 +336,8 @@ void Game::refill()
     for (unsigned i = 0; i < refillOrder_.size(); i++)
     {
         // You refill to HAND_SIZE, but only if there are enough cards.
-        int neededCards = min(HAND_SIZE - refillOrder_[i]->getNumCards(),
-                              deck_.getNumCards());
+        int neededCards = min((int)HAND_SIZE - (int)refillOrder_[i]->getNumCards(),
+                              (int)deck_.getNumCards());
         if (neededCards > 0)
         {
             vector<Card> refillCards = deck_.deal(neededCards);
