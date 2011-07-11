@@ -171,7 +171,7 @@ bool Game::doRound()
             // cards to defend the undefended cards, no deflection allowed.
             unsigned nextPlayerIdx = (defenderIdx_ + 1) % players_.size();
             PlayerPtr nextPlayer = players_[nextPlayerIdx];
-            if (nextPlayer->getNumCards() < attackingCards_.size())
+            if (nextPlayer->getNumCards() < attackingCards_.size()+1)
                 deflectable_ = false;
             // Check for deflection
             if (deflectable_)
