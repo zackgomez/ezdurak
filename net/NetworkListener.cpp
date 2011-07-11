@@ -87,10 +87,11 @@ void NetworkListener::gameStart(GameAgent *agent)
     clisock_->send(message);
 }
 
-void NetworkListener::gameOver(ConstPlayerPtr biscuit)
+void NetworkListener::gameOver(ConstPlayerPtr firstOut, ConstPlayerPtr biscuit)
 {
-    string serialBiscuit = serializePlayer(biscuit, players_);
-    string message = createMessage(MSG_GAMEOVER, serialBiscuit);
+    string serialGameOver = serializePlayer(firstOut, players_);
+    serialGameOver += serializePlayer(biscuit, players_);
+    string message = createMessage(MSG_GAMEOVER, serialGameOver);
     logger_->debug() << "sending MSG_GAMEOVER\n";
     clisock_->send(message);
 

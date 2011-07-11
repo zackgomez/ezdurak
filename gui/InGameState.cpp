@@ -89,7 +89,7 @@ bool InGameState::needsTransition() const
 GUIStatePtr InGameState::nextState()
 {
     if (gameOver_)
-        next_ = GameOverState::create(biscuit_);
+        next_ = GameOverState::create(firstOut_, biscuit_);
     return next_;
 }
 
@@ -152,13 +152,14 @@ void InGameState::gameStart(GameAgent *agent)
     syncCond_.wait(guiLock_);
 }
 
-void InGameState::gameOver(ConstPlayerPtr biscuit)
+void InGameState::gameOver(ConstPlayerPtr firstOut, ConstPlayerPtr biscuit)
 {
     Lock l(guiLock_);
     assert(players_.size() == playersDisplay_.size());
 
     attacker_ = PlayerPtr();
     defender_ = PlayerPtr();
+    firstOut_ = firstOut;
     biscuit_ = biscuit;
     //animations_.push_back(DelayAnimation::create(30));
     animations_.push_back(SetAnimation::create(gameOver_));

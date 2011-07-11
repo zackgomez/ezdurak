@@ -72,6 +72,7 @@ protected:
     std::set<int> playableRanks_;
     std::vector<PlayerPtr> refillOrder_;
 
+    ConstPlayerPtr winningPlayer_;
     std::set<GameListener*>::iterator lit_;
     std::set<GameListener*> listeners_;
 
