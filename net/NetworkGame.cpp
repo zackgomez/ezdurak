@@ -262,10 +262,11 @@ void NetworkGame::gameStartingMessage(const std::string &payload)
 void NetworkGame::gameOverMessage(const std::string &payload)
 {
     assert(payload.size() == 1);
-   ConstPlayerPtr biscuit = readPlayer(payload, players_);
+    ConstPlayerPtr firstOut = readPlayer(payload, players_);
+    ConstPlayerPtr biscuit = readPlayer(payload, players_);
     // Broadcast
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-        (*lit_)->gameOver(biscuit);
+        (*lit_)->gameOver(firstOut, biscuit);
 }
 
 void NetworkGame::newRoundMessage(const std::string &payload)

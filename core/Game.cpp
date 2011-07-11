@@ -88,9 +88,9 @@ void Game::run()
     // If there is a player left, they're the biscuit
     if (players_.size() == 1)
         biscuit = ConstPlayerPtr(players_[0]);
-    // Broadcast the game over with the loser or NULL
+    // Broadcast the game over with the loser or NULL and the first player out
     for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
-        (*lit_)->gameOver(biscuit);
+        (*lit_)->gameOver(winningPlayer_, biscuit);
 }
 
 void Game::deal()
@@ -312,11 +312,12 @@ void Game::removeFinishedPlayers()
             // Broadcast the player
             for (lit_ = listeners_.begin(); lit_ != listeners_.end(); lit_++)
                 (*lit_)->playedOut(goingOut);
+            // Check to see if it was the first player out
+            if (!winningPlayer_)
+                winningPlayer_ = goingOut;
         }
         else
-        {
             i++;
-        }
     }
 }
 

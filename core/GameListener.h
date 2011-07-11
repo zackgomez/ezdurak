@@ -25,9 +25,10 @@ public:
 
     /**
      * Called when the game is over.
+     * @param firstOut The first player out - but not the winner.
      * @param biscuit The losing "biscuit" player or NULL if it was a tie.
      */
-    virtual void gameOver(ConstPlayerPtr biscuit) = 0;
+    virtual void gameOver(ConstPlayerPtr firstOut, ConstPlayerPtr biscuit) = 0;
 
     /**
      * Called at the start of a new round.  I.e. when there is a new defender.
