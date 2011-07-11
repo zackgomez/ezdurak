@@ -295,7 +295,7 @@ void Game::pileOn()
 {
     // This is the maximum number of cards that can be played against this
     // defender.  I.E. the max size of the attackingCards_ array
-    unsigned maxCards = min((long unsigned) 6,
+    unsigned maxCards = min((unsigned) 6,
             defender_->getNumCards() + defendingCards_.size());
     // Loop invariant: cards can be piledOn
     while (attackingCards_.size() < maxCards)
@@ -419,7 +419,7 @@ Card Game::getTrumpCard() const
 
 unsigned Game::getAttacksLeft() const
 {
-    return max(6ul, defender_->getNumCards() + defendingCards_.size()) -
+    return max(6u, defender_->getNumCards() + defendingCards_.size()) -
         attackingCards_.size();
 }
 
