@@ -49,7 +49,7 @@ public:
 
     // Functions inherited from GameListener Interface
     virtual void gameStart(GameAgent *);
-    virtual void gameOver(ConstPlayerPtr biscuit);
+    virtual void gameOver(ConstPlayerPtr firstOut, ConstPlayerPtr biscuit);
     virtual void newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender);
     virtual void attackerPassed(ConstPlayerPtr newAttacker);
     virtual void endRound(bool successfulDefend);
@@ -93,7 +93,7 @@ private:
     GUIPlayerPtr guiPlayer_;
     std::vector<PlayerPtr> players_;
     ConstPlayerPtr attacker_, defender_;
-    ConstPlayerPtr biscuit_;
+    ConstPlayerPtr biscuit_, firstOut_;
     bool gameOver_;
 
     // Player display members

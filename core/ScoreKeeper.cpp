@@ -22,7 +22,7 @@ void ScoreKeeper::print()
 void ScoreKeeper::gameStart(GameAgent *)
 { /* Empty */ }
 
-void ScoreKeeper::gameOver(const ConstPlayerPtr biscuit)
+void ScoreKeeper::gameOver(ConstPlayerPtr firstOut, const ConstPlayerPtr biscuit)
 {
     if (biscuit)
         scores_[biscuit->getName()]++;

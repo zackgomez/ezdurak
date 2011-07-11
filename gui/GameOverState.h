@@ -10,7 +10,7 @@ class GameOverState :
     public GUIState
 {
 public:
-    static GUIStatePtr create(ConstPlayerPtr biscuit);
+    static GUIStatePtr create(ConstPlayerPtr firstOut, ConstPlayerPtr biscuit);
 
     /// Destructor
     ~GameOverState();
@@ -23,12 +23,13 @@ public:
 
 private:
     // Private constructors for create idiom
-    GameOverState(ConstPlayerPtr biscuit);
+    GameOverState(ConstPlayerPtr firstOut, ConstPlayerPtr biscuit);
     GameOverState(const GameOverState&);
     void operator=(const GameOverState&);
 
     // Data members
     GUIStringPtr biscuitStr_;
+    GUIStringPtr firstOutStr_;
     GUIStringPtr instrStr_;
     GUIStatePtr next_;
 };

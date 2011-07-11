@@ -28,12 +28,14 @@ void CLIListener::gameStart(GameAgent *agent)
     cout << "Trump is " << agent_->getTrumpCard() << '\n';
 }
 
-void CLIListener::gameOver(const ConstPlayerPtr biscuitPlayer)
+void CLIListener::gameOver(ConstPlayerPtr firstOut, const ConstPlayerPtr biscuitPlayer)
 {
     if (biscuitPlayer)
         cout << "The biscuit is " << biscuitPlayer->getName() << '\n';
     else
         cout << "The game is a draw.\n";
+
+    cout << "First Player out was " << firstOut->getName() << '\n';
 }
 
 void CLIListener::newRound(ConstPlayerPtr attacker, ConstPlayerPtr defender)

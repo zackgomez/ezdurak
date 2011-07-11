@@ -13,7 +13,7 @@ public:
 
     // Methods inherited from GameListener
     void gameStart(GameAgent *);
-    void gameOver(ConstPlayerPtr);
+    void gameOver(ConstPlayerPtr, ConstPlayerPtr);
     void newRound(ConstPlayerPtr, ConstPlayerPtr);
     void endRound(bool);
     void attackerPassed(ConstPlayerPtr);
