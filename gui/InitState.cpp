@@ -3,7 +3,11 @@
 #include <iostream>
 #include "GUICard.h"
 #include "GUIPlayerView.h"
+#ifdef MAC_OSX
+#include <SDL_image/SDL_image.h>
+#else
 #include <SDL/SDL_image.h>
+#endif
 #include <SDL/SDL_ttf.h>
 #include "GUIApp.h"
 #include "net/kissnet.h"
