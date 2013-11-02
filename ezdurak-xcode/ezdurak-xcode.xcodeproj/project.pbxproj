@@ -38,6 +38,9 @@
 		144AD3BC11EEE2DC0080D7F0 /* guimain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 144AD3BB11EEE2DC0080D7F0 /* guimain.cpp */; };
 		144AD3E411EEE3860080D7F0 /* cards.png in Resources */ = {isa = PBXBuildFile; fileRef = 144AD3E211EEE3860080D7F0 /* cards.png */; };
 		144AD3E511EEE3860080D7F0 /* FreeMonoBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 144AD3E311EEE3860080D7F0 /* FreeMonoBold.ttf */; };
+		146F0ADF1825973F00FC2683 /* SDL_ttf.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 14432AFA182593010094DC0E /* SDL_ttf.framework */; };
+		146F0AE01825973F00FC2683 /* SDL_image.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 14432AF8182592A80094DC0E /* SDL_image.framework */; };
+		146F0AE11825973F00FC2683 /* SDL.framework in Copy Frameworks into .app bundle */ = {isa = PBXBuildFile; fileRef = 14432AF6182591E70094DC0E /* SDL.framework */; };
 		148526BB1223668C000D304E /* EZDurakIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 148526BA1223668C000D304E /* EZDurakIcon.icns */; };
 		14C2D7D5121E388C00F6BE31 /* shield.png in Resources */ = {isa = PBXBuildFile; fileRef = 14C2D7D2121E388C00F6BE31 /* shield.png */; };
 		14C2D7D6121E388C00F6BE31 /* shieldx.png in Resources */ = {isa = PBXBuildFile; fileRef = 14C2D7D3121E388C00F6BE31 /* shieldx.png */; };
@@ -80,10 +83,13 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		002F39FD09D0883400EBEB88 /* Copy Frameworks into .app bundle */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				146F0ADF1825973F00FC2683 /* SDL_ttf.framework in Copy Frameworks into .app bundle */,
+				146F0AE01825973F00FC2683 /* SDL_image.framework in Copy Frameworks into .app bundle */,
+				146F0AE11825973F00FC2683 /* SDL.framework in Copy Frameworks into .app bundle */,
 			);
 			name = "Copy Frameworks into .app bundle";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,10 +103,9 @@
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		14382CED11EEED02006B082D /* ezdurak_xcode_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ezdurak_xcode_Prefix.pch; sourceTree = "<group>"; };
-		14432AE918258A3F0094DC0E /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = /Library/Frameworks/SDL2_ttf.framework; sourceTree = "<absolute>"; };
 		14432AF6182591E70094DC0E /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
-		14432AF8182592A80094DC0E /* SDL_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_image.framework; path = ../../../../../Library/Frameworks/SDL_image.framework; sourceTree = "<group>"; };
-		14432AFA182593010094DC0E /* SDL_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_ttf.framework; path = ../../../../../Library/Frameworks/SDL_ttf.framework; sourceTree = "<group>"; };
+		14432AF8182592A80094DC0E /* SDL_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_image.framework; path = /Library/Frameworks/SDL_image.framework; sourceTree = "<absolute>"; };
+		14432AFA182593010094DC0E /* SDL_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_ttf.framework; path = /Library/Frameworks/SDL_ttf.framework; sourceTree = "<absolute>"; };
 		144AD34011EEDF600080D7F0 /* AIPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AIPlayer.cpp; sourceTree = "<group>"; };
 		144AD34111EEDF600080D7F0 /* AIPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIPlayer.h; sourceTree = "<group>"; };
 		144AD34411EEDF600080D7F0 /* CLIListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CLIListener.cpp; sourceTree = "<group>"; };
@@ -209,8 +214,9 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				14432AFA182593010094DC0E /* SDL_ttf.framework */,
+				14432AF8182592A80094DC0E /* SDL_image.framework */,
 				14432AF6182591E70094DC0E /* SDL.framework */,
-				14432AE918258A3F0094DC0E /* SDL2_ttf.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				002F3C0009D093BD00EBEB88 /* OpenGL.framework */,
 			);
@@ -385,8 +391,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				14432AFA182593010094DC0E /* SDL_ttf.framework */,
-				14432AF8182592A80094DC0E /* SDL_image.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -422,6 +426,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "EZ Games";
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ezdurak-xcode" */;
@@ -561,6 +566,7 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -581,7 +587,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = EZDurak;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -589,7 +595,7 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
@@ -607,7 +613,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = EZDurak;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -615,7 +621,6 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(HOME)/Library/Frameworks",
 					/Library/Frameworks,
@@ -644,7 +649,6 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(HOME)/Library/Frameworks",
 					/Library/Frameworks,
